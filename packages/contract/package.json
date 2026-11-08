@@ -1,0 +1,26 @@
+{
+  "name": "@expense/contract",
+  "version": "0.0.0",
+  "private": true,
+  "description": "oRPC contracts shared by apps/api and apps/web.",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "scripts": {
+    "build": "tsdown",
+    "prepare": "tsdown",
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:"
+  }
+}

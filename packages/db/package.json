@@ -1,0 +1,26 @@
+{
+  "name": "@expense/db",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Drizzle schema, migrations and RLS policies.",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "scripts": {
+    "build": "tsdown",
+    "prepare": "tsdown",
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:"
+  }
+}

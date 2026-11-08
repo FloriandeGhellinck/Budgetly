@@ -1,0 +1,15 @@
+{
+  "name": "@expense/web",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Next.js web app. Calls apps/api from the server only.",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

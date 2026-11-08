@@ -1,0 +1,50 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# One version per dependency across the workspace. Packages reference these
+# with "catalog:". Entries for libraries not yet used are reserved for the
+# packages that will need them (ADR 0015).
+catalog:
+  # Tooling
+  "@types/node": ^26.6.6
+  lefthook: ^2.2.2
+  oxfmt: ^0.77.0
+  oxlint: ^1.92.0
+  oxlint-tsgolint: ^7.0.2006
+  tsdown: ^0.23.7
+  typescript: 7.0.2
+  vitest: ^5.1.0
+
+  # Data
+  drizzle-kit: ^0.31.11
+  drizzle-orm: ^0.45.4
+  postgres: ^3.4.9
+
+  # API
+  "@hono/node-server": ^2.1.6
+  "@orpc/client": ^1.16.2
+  "@orpc/contract": ^1.16.2
+  "@orpc/server": ^1.16.2
+  hono: ^4.13.17
+  zod: ^4.6.7
+
+  # Web
+  "@base-ui/react": ^1.9.0
+  "@supabase/ssr": ^0.12.7
+  "@supabase/supabase-js": ^2.119.0
+  "@tailwindcss/postcss": ^4.3.5
+  "@types/react": ^19.3.0
+  "@types/react-dom": ^19.3.0
+  next: 16.4.5
+  next-intl: ^4.14.9
+  react: 19.3.1
+  react-dom: 19.3.1
+  shadcn: ^4.23.0
+  tailwindcss: ^4.3.5
+
+allowBuilds:
+  esbuild: true
+  lefthook: true
+  sharp: false
+  unrs-resolver: false

@@ -1,0 +1,15 @@
+{
+  "name": "@expense/api",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Hono + oRPC API server and MCP endpoint. The single door to data.",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

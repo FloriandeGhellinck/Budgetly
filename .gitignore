@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+build/
+out/
+.next/
+.turbo/
+.vercel/
+
+# TypeScript
+*.tsbuildinfo
+
+# Test / coverage
+coverage/
+test-results/
+playwright-report/
+
+# Logs
+*.log
+
+# Environment
+.env*
+!.env.example
+
+# Editors / OS
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+*.swp
+.DS_Store
+
+# Local tooling
+.superset/
+.claude/worktrees/
