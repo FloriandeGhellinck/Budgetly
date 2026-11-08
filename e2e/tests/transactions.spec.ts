@@ -1,19 +1,10 @@
-import { expect, type Page, test } from "@playwright/test";
-import { readMagicLink } from "../local-stack";
+import { expect, test } from "@playwright/test";
+import { signIn } from "../sign-in";
 
 // Smoke journey (docs/what-to-test.md): sign in by magic link, land on a
-// bootstrapped space, record an expense, see it listed, delete and undo,
-// then edit it with a new tag and get it suggested from history.
-
-async function signIn(page: Page, email: string) {
-  await page.goto("/transactions");
-  await expect(page).toHaveURL(/\/login$/);
-  await page.getByLabel("Email").fill(email);
-  await page.getByRole("button", { name: "Email me a sign-in link" }).click();
-  await expect(page.getByText(`we sent a sign-in link to ${email}`)).toBeVisible();
-  await page.goto(await readMagicLink(email));
-  await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
-}
+// bootstrapped space, record an expense, see it in the month overview and
+// listed, delete and undo, then edit it with a new tag and get it suggested
+// from history.
 
 test("record, delete, undo, edit and get suggestions", async ({ page }, testInfo) => {
   const run = `${Date.now()}-${testInfo.project.name}`;
@@ -34,6 +25,10 @@ test("record, delete, undo, edit and get suggestions", async ({ page }, testInfo
   await dialog.getByRole("button", { name: "Save" }).click();
   await expect(page.getByText("Saved")).toBeVisible();
   await expect(dialog).toBeHidden();
+
+  // The dashboard's month overview counts it as this month's spending.
+  const overview = page.getByRole("region", { name: "Month overview" });
+  await expect(overview).toContainText(/Spending\s*€12\.34/);
 
   await page.goto("/transactions");
   // Scoped to the page: toasts are list items too.
