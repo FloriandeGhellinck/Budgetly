@@ -60,6 +60,18 @@ export function FilterBar({ filters }: { filters: TransactionFilters }) {
     { value: ALL, label: t("all") },
     ...options.accounts.map((a) => ({ value: a.id, label: a.label })),
   ];
+  const beneficiaryItems = [
+    { value: ALL, label: t("all") },
+    ...options.beneficiaries.map((b) => ({ value: b.id, label: b.label })),
+  ];
+  // Filters reached from reports with no control of their own, shown as chips.
+  const groupLabel = options.categoryGroups.find((g) => g.id === filters.groupId)?.label;
+  const chips = [
+    ...(filters.groupId
+      ? [{ key: "groupId" as const, label: t("group", { name: groupLabel ?? "…" }) }]
+      : []),
+    ...(filters.tag ? [{ key: "tag" as const, label: t("tag", { name: filters.tag }) }] : []),
+  ];
   const categoryItems = [
     { value: ALL, label: t("all") },
     ...options.categoryGroups.flatMap((g) =>
@@ -134,6 +146,22 @@ export function FilterBar({ filters }: { filters: TransactionFilters }) {
           ))}
         </SelectContent>
       </Select>
+      <Select
+        items={beneficiaryItems}
+        value={filters.beneficiaryId ?? ALL}
+        onValueChange={(v: string | null) => set("beneficiaryId", v)}
+      >
+        <SelectTrigger aria-label={t("beneficiary")} className="w-36">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {beneficiaryItems.map((item) => (
+            <SelectItem key={item.value} value={item.value}>
+              {item.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       <Input
         type="date"
         aria-label={t("from")}
@@ -148,6 +176,18 @@ export function FilterBar({ filters }: { filters: TransactionFilters }) {
         onChange={(event) => set("to", event.target.value)}
         className="w-auto"
       />
+      {chips.map((chip) => (
+        <Button
+          key={chip.key}
+          variant="secondary"
+          size="sm"
+          aria-label={t("remove", { name: chip.label })}
+          onClick={() => set(chip.key, undefined)}
+        >
+          {chip.label}
+          <XIcon />
+        </Button>
+      ))}
       {hasFilters(filters) && (
         <Button
           variant="ghost"

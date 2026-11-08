@@ -12,6 +12,7 @@ const FiltersSchema = z.object({
   direction: DirectionSchema.optional().catch(undefined),
   accountId: Id.optional().catch(undefined),
   categoryId: Id.optional().catch(undefined),
+  groupId: Id.optional().catch(undefined),
   beneficiaryId: Id.optional().catch(undefined),
   tag: z.string().trim().min(1).max(100).optional().catch(undefined),
   from: IsoDate.optional().catch(undefined),
@@ -56,4 +57,9 @@ export function withFilter(
 
 export function hasFilters(filters: TransactionFilters): boolean {
   return Object.keys(filters).length > 0;
+}
+
+// The transaction list showing these filters, for links from reports.
+export function transactionsHref(filters: TransactionFilters): string {
+  return `/transactions${filtersToSearch(filters)}`;
 }

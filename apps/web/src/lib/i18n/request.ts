@@ -1,5 +1,6 @@
 import { cookies, headers } from "next/headers";
 import { getRequestConfig } from "next-intl/server";
+import { TIME_ZONE } from "@/lib/dates";
 import { LOCALE_COOKIE, resolveLocale } from "./config";
 import { MESSAGES } from "./messages";
 
@@ -10,5 +11,5 @@ export default getRequestConfig(async () => {
     cookieStore.get(LOCALE_COOKIE)?.value,
     headerList.get("accept-language"),
   );
-  return { locale, messages: MESSAGES[locale], timeZone: "Europe/Brussels" };
+  return { locale, messages: MESSAGES[locale], timeZone: TIME_ZONE };
 });
