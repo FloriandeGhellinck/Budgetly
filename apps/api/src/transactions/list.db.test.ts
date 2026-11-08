@@ -112,9 +112,17 @@ describe("transactions.list filters", () => {
       expected: ["school"],
     },
     { label: "beneficiary", filters: () => ({ beneficiaryId: children }), expected: ["school"] },
-    { label: "tag, case-insensitive", filters: () => ({ tag: "summer trip" }), expected: ["ferry"] },
+    {
+      label: "tag, case-insensitive",
+      filters: () => ({ tag: "summer trip" }),
+      expected: ["ferry"],
+    },
     { label: "direction", filters: () => ({ direction: "income" }), expected: ["salary"] },
-    { label: "text in the name", filters: () => ({ text: "supermarket" }), expected: ["groceries"] },
+    {
+      label: "text in the name",
+      filters: () => ({ text: "supermarket" }),
+      expected: ["groceries"],
+    },
     {
       label: "text in the note, % taken literally",
       filters: () => ({ text: "50%" }),

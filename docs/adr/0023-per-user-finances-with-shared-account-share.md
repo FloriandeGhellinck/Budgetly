@@ -14,8 +14,8 @@ count for me at 50 %".
 - The tenant is the **user**. Every domain row (accounts, transactions,
   categories, tags, beneficiaries) belongs to exactly one user, and only that
   user can see it. There is no household and no member entity.
-- An account can be marked **shared** with the user's **share** (e.g. Joint account
-  joint: 50 %). Personal accounts are 100 %.
+- An account can be marked **shared** with the user's **share** (e.g. Joint
+  account: 50 %). Personal accounts are 100 %.
 - Transactions are recorded at their **real amount**. Reports weight each
   transaction by the share of its account ("my part"); account balances use
   real amounts.

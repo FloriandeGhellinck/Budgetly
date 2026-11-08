@@ -4,8 +4,8 @@ Status: accepted (2026-11-07)
 
 ## Context
 
-Accounts are EUR bank accounts and an account holding EURC (a 1:1
-euro stablecoin). Moving EUR to EURC can lose a little to fees.
+Accounts are EUR bank accounts and an account holding EURC (a 1:1 euro
+stablecoin). Moving EUR to EURC can lose a little to fees.
 
 ## Decision
 

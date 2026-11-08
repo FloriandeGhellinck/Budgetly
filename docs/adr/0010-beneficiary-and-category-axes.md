@@ -34,5 +34,6 @@ on the fly), e.g. "Summer trip 2026", "Baby shower". The Notion
 - "How much on leisure?" = filter by group, all beneficiaries.
 - The Notion import maps `Enfants` → beneficiary Children, `Dépenses
   générales` → Me, and `Loisirs` / `Investissement` / `Dettes` → category
-  groups (beneficiary Me unless the sub-category says otherwise, e.g.
-  Invest Child A / Invest Child B → Children).
+  groups (beneficiary Me unless the sub-category is one passed with
+  `--children-sub-category`, e.g. Invest Child A → Children; none by
+  default).

@@ -38,7 +38,9 @@ browser session, valid for an hour, for a script run once.
   row comes from an explicit sub-category table in
   `apps/api/src/import-notion/mapping.ts`. A sub-category missing from it
   goes to Daily life and is reported. An unknown `Catégorie` is skipped and
-  reported.
+  reported. Which sub-categories make a non-`Enfants` row the children's
+  (ADR 0010) is not in the code: each is passed with the repeatable
+  `--children-sub-category <name>`, none by default.
 - The summary names months without a year: years start at
   `--summary-start-year` (default: the year of the oldest expense) and move
   on each time the month does not move forward. Notion's `DEPENSES` column is

@@ -10,7 +10,9 @@ describe("seedLabel", () => {
   });
 
   it("shows the stored name once renamed", () => {
-    expect(seedLabel(fr.seed, "accounts", { name: "Joint account", seedKey: null })).toBe("Joint account");
+    expect(seedLabel(fr.seed, "accounts", { name: "Joint account", seedKey: null })).toBe(
+      "Joint account",
+    );
   });
 
   it("falls back to the stored name for a seed key it does not know", () => {

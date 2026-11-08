@@ -76,7 +76,8 @@ import for real, as a user who signed in once:
 ```sh
 pnpm --filter @expense/api import:notion \
   --expenses ~/Downloads/expenses.csv --summary ~/Downloads/summary.csv \
-  --user <user uuid>
+  --user <user uuid> \
+  --children-sub-category "Invest Child A" --children-sub-category "Invest Child B"
 ```
 
 It writes through the API procedures on `DATABASE_URL` from `apps/api/.env`
@@ -84,7 +85,9 @@ It writes through the API procedures on `DATABASE_URL` from `apps/api/.env`
 takes an email when `DATABASE_ADMIN_URL` points at the `postgres` role
 (locally `postgres://postgres:postgres@127.0.0.1:56322/postgres`). The
 summary has no years: they start at the year of the oldest expense, or at
-`--summary-start-year`.
+`--summary-start-year`. Each `--children-sub-category` (repeatable, none by
+default, also honoured by `--dry-run`) names a sub-category that makes a
+non-`Enfants` row the children's.
 
 ## Tests
 

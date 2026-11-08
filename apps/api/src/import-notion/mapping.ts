@@ -24,9 +24,6 @@ const CATEGORY_GROUPS = new Map<string, ExpenseGroupKey>([
   ["Dettes", "debt"],
 ]);
 
-// Sub-categories that make a non-Enfants row the children's (ADR 0010).
-const CHILDREN_SUB_CATEGORIES = new Set(["Invest Child A", "Invest Child B"]);
-
 // Group of each sub-category seen under `Enfants` in the export. Anything not
 // listed goes to Daily life and is reported.
 export const ENFANTS_GROUPS = new Map<string, ExpenseGroupKey>([
@@ -60,7 +57,13 @@ export type ExpenseMapping =
     }
   | { ok: false; reason: string };
 
-export function mapExpense(category: string, subCategory: string): ExpenseMapping {
+// childrenSubCategories: sub-categories that make a non-Enfants row the
+// children's (ADR 0010), passed with --children-sub-category.
+export function mapExpense(
+  category: string,
+  subCategory: string,
+  childrenSubCategories: ReadonlySet<string> = new Set(),
+): ExpenseMapping {
   // "À classer" lives in Daily life, whatever the Catégorie.
   const unsorted = subCategory === "";
   const name = unsorted ? UNSORTED_CATEGORY : subCategory;
@@ -80,7 +83,7 @@ export function mapExpense(category: string, subCategory: string): ExpenseMappin
     ok: true,
     group: unsorted ? "daily_life" : group,
     category: name,
-    beneficiary: CHILDREN_SUB_CATEGORIES.has(subCategory) ? "children" : "me",
+    beneficiary: childrenSubCategories.has(subCategory) ? "children" : "me",
     unmapped: false,
   };
 }
@@ -123,13 +126,20 @@ function transactionName(row: ExpenseRow, category: string): string {
   return (row.name || row.subCategory || category).slice(0, 200);
 }
 
-export function planImport(expenses: ParsedExpenses, summary: ParsedSummary): ImportPlan {
+export type PlanOptions = { childrenSubCategories?: readonly string[] };
+
+export function planImport(
+  expenses: ParsedExpenses,
+  summary: ParsedSummary,
+  options: PlanOptions = {},
+): ImportPlan {
+  const childrenSubCategories = new Set(options.childrenSubCategories);
   const skipped = [...expenses.skipped, ...summary.skipped];
   const unmappedSubCategories = new Map<string, number>();
   const planned: PlannedExpense[] = [];
 
   for (const row of expenses.rows) {
-    const mapping = mapExpense(row.category, row.subCategory);
+    const mapping = mapExpense(row.category, row.subCategory, childrenSubCategories);
     if (!mapping.ok) {
       skipped.push({ source: "expenses", row: row.row, reason: mapping.reason });
       continue;

@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import { mapExpense, planImport } from "./mapping.ts";
 import type { ExpenseRow } from "./parse.ts";
 
+const CHILDREN_SUB_CATEGORIES = new Set(["Invest Child A", "Invest Child B"]);
+
 describe("mapExpense", () => {
   it.each([
     [
@@ -16,7 +18,7 @@ describe("mapExpense", () => {
     ["Investissement → Investment", "Investissement", "Bourse", "investment", "Bourse", "me"],
     ["Dettes → Debt", "Dettes", "Remboursement emprunt", "debt", "Remboursement emprunt", "me"],
     [
-      "Invest Child A → Children",
+      "a children's sub-category → Children",
       "Investissement",
       "Invest Child A",
       "investment",
@@ -28,13 +30,17 @@ describe("mapExpense", () => {
     ["no sub-category → À classer", "Loisirs", "", "daily_life", "À classer", "me"],
     ["no category at all → À classer", "", "", "daily_life", "À classer", "me"],
   ])("%s", (_, category, subCategory, group, name, beneficiary) => {
-    expect(mapExpense(category, subCategory)).toEqual({
+    expect(mapExpense(category, subCategory, CHILDREN_SUB_CATEGORIES)).toEqual({
       ok: true,
       group,
       category: name,
       beneficiary,
       unmapped: false,
     });
+  });
+
+  it("treats no sub-category as the children's by default", () => {
+    expect(mapExpense("Investissement", "Invest Child A")).toMatchObject({ beneficiary: "me" });
   });
 
   it("files an unknown Enfants sub-category under Daily life and flags it", () => {
@@ -102,6 +108,15 @@ describe("planImport", () => {
     expect(plan.skipped).toEqual([{ source: "expenses", row: 3, reason: "unknown Catégorie" }]);
     expect([...plan.unmappedSubCategories]).toEqual([["Poney", 1]]);
     expect(plan.cardRows).toBe(1);
+  });
+
+  it("passes the children's sub-categories through to the mapping", () => {
+    const rows = [row({ category: "Investissement", subCategory: "Invest Child B" })];
+    const empty = { months: [], blankRows: 0, skipped: [] };
+    const plan = planImport({ rows, blankRows: 0, skipped: [] }, empty, {
+      childrenSubCategories: ["Invest Child B"],
+    });
+    expect(plan.expenses.map((e) => e.beneficiary)).toEqual(["children"]);
   });
 
   it("makes one income per month and column, dated the 1st, with a per-month key", () => {

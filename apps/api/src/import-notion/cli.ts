@@ -1,8 +1,10 @@
 // One-off import of the Notion history (ADR 0009, 0033):
 //   pnpm --filter @expense/api import:notion --expenses <csv> --summary <csv> \
-//     --user <uuid|email> [--summary-start-year 2025] [--dry-run]
+//     --user <uuid|email> [--summary-start-year 2025] [--dry-run] \
+//     [--children-sub-category <name>]...
 // --dry-run reads and maps both files and prints what would be written,
-// without touching any database.
+// without touching any database. Each --children-sub-category names a
+// sub-category that makes a non-Enfants row the children's (ADR 0010).
 import { createDb } from "@expense/db";
 import { readFileSync } from "node:fs";
 import { parseArgs } from "node:util";
@@ -19,6 +21,7 @@ const { values } = parseArgs({
     user: { type: "string" },
     "summary-start-year": { type: "string" },
     "dry-run": { type: "boolean", default: false },
+    "children-sub-category": { type: "string", multiple: true, default: [] },
   },
   strict: true,
 });
@@ -29,7 +32,9 @@ function fail(message: string): never {
 }
 
 if (!values.expenses || !values.summary) {
-  fail("Usage: import:notion --expenses <csv> --summary <csv> --user <uuid|email> [--dry-run]");
+  fail(
+    "Usage: import:notion --expenses <csv> --summary <csv> --user <uuid|email> [--dry-run] [--children-sub-category <name>]...",
+  );
 }
 
 const expenses = parseExpenses(readFileSync(values.expenses, "utf8"));
@@ -38,7 +43,9 @@ const oldest = expenses.rows.map((row) => row.occurredOn).toSorted()[0];
 const startYear = Number(values["summary-start-year"] ?? oldest?.slice(0, 4));
 if (!Number.isInteger(startYear)) fail("Pass --summary-start-year: no dated expense to infer it.");
 const summary = parseSummary(readFileSync(values.summary, "utf8"), startYear);
-const plan = planImport(expenses, summary);
+const plan = planImport(expenses, summary, {
+  childrenSubCategories: values["children-sub-category"],
+});
 
 const months = summary.months.map((m) => m.month);
 console.log(`Summary months: ${months[0] ?? "-"} → ${months.at(-1) ?? "-"} (${months.length})`);

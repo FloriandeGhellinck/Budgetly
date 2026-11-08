@@ -52,13 +52,13 @@ account as an `expense` transaction but is reported apart from spending.
 ## Account
 
 A place money is held or spent from: the joint bank account (shared), a personal card
-account (Broker), a crypto card account (Crypto card). Every transaction
+account at a broker, a crypto card account paying in EURC. Every transaction
 belongs to one account.
 
 ## Transfer
 
 Money moving between two accounts of the same user (e.g. joint account
-→ Broker). Not spending, not income. Excluded from consumption and
+→ broker account). Not spending, not income. Excluded from consumption and
 savings-rate figures. Stored as two transaction rows (legs), one per account:
 a `transfer_out` leg and a `transfer_in` leg sharing the same `transferId`,
 each with its own amount (ADR 0006).

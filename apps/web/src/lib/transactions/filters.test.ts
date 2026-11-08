@@ -12,7 +12,12 @@ describe("parseFilters", () => {
         accountId: ACCOUNT,
         from: "2026-11-01",
       }),
-    ).toEqual({ text: "supermarket", direction: "expense", accountId: ACCOUNT, from: "2026-11-01" });
+    ).toEqual({
+      text: "supermarket",
+      direction: "expense",
+      accountId: ACCOUNT,
+      from: "2026-11-01",
+    });
   });
 
   it.each([

@@ -20,8 +20,8 @@ contributions to the children's investments.
 - What happens inside untracked places (exchange buys, portfolio moves) is not
   recorded. A future net-worth module may turn them into investment accounts.
 
-Initial tracked accounts for the author's household: Personal account, Joint account,
-Broker, Crypto card (EURC), meal vouchers, eco vouchers.
+Example tracked accounts for a household: Personal account, Joint account,
+Card account, Crypto card (EURC), meal vouchers, eco vouchers.
 
 ## Consequences
 

@@ -5,8 +5,8 @@ Status: accepted (2026-11-07)
 ## Context
 
 The household pays from several places: a joint bank account, personal cards
-chosen for cashback (e.g. Broker), and a crypto card account
-(Crypto card). Money moves between them through many
+chosen for cashback (e.g. a broker account), and a crypto card account
+paying in EURC. Money moves between them through many
 internal transfers. Without accounts, a transfer looks like an expense on one
 side and an income on the other, which corrupts every dashboard. Future bank
 sync (ADR 0002) also needs accounts to reconcile against.
