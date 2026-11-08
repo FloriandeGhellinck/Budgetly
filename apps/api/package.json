@@ -6,8 +6,8 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "scripts": {
-    "dev": "node --env-file-if-exists=.env --watch src/server.ts",
-    "start": "node src/server.ts",
+    "dev": "node --env-file-if-exists=.env --watch src/local-server.ts",
+    "start": "node src/local-server.ts",
     "typecheck": "tsc"
   },
   "dependencies": {

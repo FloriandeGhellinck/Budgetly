@@ -79,7 +79,7 @@ const get = procedure({
 
 const create = procedure({
   description:
-    "Record one expense or income. amountMinor is a positive integer in cents (20.68 € → 2068); direction gives the sign. occurredOn is YYYY-MM-DD. accountId is required (accounts.list); categoryId must belong to a group of the same direction (categories.list), else CATEGORY_DIRECTION_MISMATCH. tags are names; unknown names create the tag. Use suggestions.forName to pre-fill category, beneficiary and account from history. idempotencyKey is required: a retry with the same key returns the original transaction instead of recording it twice. For money moving between two of the caller's accounts use transfers.create.",
+    "Record one expense or income. amountMinor is a positive integer in cents (20.68 € → 2068); direction gives the sign. occurredOn is YYYY-MM-DD. accountId is required (accounts.list); categoryId must belong to a group of the same direction (categories.list), else CATEGORY_DIRECTION_MISMATCH. tags are names; unknown names create the tag. Use suggestions.forName to pre-fill category, beneficiary and account from history. idempotencyKey is required: a retry with the same key returns the original transaction instead of recording it twice, even if the other fields differ, so use a fresh key for each new transaction. For money moving between two of the caller's accounts use transfers.create.",
   examples: [
     {
       direction: "expense",

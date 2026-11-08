@@ -15,7 +15,7 @@ export type Transfer = z.infer<typeof TransferSchema>;
 
 const create = procedure({
   description:
-    "Move money between two of the caller's accounts (e.g. joint account → Broker). Not spending, not income. Writes two linked transactions: a transfer_out leg of sentAmountMinor on fromAccountId and a transfer_in leg of receivedAmountMinor on toAccountId. receivedAmountMinor defaults to sentAmountMinor; set it lower when fees or a conversion (EUR → EURC) ate part of it. Amounts are positive cents. idempotencyKey is required: a retry with the same key returns the original transfer.",
+    "Move money between two of the caller's accounts (e.g. joint account → Broker). Not spending, not income. Writes two linked transactions: a transfer_out leg of sentAmountMinor on fromAccountId and a transfer_in leg of receivedAmountMinor on toAccountId. receivedAmountMinor defaults to sentAmountMinor; set it lower when fees or a conversion (EUR → EURC) ate part of it. Amounts are positive cents. idempotencyKey is required: a retry with the same key returns the original transfer, even if the other fields differ.",
   examples: [
     {
       fromAccountId: EXAMPLE_IDS.account,
