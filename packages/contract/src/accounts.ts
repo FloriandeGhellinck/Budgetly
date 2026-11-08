@@ -16,6 +16,8 @@ export const AccountSchema = z.object({
   currency: z.string(),
   shareBps: z.int(),
   archivedAt: Timestamp.nullable(),
+  // "main" on the default created at sign-up; cleared on rename.
+  seedKey: z.string().nullable(),
   createdAt: Timestamp,
   updatedAt: Timestamp,
 });
@@ -53,7 +55,7 @@ const create = procedure({
 
 const update = procedure({
   description:
-    "Change an account's name, currency label or share (basis points: 10000 = 100 %, 5000 = 50 %). Only the fields you pass change. A new share applies to past transactions too, since reports weight every transaction by its account's current share.",
+    "Change an account's name, currency label or share (basis points: 10000 = 100 %, 5000 = 50 %). Only the fields you pass change. Renaming the default account (seedKey \"main\") clears its seedKey, so the UI shows the new name instead of a translation. A new share applies to past transactions too, since reports weight every transaction by its account's current share.",
   examples: [
     { id: EXAMPLE_IDS.account, name: "Personal account" },
     { id: EXAMPLE_IDS.account, shareBps: 5000 },

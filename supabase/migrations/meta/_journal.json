@@ -15,6 +15,13 @@
       "when": 1794139581797,
       "tag": "20261108120621_rls",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794143219237,
+      "tag": "20261108130659_accounts_seed_key",
+      "breakpoints": true
     }
   ]
 }

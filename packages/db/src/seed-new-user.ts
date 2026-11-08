@@ -66,6 +66,7 @@ type DefaultGroup = (typeof DEFAULT_GROUPS)[number];
 export type CategoryGroupSeedKey = DefaultGroup["seedKey"];
 export type CategorySeedKey = DefaultGroup["categories"][number]["seedKey"];
 export type BeneficiarySeedKey = "me";
+export type AccountSeedKey = "main";
 
 // Runs inside `withUser(db, userId, …)`, so RLS lets it write only that
 // user's rows. A user who already has an account is left untouched, which
@@ -78,7 +79,9 @@ export async function seedNewUser(tx: Tx, userId: string): Promise<void> {
     .limit(1);
   if (existing.length > 0) return;
 
-  await tx.insert(accounts).values({ userId, name: "Main", currency: "EUR", shareBps: 10000 });
+  await tx
+    .insert(accounts)
+    .values({ userId, name: "Main", seedKey: "main", currency: "EUR", shareBps: 10000 });
   await tx.insert(beneficiaries).values({ userId, name: "Me", seedKey: "me" });
 
   const groups = await tx

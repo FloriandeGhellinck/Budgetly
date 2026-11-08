@@ -21,10 +21,15 @@ afterAll(async () => {
 describe("seedNewUser", () => {
   it("creates one personal account", async () => {
     const rows = await db.admin
-      .select({ name: accounts.name, shareBps: accounts.shareBps, currency: accounts.currency })
+      .select({
+        name: accounts.name,
+        seedKey: accounts.seedKey,
+        shareBps: accounts.shareBps,
+        currency: accounts.currency,
+      })
       .from(accounts)
       .where(eq(accounts.userId, ALICE));
-    expect(rows).toEqual([{ name: "Main", shareBps: 10000, currency: "EUR" }]);
+    expect(rows).toEqual([{ name: "Main", seedKey: "main", shareBps: 10000, currency: "EUR" }]);
   });
 
   it("creates the beneficiary Me", async () => {

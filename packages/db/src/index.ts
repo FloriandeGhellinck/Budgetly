@@ -14,6 +14,7 @@ export { createDb, type Db, type Tx } from "./client";
 export * from "./schema";
 export {
   seedNewUser,
+  type AccountSeedKey,
   type BeneficiarySeedKey,
   type CategoryGroupSeedKey,
   type CategorySeedKey,

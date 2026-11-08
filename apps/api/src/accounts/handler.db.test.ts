@@ -40,6 +40,17 @@ describe("accounts", () => {
     expect(updated).toMatchObject({ name: "Card", currency: "EURC", shareBps: 2500 });
   });
 
+  it("clears the seed key of the default account when it is renamed", async () => {
+    const carol = (await api.signUp()).client;
+    await carol.me.bootstrap({});
+    const [main] = (await carol.accounts.list({})).items;
+    if (!main) throw new Error("bootstrap created no account");
+    expect(main.seedKey).toBe("main");
+
+    expect((await carol.accounts.update({ id: main.id, name: main.name })).seedKey).toBe("main");
+    expect((await carol.accounts.update({ id: main.id, name: "Joint account" })).seedKey).toBeNull();
+  });
+
   it("hides archived accounts from the default list and brings them back", async () => {
     const account = await alice.accounts.create({ name: "Old card" });
 

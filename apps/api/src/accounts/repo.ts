@@ -12,6 +12,7 @@ function toAccount(row: AccountRow): Account {
     currency: row.currency,
     shareBps: row.shareBps,
     archivedAt: iso(row.archivedAt),
+    seedKey: row.seedKey,
     createdAt: iso(row.createdAt),
     updatedAt: iso(row.updatedAt),
   };
@@ -61,7 +62,17 @@ export async function updateAccount(
 ): Promise<Account | null> {
   const [row] = await tx
     .update(accounts)
-    .set({ ...patch, updatedAt: new Date() })
+    .set({
+      ...patch,
+      // A real rename turns the default into the user's own name (ADR 0026);
+      // the same name again keeps the seed key, so the update stays idempotent.
+      ...(patch.name !== undefined
+        ? {
+            seedKey: sql`case when ${accounts.name} = ${patch.name} then ${accounts.seedKey} end`,
+          }
+        : {}),
+      updatedAt: new Date(),
+    })
     .where(and(eq(accounts.userId, userId), eq(accounts.id, id)))
     .returning();
   return row ? toAccount(row) : null;
