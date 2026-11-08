@@ -90,3 +90,51 @@ export async function errorCode(promise: Promise<unknown>): Promise<string> {
   }
   throw new Error("errorCode: expected the call to fail, but it succeeded");
 }
+
+export type SeededUser = {
+  userId: string;
+  client: Client;
+  // The default account Main.
+  accountId: string;
+  // The default beneficiary Me.
+  beneficiaryId: string;
+  // Default categories and groups by seed key (groceries, salary, daily_life…).
+  categoryId: (seedKey: string) => string;
+  groupId: (seedKey: string) => string;
+};
+
+// A signed-up user after me.bootstrap, with handles on their defaults.
+export async function signUpSeeded(api: TestApi): Promise<SeededUser> {
+  const { userId, client } = await api.signUp();
+  await client.me.bootstrap({});
+  const [{ items: accountsList }, { groups }, { items: people }] = await Promise.all([
+    client.accounts.list({}),
+    client.categories.list({}),
+    client.beneficiaries.list({}),
+  ]);
+  const categoryIds = new Map(groups.flatMap((g) => g.categories).map((c) => [c.seedKey, c.id]));
+  const groupIds = new Map(groups.map((g) => [g.seedKey, g.id]));
+  const pick = (map: Map<string | null, string>, key: string) => {
+    const id = map.get(key);
+    if (!id) throw new Error(`signUpSeeded: no default ${key}`);
+    return id;
+  };
+  const [account] = accountsList;
+  const [me] = people;
+  if (!account || !me) throw new Error("signUpSeeded: bootstrap created no account or beneficiary");
+  return {
+    userId,
+    client,
+    accountId: account.id,
+    beneficiaryId: me.id,
+    categoryId: (key) => pick(categoryIds, key),
+    groupId: (key) => pick(groupIds, key),
+  };
+}
+
+let keyCounter = 0;
+// A fresh idempotency key per call.
+export function newKey(): string {
+  keyCounter += 1;
+  return `test-key-${keyCounter}-${randomUUID()}`;
+}

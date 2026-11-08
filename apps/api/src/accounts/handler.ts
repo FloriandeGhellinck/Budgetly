@@ -29,3 +29,5 @@ export const unarchive = authed.accounts.unarchive.handler(async ({ input, conte
   if (!account) throw errors.NOT_FOUND({ message: notFound, data: { entity: "account" } });
   return account;
 });
+
+export const accountsRouter = { list, create, update, archive, unarchive };
