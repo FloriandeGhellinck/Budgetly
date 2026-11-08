@@ -70,15 +70,66 @@
   },
   "accounts": {
     "title": "Comptes",
-    "comingSoon": "Vous pourrez bientôt gérer vos comptes et vos parts ici."
+    "intro": "Chaque transaction appartient à un compte. Marquez un compte comme partagé si vous le détenez avec quelqu'un : les rapports comptent alors votre part de ses dépenses.",
+    "new": "Nouveau compte",
+    "newTitle": "Nouveau compte",
+    "editTitle": "Modifier le compte",
+    "saved": "Compte enregistré",
+    "namePlaceholder": "Compte joint, Broker…",
+    "shared": "Compte partagé",
+    "sharedHelp": "Vous le détenez avec quelqu'un d'autre. Les rapports comptent votre part de ses dépenses et ignorent l'argent qui y est versé ; son solde reste le montant réel.",
+    "share": "Votre part",
+    "shareHelp": "50 pour un compte partagé à parts égales.",
+    "shareInvalid": "Saisissez une part entre 0,01 et 100, avec au plus deux décimales.",
+    "personal": "Personnel",
+    "sharedBadge": "Partagé · votre part {share}",
+    "active": "Comptes actifs",
+    "archived": "Archivés",
+    "balanceOf": "Solde de {name}",
+    "actions": "Actions pour {name}",
+    "edit": "Modifier",
+    "archive": "Archiver",
+    "unarchive": "Désarchiver",
+    "archivedToast": "Compte archivé",
+    "unarchivedToast": "Compte restauré",
+    "relativeBalances": "Les soldes sont le net des transactions enregistrées ici : ils ne correspondent à votre banque que si vous avez commencé à zéro.",
+    "flowsTitle": "Virements entre comptes",
+    "flowsDescription": "L'argent déplacé d'un de vos comptes vers un autre, depuis le début.",
+    "to": "vers",
+    "transfers": "{count, plural, one {# virement} other {# virements}}"
   },
   "categories": {
     "title": "Catégories",
-    "comingSoon": "Vous pourrez bientôt modifier vos catégories ici."
+    "intro": "Les catégories disent à quoi sert une transaction et appartiennent à un groupe. Les groupes d'épargne sont comptés à part des dépenses dans vos rapports.",
+    "saving": "Épargne",
+    "add": "Ajouter",
+    "addTo": "Ajouter une catégorie à {group}",
+    "newTitle": "Nouvelle catégorie dans {group}",
+    "renameTitle": "Renommer la catégorie",
+    "saved": "Catégorie enregistrée",
+    "deleted": "{name} supprimée",
+    "emptyGroup": "Aucune catégorie dans ce groupe.",
+    "actions": "Actions pour {name}",
+    "rename": "Renommer",
+    "delete": "Supprimer",
+    "beneficiaries": "Pour qui",
+    "beneficiariesHelp": "Pour qui est une transaction, quelle que soit sa catégorie : filtrez le tableau de bord par personne pour voir, par exemple, ce que coûtent les enfants.",
+    "addBeneficiary": "Ajouter une personne",
+    "newBeneficiaryTitle": "Nouvelle personne",
+    "renameBeneficiaryTitle": "Renommer la personne",
+    "beneficiarySaved": "Enregistré"
   },
   "tags": {
     "title": "Étiquettes",
-    "comingSoon": "Vous pourrez bientôt parcourir vos étiquettes ici."
+    "empty": "Aucune étiquette pour l'instant. Ajoutez-en une à une transaction pour la regrouper avec d'autres, comme un voyage ou un événement.",
+    "back": "Toutes les étiquettes",
+    "seeTransactions": "Voir les transactions",
+    "spent": "Dépensé",
+    "received": "Reçu",
+    "count": "{count, plural, one {# transaction} other {# transactions}}",
+    "byCategory": "Dépenses par catégorie",
+    "incomeByCategory": "Revenus par catégorie",
+    "noTransactions": "Plus aucune transaction n'utilise cette étiquette."
   },
   "settings": {
     "title": "Réglages",
@@ -198,7 +249,7 @@
   "errors": {
     "NOT_FOUND": "Cet élément n'existe plus. Rechargez la page.",
     "CATEGORY_DIRECTION_MISMATCH": "Cette catégorie est pour l'autre type (dépense ou revenu). Choisissez-en une autre.",
-    "CATEGORY_IN_USE": "Des transactions utilisent encore cette catégorie.",
+    "CATEGORY_IN_USE": "Des transactions utilisent encore cette catégorie. Déplacez-les d'abord vers une autre catégorie, ou renommez-la.",
     "TRANSFER_SAME_ACCOUNT": "Choisissez deux comptes différents.",
     "TRANSFER_LEG": "Ceci fait partie d'un virement : modifiez-le comme virement.",
     "IDEMPOTENCY_KEY_CONFLICT": "Ceci a déjà été enregistré. Fermez le formulaire et vérifiez la liste.",
@@ -239,5 +290,12 @@
       "meal_vouchers": "Chèques-repas",
       "other_income": "Autres revenus"
     }
+  },
+  "forms": {
+    "name": "Nom",
+    "nameRequired": "Saisissez un nom.",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "cancel": "Annuler"
   }
 }

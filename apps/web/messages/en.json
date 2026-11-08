@@ -70,15 +70,66 @@
   },
   "accounts": {
     "title": "Accounts",
-    "comingSoon": "Manage your accounts and shares here soon."
+    "intro": "Every transaction belongs to an account. Mark an account as shared when you co-own it: reports then count your share of what it spends.",
+    "new": "New account",
+    "newTitle": "New account",
+    "editTitle": "Edit account",
+    "saved": "Account saved",
+    "namePlaceholder": "Joint account, Broker…",
+    "shared": "Shared account",
+    "sharedHelp": "You co-own it with someone else. Reports count your share of its expenses and ignore money paid into it; its balance stays the real amount.",
+    "share": "Your share",
+    "shareHelp": "50 for an account split evenly.",
+    "shareInvalid": "Enter a share between 0.01 and 100, with at most two decimals.",
+    "personal": "Personal",
+    "sharedBadge": "Shared · your share {share}",
+    "active": "Active accounts",
+    "archived": "Archived",
+    "balanceOf": "Balance of {name}",
+    "actions": "Actions for {name}",
+    "edit": "Edit",
+    "archive": "Archive",
+    "unarchive": "Unarchive",
+    "archivedToast": "Account archived",
+    "unarchivedToast": "Account restored",
+    "relativeBalances": "Balances are the net of the transactions recorded here, so they match your bank only if you started recording from zero.",
+    "flowsTitle": "Transfers between accounts",
+    "flowsDescription": "Money moved from one of your accounts to another, all time.",
+    "to": "to",
+    "transfers": "{count, plural, one {# transfer} other {# transfers}}"
   },
   "categories": {
     "title": "Categories",
-    "comingSoon": "Edit your categories here soon."
+    "intro": "Categories say what a transaction is for and belong to a group. Saving groups count apart from spending in your reports.",
+    "saving": "Saving",
+    "add": "Add",
+    "addTo": "Add a category to {group}",
+    "newTitle": "New category in {group}",
+    "renameTitle": "Rename category",
+    "saved": "Category saved",
+    "deleted": "{name} deleted",
+    "emptyGroup": "No categories in this group.",
+    "actions": "Actions for {name}",
+    "rename": "Rename",
+    "delete": "Delete",
+    "beneficiaries": "For whom",
+    "beneficiariesHelp": "Who a transaction is for, whatever its category: filter the dashboard by them to see, for example, what the children cost.",
+    "addBeneficiary": "Add a person",
+    "newBeneficiaryTitle": "New person",
+    "renameBeneficiaryTitle": "Rename person",
+    "beneficiarySaved": "Saved"
   },
   "tags": {
     "title": "Tags",
-    "comingSoon": "Browse your tags here soon."
+    "empty": "No tags yet. Add one to a transaction to group it with others, such as a trip or an event.",
+    "back": "All tags",
+    "seeTransactions": "See transactions",
+    "spent": "Spent",
+    "received": "Received",
+    "count": "{count, plural, one {# transaction} other {# transactions}}",
+    "byCategory": "Spending by category",
+    "incomeByCategory": "Income by category",
+    "noTransactions": "No transactions use this tag any more."
   },
   "settings": {
     "title": "Settings",
@@ -198,7 +249,7 @@
   "errors": {
     "NOT_FOUND": "This item no longer exists. Refresh the page.",
     "CATEGORY_DIRECTION_MISMATCH": "This category is for the other type (expense or income). Pick another one.",
-    "CATEGORY_IN_USE": "Transactions still use this category.",
+    "CATEGORY_IN_USE": "Transactions still use this category. Move them to another category first, or rename it instead.",
     "TRANSFER_SAME_ACCOUNT": "Pick two different accounts.",
     "TRANSFER_LEG": "This is part of a transfer: change it as a transfer.",
     "IDEMPOTENCY_KEY_CONFLICT": "This was already saved. Close the form and check the list.",
@@ -239,5 +290,12 @@
       "meal_vouchers": "Meal vouchers",
       "other_income": "Other income"
     }
+  },
+  "forms": {
+    "name": "Name",
+    "nameRequired": "Enter a name.",
+    "save": "Save",
+    "saving": "Saving…",
+    "cancel": "Cancel"
   }
 }
