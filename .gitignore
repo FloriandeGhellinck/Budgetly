@@ -36,3 +36,6 @@ playwright-report/
 # Local tooling
 .superset/
 .claude/worktrees/
+
+# Schema drift probe (scripts/check-schema-drift.ts)
+.schema-drift-probe/

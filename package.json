@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "prepare": "test -e .git && lefthook install || true",
-    "checks": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm boundaries",
+    "checks": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm boundaries && pnpm schema-drift",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc -p tsconfig.json && pnpm -r typecheck",
@@ -14,7 +14,8 @@
     "lint:fix": "oxlint --type-aware --fix",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
-    "boundaries": "node scripts/check-boundaries.ts"
+    "boundaries": "node scripts/check-boundaries.ts",
+    "schema-drift": "pnpm --filter @expense/db db:check && node scripts/check-schema-drift.ts"
   },
   "devDependencies": {
     "@types/node": "catalog:",
