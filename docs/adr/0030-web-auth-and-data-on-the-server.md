@@ -1,6 +1,6 @@
 # 30. apps/web: auth and data calls run on the server only
 
-Status: accepted (2026-11-08)
+Status: accepted (2026-11-08). Amended by ADR 0032 (the API checks `aal`).
 
 ## Context
 

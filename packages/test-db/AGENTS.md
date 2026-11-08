@@ -10,7 +10,7 @@ test file its own empty database. Tests need Docker running, or
 - `createTestDatabase()` → `{ url, sql, close() }`: an empty database on the
   run's server; call `close()` in `afterAll`.
 - `migrate(sql)`: applies `supabase/migrations` in order, after a bootstrap
-  that stands in for Supabase (`auth.users`, the `anon`/`authenticated` roles,
+  that stands in for Supabase (`auth.users`, `auth.mfa_factors`, the `anon`/`authenticated` roles,
   `app_runtime` with a test password).
 - `appRoleUrl(url)`: the same database logged in as `app_runtime`, so RLS
   applies. The `postgres` URL is a superuser and bypasses RLS: never prove

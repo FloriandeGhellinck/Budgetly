@@ -9,9 +9,10 @@ transaction bound to them for RLS. No MCP endpoint yet (ADR 0018).
 - `src/app.ts`: `createApp({ db, verifyToken })` mounts `/rpc/*` and `/health`.
   `src/index.ts` validates env (`src/env.ts`) and is the Vercel entry
   (ADR 0028); `src/local-server.ts` serves it locally.
-- `src/orpc.ts`: `authed` builder. Its middleware verifies the bearer token
-  and wraps the call in `withUser`; handlers get `context.userId` and
-  `context.tx`.
+- `src/orpc.ts`: `authed` builder. Its middleware verifies the bearer token,
+  wraps the call in `withUser` and refuses an `aal1` token from a user with a
+  verified TOTP factor (`MFA_REQUIRED`, ADR 0032); handlers get
+  `context.userId` and `context.tx`.
 - `src/<namespace>/repo.ts` (Drizzle, always filtered on `userId`) →
   `handler.ts` (exports `<namespace>Router`) → `src/router.ts`.
 - `src/pg-errors.ts`: `onConstraint` maps a constraint to the call site's

@@ -171,6 +171,7 @@
     "TRANSFER_SAME_ACCOUNT": "Choisissez deux comptes différents.",
     "TRANSFER_LEG": "Ceci fait partie d'un virement : modifiez-le comme virement.",
     "IDEMPOTENCY_KEY_CONFLICT": "Ceci a déjà été enregistré. Fermez le formulaire et vérifiez la liste.",
+    "MFA_REQUIRED": "Terminez l'authentification à deux facteurs pour continuer.",
     "INVALID_CURSOR": "La liste a changé. Rechargez la page.",
     "INVALID_INPUT": "Certains champs sont invalides. Vérifiez le formulaire.",
     "UNEXPECTED": "Une erreur est survenue. Réessayez."

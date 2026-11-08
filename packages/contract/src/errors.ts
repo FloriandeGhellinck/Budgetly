@@ -44,6 +44,13 @@ export const ERRORS = {
     message:
       "This idempotencyKey was already used for a different kind of write. Use a fresh key for each new write.",
   },
+  // Thrown by apps/api's auth middleware on any procedure (ADR 0032), so no
+  // procedure declares it.
+  MFA_REQUIRED: {
+    status: 403,
+    message:
+      "This user has two-factor authentication turned on, and this access token is not at assurance level aal2. Complete the TOTP challenge (Supabase Auth mfa.challenge + mfa.verify) and retry with the new access token.",
+  },
   INVALID_CURSOR: {
     status: 400,
     message: "The cursor is malformed. Pass back nextCursor exactly as returned, or omit it.",

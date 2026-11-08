@@ -24,11 +24,17 @@ export const APP_ROLE = "app_runtime";
 const APP_ROLE_PASSWORD = "app_runtime";
 
 // What a Supabase project has before our migrations run: the auth.users table
-// user_id references, and the API roles the migrations revoke from. Roles are
+// user_id references, the auth.mfa_factors columns the MFA check reads, and
+// the API roles the migrations revoke from. Roles are
 // cluster-wide and test databases are migrated in parallel, hence the guards.
 const BOOTSTRAP_SQL = `
 create schema if not exists auth;
 create table if not exists auth.users (id uuid primary key default gen_random_uuid());
+create table if not exists auth.mfa_factors (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users (id) on delete cascade,
+  status text not null
+);
 
 do $$ begin
   create role ${APP_ROLE} with login password '${APP_ROLE_PASSWORD}' nosuperuser nobypassrls noinherit;

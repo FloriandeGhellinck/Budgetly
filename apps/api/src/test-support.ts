@@ -22,6 +22,10 @@ export type TestApi = {
   admin: Db;
   // A new Supabase user (row in auth.users) and a client signed in as them.
   signUp(): Promise<{ userId: string; client: Client }>;
+  // A client for an existing user whose token carries these extra claims (e.g. `aal`).
+  clientFor(userId: string, claims?: Record<string, unknown>): Promise<Client>;
+  // A TOTP factor in auth.mfa_factors, as Supabase Auth records it.
+  addFactor(userId: string, status: "verified" | "unverified"): Promise<void>;
   // A client sending this exact Authorization header.
   clientWithHeader(authorization: string | undefined): Client;
   fetch(request: Request): Promise<Response>;
@@ -56,22 +60,30 @@ export async function createTestApi(): Promise<TestApi> {
     return createORPCClient(link);
   }
 
+  async function clientFor(userId: string, claims: Record<string, unknown> = {}): Promise<Client> {
+    const token = await new SignJWT({ role: "authenticated", ...claims })
+      .setProtectedHeader({ alg: "ES256", kid: KID })
+      .setSubject(userId)
+      .setIssuer(ISSUER)
+      .setAudience(AUDIENCE)
+      .setIssuedAt()
+      .setExpirationTime("1h")
+      .sign(privateKey);
+    return clientWithHeader(`Bearer ${token}`);
+  }
+
   return {
     admin,
     fetch,
     clientWithHeader,
+    clientFor,
     async signUp() {
       const userId = randomUUID();
       await database.sql`insert into auth.users (id) values (${userId})`;
-      const token = await new SignJWT({ role: "authenticated" })
-        .setProtectedHeader({ alg: "ES256", kid: KID })
-        .setSubject(userId)
-        .setIssuer(ISSUER)
-        .setAudience(AUDIENCE)
-        .setIssuedAt()
-        .setExpirationTime("1h")
-        .sign(privateKey);
-      return { userId, client: clientWithHeader(`Bearer ${token}`) };
+      return { userId, client: await clientFor(userId) };
+    },
+    async addFactor(userId, status) {
+      await database.sql`insert into auth.mfa_factors (user_id, status) values (${userId}, ${status})`;
     },
     async close() {
       await Promise.all([admin.$client.end(), appDb.$client.end()]);

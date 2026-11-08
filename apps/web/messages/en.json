@@ -171,6 +171,7 @@
     "TRANSFER_SAME_ACCOUNT": "Pick two different accounts.",
     "TRANSFER_LEG": "This is part of a transfer: change it as a transfer.",
     "IDEMPOTENCY_KEY_CONFLICT": "This was already saved. Close the form and check the list.",
+    "MFA_REQUIRED": "Complete two-factor authentication to continue.",
     "INVALID_CURSOR": "The list changed. Refresh the page.",
     "INVALID_INPUT": "Some fields are invalid. Check the form.",
     "UNEXPECTED": "Something went wrong. Try again."

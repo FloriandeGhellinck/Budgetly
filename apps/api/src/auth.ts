@@ -1,9 +1,16 @@
 import { errors as joseErrors, jwtVerify, type JWTVerifyGetKey } from "jose";
 import { z } from "zod";
 
-// Resolves a bearer token to the Supabase user id (`sub`), or null when the
-// token is missing, malformed, expired or not signed by the configured issuer.
-export type VerifyToken = (token: string) => Promise<string | null>;
+// Authenticator assurance level: aal2 once the user passed a second factor in
+// this session. Supabase omits the claim at aal1.
+export type Aal = "aal1" | "aal2";
+
+export type VerifiedToken = { userId: string; aal: Aal };
+
+// Resolves a bearer token to the Supabase user id (`sub`) and its `aal`, or
+// null when the token is missing, malformed, expired or not signed by the
+// configured issuer.
+export type VerifyToken = (token: string) => Promise<VerifiedToken | null>;
 
 export function createTokenVerifier(options: {
   keys: JWTVerifyGetKey;
@@ -18,7 +25,9 @@ export function createTokenVerifier(options: {
         // Supabase's asymmetric signing keys; HS256 shared secrets are refused.
         algorithms: ["ES256", "RS256"],
       });
-      return z.uuid().safeParse(payload.sub).data ?? null;
+      const userId = z.uuid().safeParse(payload.sub).data;
+      if (!userId) return null;
+      return { userId, aal: payload["aal"] === "aal2" ? "aal2" : "aal1" };
     } catch (error) {
       if (error instanceof joseErrors.JOSEError) return null;
       throw error;
