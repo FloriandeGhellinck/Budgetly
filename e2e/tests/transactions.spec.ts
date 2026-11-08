@@ -2,7 +2,8 @@ import { expect, type Page, test } from "@playwright/test";
 import { readMagicLink } from "../local-stack";
 
 // Smoke journey (docs/what-to-test.md): sign in by magic link, land on a
-// bootstrapped space, record an expense, see it listed, delete and undo.
+// bootstrapped space, record an expense, see it listed, delete and undo,
+// then edit it with a new tag and get it suggested from history.
 
 async function signIn(page: Page, email: string) {
   await page.goto("/transactions");
@@ -14,7 +15,7 @@ async function signIn(page: Page, email: string) {
   await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
 }
 
-test("record an expense, delete it and undo", async ({ page }, testInfo) => {
+test("record, delete, undo, edit and get suggestions", async ({ page }, testInfo) => {
   const run = `${Date.now()}-${testInfo.project.name}`;
   const email = `e2e-${run}@example.com`;
   const name = `Bakery ${run}`;
@@ -47,4 +48,23 @@ test("record an expense, delete it and undo", async ({ page }, testInfo) => {
   await page.getByRole("button", { name: "Undo" }).click();
   await expect(page.getByText("Restored")).toBeVisible();
   await expect(row).toBeVisible();
+
+  // Edit: new amount and a tag created on the fly.
+  await row.getByRole("button", { name: `Actions for ${name}` }).click();
+  await page.getByRole("menuitem", { name: "Edit" }).click();
+  const edit = page.getByRole("dialog", { name: "Edit transaction" });
+  await edit.getByLabel("Amount").fill("15");
+  await edit.getByLabel("Tags").fill("Trip");
+  await page.getByRole("option", { name: "Create “Trip”" }).click();
+  await edit.getByRole("button", { name: "Save" }).click();
+  await expect(edit).toBeHidden();
+  await expect(row).toContainText("-€15.00");
+  await expect(row).toContainText("Trip");
+
+  // A new transaction with a similar name is pre-filled from history (ADR 0024).
+  await page.getByRole("button", { name: "Add", exact: true }).click();
+  const next = page.getByRole("dialog", { name: "New transaction" });
+  await next.getByLabel("Name").fill("Bakery");
+  await expect(next.getByText("Filled in from your history.")).toBeVisible();
+  await expect(next.getByLabel("Category")).toHaveValue("Groceries");
 });
