@@ -55,7 +55,8 @@ export function TransferForm({
   const receivedAmountMinor = received.trim() === "" ? undefined : parseAmountMinor(received);
   const amountInvalid = submitted && sentAmountMinor === null;
   const receivedInvalid = submitted && receivedAmountMinor === null;
-  const sameAccount = submitted && fromAccountId === toAccountId;
+  const sameAccount =
+    submitted && (!fromAccountId || !toAccountId || fromAccountId === toAccountId);
 
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -65,6 +66,7 @@ export function TransferForm({
       sentAmountMinor === null ||
       receivedAmountMinor === null ||
       !fromAccountId ||
+      !toAccountId ||
       fromAccountId === toAccountId
     ) {
       return;
@@ -76,7 +78,8 @@ export function TransferForm({
         sentAmountMinor,
         ...(receivedAmountMinor !== undefined ? { receivedAmountMinor } : {}),
         occurredOn: toIsoDay(date),
-        ...(name.trim() ? { name: name.trim() } : {}),
+        // Stored as typed: an empty name gets the word in the UI language.
+        name: name.trim() || t("transfer"),
         idempotencyKey: idempotencyKey.current,
       });
       if (!result.ok) {
@@ -113,6 +116,18 @@ export function TransferForm({
           </SelectContent>
         </Select>
       </Field>
+    );
+  }
+
+  // A new user has only Main: a transfer needs a second account first.
+  if (accounts.length < 2) {
+    return (
+      <div className="flex flex-col gap-4">
+        <p className="text-sm text-muted-foreground">{t("needTwoAccounts")}</p>
+        <Button type="button" variant="outline" onClick={onCancel}>
+          {t("cancel")}
+        </Button>
+      </div>
     );
   }
 

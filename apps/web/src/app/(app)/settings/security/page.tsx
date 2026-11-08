@@ -28,7 +28,7 @@ export default async function SecurityPage() {
       <PageHeader
         title={t("title")}
         actions={
-          <Button variant="ghost" size="sm" render={<Link href="/settings" />}>
+          <Button variant="ghost" size="sm" nativeButton={false} render={<Link href="/settings" />}>
             <ArrowLeftIcon />
             {t("back")}
           </Button>

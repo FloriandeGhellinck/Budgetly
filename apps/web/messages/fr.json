@@ -157,6 +157,7 @@
     "received": "Montant reçu",
     "receivedHint": "Laissez vide s'il est égal au montant envoyé.",
     "sameAccount": "Choisissez deux comptes différents.",
+    "needTwoAccounts": "Un virement déplace de l'argent entre deux de vos comptes. Ajoutez d'abord un deuxième compte.",
     "save": "Enregistrer",
     "saving": "Enregistrement…",
     "cancel": "Annuler",

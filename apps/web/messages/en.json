@@ -157,6 +157,7 @@
     "received": "Amount received",
     "receivedHint": "Leave empty when it equals the amount sent.",
     "sameAccount": "Pick two different accounts.",
+    "needTwoAccounts": "A transfer moves money between two of your accounts. Add a second account first.",
     "save": "Save",
     "saving": "Saving…",
     "cancel": "Cancel",

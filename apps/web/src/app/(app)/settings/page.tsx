@@ -70,7 +70,11 @@ export default async function SettingsPage() {
           <CardDescription>{t("securityDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
-          <Button variant="outline" render={<Link href="/settings/security" />}>
+          <Button
+            variant="outline"
+            nativeButton={false}
+            render={<Link href="/settings/security" />}
+          >
             {t("security")}
           </Button>
         </CardContent>

@@ -22,7 +22,14 @@ export async function startTotpEnrollment(): Promise<TotpEnrollment | null> {
     console.error("mfa.enroll failed", error.message);
     return null;
   }
-  return { factorId: data.id, qrCode: data.totp.qr_code, secret: data.totp.secret };
+  return { factorId: data.id, qrCode: toDataUri(data.totp.qr_code), secret: data.totp.secret };
+}
+
+// Auth returns `data:image/svg+xml;utf-8,<svg …>` with raw markup and a
+// trailing newline, which next/image refuses; encode it.
+function toDataUri(qrCode: string): string {
+  const svg = qrCode.slice(qrCode.indexOf(",") + 1).trim();
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
 export async function confirmTotpEnrollment(factorId: string, code: string): Promise<boolean> {

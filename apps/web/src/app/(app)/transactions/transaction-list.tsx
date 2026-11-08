@@ -150,38 +150,48 @@ function TransactionRow({ transaction }: { transaction: Transaction }) {
     });
   }
 
+  const summary = (
+    <>
+      <span className="flex min-w-0 flex-col">
+        <span className="truncate font-medium">{transaction.name}</span>
+        <span className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
+          <span>{detail}</span>
+          {account && <span aria-hidden>·</span>}
+          {account && <span>{account}</span>}
+          {transaction.tags.map((tag) => (
+            <Badge key={tag} variant="secondary">
+              {tag}
+            </Badge>
+          ))}
+        </span>
+      </span>
+      <Money
+        amountMinor={transaction.amountMinor}
+        direction={transaction.direction}
+        locale={locale}
+        className={
+          transaction.direction === "income" ? "text-emerald-600 dark:text-emerald-400" : undefined
+        }
+      />
+    </>
+  );
+
   return (
     <li className="flex items-center gap-2 px-3 py-2">
-      <Button
-        variant="ghost"
-        className="h-auto min-w-0 flex-1 justify-between gap-3 px-1 py-1 text-left font-normal"
-        disabled={isTransfer}
-        onClick={() => openEdit(transaction)}
-      >
-        <span className="flex min-w-0 flex-col">
-          <span className="truncate font-medium">{transaction.name}</span>
-          <span className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
-            <span>{detail}</span>
-            {account && <span aria-hidden>·</span>}
-            {account && <span>{account}</span>}
-            {transaction.tags.map((tag) => (
-              <Badge key={tag} variant="secondary">
-                {tag}
-              </Badge>
-            ))}
-          </span>
-        </span>
-        <Money
-          amountMinor={transaction.amountMinor}
-          direction={transaction.direction}
-          locale={locale}
-          className={
-            transaction.direction === "income"
-              ? "text-emerald-600 dark:text-emerald-400"
-              : undefined
-          }
-        />
-      </Button>
+      {isTransfer ? (
+        // Transfers have no edit form yet (no transfers.update): not clickable.
+        <div className="flex min-w-0 flex-1 items-center justify-between gap-3 px-1 py-1">
+          {summary}
+        </div>
+      ) : (
+        <Button
+          variant="ghost"
+          className="h-auto min-w-0 flex-1 justify-between gap-3 px-1 py-1 text-left font-normal"
+          onClick={() => openEdit(transaction)}
+        >
+          {summary}
+        </Button>
+      )}
       <DropdownMenu>
         <DropdownMenuTrigger
           render={
