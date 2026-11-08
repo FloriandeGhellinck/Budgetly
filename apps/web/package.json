@@ -6,10 +6,35 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "scripts": {
-    "typecheck": "tsc"
+    "dev": "next dev --port 3000",
+    "build": "next build",
+    "start": "next start --port 3000",
+    "typecheck": "next typegen && tsc"
+  },
+  "dependencies": {
+    "@base-ui/react": "catalog:",
+    "@expense/contract": "workspace:*",
+    "@expense/ui": "workspace:*",
+    "@orpc/client": "catalog:",
+    "@supabase/ssr": "catalog:",
+    "@supabase/supabase-js": "catalog:",
+    "lucide-react": "catalog:",
+    "next": "catalog:",
+    "next-intl": "catalog:",
+    "next-themes": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "server-only": "catalog:",
+    "sonner": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "catalog:",
     "@types/node": "catalog:",
-    "typescript": "catalog:"
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }
