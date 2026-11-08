@@ -1,0 +1,210 @@
+{
+  "app": {
+    "name": "expense",
+    "description": "Suivez vos dépenses et vos revenus.",
+    "shortName": "expense"
+  },
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "transactions": "Transactions",
+    "accounts": "Comptes",
+    "categories": "Catégories",
+    "tags": "Étiquettes",
+    "settings": "Réglages",
+    "add": "Ajouter une transaction",
+    "main": "Navigation principale"
+  },
+  "login": {
+    "title": "Connexion à expense",
+    "description": "Nous vous envoyons un lien de connexion par e-mail. Pas de mot de passe.",
+    "email": "E-mail",
+    "emailPlaceholder": "vous@exemple.com",
+    "sendLink": "Recevoir un lien de connexion",
+    "sending": "Envoi…",
+    "sent": "Consultez votre boîte : un lien de connexion a été envoyé à {email}.",
+    "or": "ou",
+    "google": "Continuer avec Google",
+    "invalidEmail": "Saisissez une adresse e-mail valide.",
+    "failed": "Impossible d'envoyer le lien. Réessayez dans une minute.",
+    "linkInvalid": "Ce lien de connexion est invalide ou a expiré. Demandez-en un nouveau."
+  },
+  "mfa": {
+    "title": "Authentification à deux facteurs",
+    "description": "Saisissez le code à 6 chiffres de votre application d'authentification.",
+    "code": "Code",
+    "verify": "Vérifier",
+    "invalidCode": "Ce code ne fonctionne pas. Vérifiez votre application et réessayez.",
+    "signOut": "Se connecter avec un autre compte"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "comingSoon": "Les chiffres du mois apparaîtront ici.",
+    "addFirst": "Ajouter une transaction"
+  },
+  "accounts": {
+    "title": "Comptes",
+    "comingSoon": "Vous pourrez bientôt gérer vos comptes et vos parts ici."
+  },
+  "categories": {
+    "title": "Catégories",
+    "comingSoon": "Vous pourrez bientôt modifier vos catégories ici."
+  },
+  "tags": {
+    "title": "Étiquettes",
+    "comingSoon": "Vous pourrez bientôt parcourir vos étiquettes ici."
+  },
+  "settings": {
+    "title": "Réglages",
+    "language": "Langue",
+    "languageDescription": "La langue de l'application.",
+    "theme": "Thème",
+    "themeDescription": "Clair, sombre ou comme votre appareil.",
+    "themes": {
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système"
+    },
+    "account": "Compte",
+    "signedInAs": "Connecté en tant que {email}",
+    "signOut": "Se déconnecter",
+    "security": "Authentification à deux facteurs",
+    "securityDescription": "Protégez votre compte avec une application d'authentification."
+  },
+  "security": {
+    "title": "Authentification à deux facteurs",
+    "enabled": "L'authentification à deux facteurs est activée.",
+    "disabled": "L'authentification à deux facteurs est désactivée.",
+    "enable": "Configurer une application d'authentification",
+    "scan": "Scannez ce QR code avec votre application d'authentification, puis saisissez le code à 6 chiffres affiché.",
+    "secret": "Impossible de scanner ? Saisissez cette clé : {secret}",
+    "code": "Code",
+    "confirm": "Activer",
+    "cancel": "Annuler",
+    "remove": "Désactiver",
+    "turnedOn": "L'authentification à deux facteurs est activée.",
+    "turnedOff": "L'authentification à deux facteurs est désactivée.",
+    "invalidCode": "Ce code ne fonctionne pas. Vérifiez votre application et réessayez.",
+    "failed": "Une erreur est survenue. Réessayez.",
+    "back": "Retour aux réglages"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Français"
+  },
+  "transactions": {
+    "title": "Transactions",
+    "add": "Ajouter",
+    "empty": "Aucune transaction pour l'instant.",
+    "emptyFiltered": "Aucune transaction ne correspond à ces filtres.",
+    "loadMore": "Afficher plus",
+    "loading": "Chargement…",
+    "uncategorized": "Sans catégorie",
+    "transfer": "Virement",
+    "actions": "Actions pour {name}",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "deleted": "Transaction supprimée",
+    "transferDeleted": "Virement supprimé",
+    "undo": "Annuler",
+    "restored": "Restaurée",
+    "filters": {
+      "search": "Rechercher",
+      "searchPlaceholder": "Rechercher un nom ou une note",
+      "direction": "Type",
+      "account": "Compte",
+      "category": "Catégorie",
+      "from": "Du",
+      "to": "Au",
+      "all": "Tous",
+      "clear": "Effacer les filtres"
+    }
+  },
+  "directions": {
+    "expense": "Dépense",
+    "income": "Revenu",
+    "transfer_out": "Virement sortant",
+    "transfer_in": "Virement entrant"
+  },
+  "entry": {
+    "newTitle": "Nouvelle transaction",
+    "editTitle": "Modifier la transaction",
+    "transferTitle": "Nouveau virement",
+    "description": "Les montants sont en euros.",
+    "kind": "Type",
+    "expense": "Dépense",
+    "income": "Revenu",
+    "transfer": "Virement",
+    "amount": "Montant",
+    "amountPlaceholder": "0,00",
+    "invalidAmount": "Saisissez un montant supérieur à zéro, avec au plus deux décimales.",
+    "name": "Nom",
+    "namePlaceholder": "Supermarket, loyer, salaire…",
+    "nameRequired": "Saisissez un nom.",
+    "suggested": "Complété d'après votre historique.",
+    "date": "Date",
+    "account": "Compte",
+    "category": "Catégorie",
+    "categoryPlaceholder": "Choisir une catégorie",
+    "noCategory": "Sans catégorie",
+    "noMatch": "Aucun résultat.",
+    "beneficiary": "Pour qui",
+    "noBeneficiary": "Personne en particulier",
+    "tags": "Étiquettes",
+    "tagsPlaceholder": "Ajouter une étiquette",
+    "createTag": "Créer « {name} »",
+    "from": "Compte de départ",
+    "to": "Compte d'arrivée",
+    "received": "Montant reçu",
+    "receivedHint": "Laissez vide s'il est égal au montant envoyé.",
+    "sameAccount": "Choisissez deux comptes différents.",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "cancel": "Annuler",
+    "saved": "Enregistré",
+    "transferSaved": "Virement enregistré"
+  },
+  "errors": {
+    "NOT_FOUND": "Cet élément n'existe plus. Rechargez la page.",
+    "CATEGORY_DIRECTION_MISMATCH": "Cette catégorie est pour l'autre type (dépense ou revenu). Choisissez-en une autre.",
+    "CATEGORY_IN_USE": "Des transactions utilisent encore cette catégorie.",
+    "TRANSFER_SAME_ACCOUNT": "Choisissez deux comptes différents.",
+    "TRANSFER_LEG": "Ceci fait partie d'un virement : modifiez-le comme virement.",
+    "IDEMPOTENCY_KEY_CONFLICT": "Ceci a déjà été enregistré. Fermez le formulaire et vérifiez la liste.",
+    "INVALID_CURSOR": "La liste a changé. Rechargez la page.",
+    "INVALID_INPUT": "Certains champs sont invalides. Vérifiez le formulaire.",
+    "UNEXPECTED": "Une erreur est survenue. Réessayez."
+  },
+  "seed": {
+    "accounts": {
+      "main": "Principal"
+    },
+    "beneficiaries": {
+      "me": "Moi"
+    },
+    "categoryGroups": {
+      "daily_life": "Vie quotidienne",
+      "leisure": "Loisirs",
+      "investment": "Investissement",
+      "debt": "Dettes",
+      "income": "Revenus"
+    },
+    "categories": {
+      "groceries": "Courses",
+      "health": "Santé",
+      "clothing": "Vêtements",
+      "furniture": "Mobilier",
+      "childcare": "Garde d'enfants",
+      "holidays": "Vacances",
+      "outings": "Sorties",
+      "gifts": "Cadeaux",
+      "sport": "Sport",
+      "stocks": "Actions",
+      "crypto": "Crypto",
+      "real_estate": "Immobilier",
+      "loan_repayment": "Remboursement d'emprunt",
+      "salary": "Salaire",
+      "meal_vouchers": "Chèques-repas",
+      "other_income": "Autres revenus"
+    }
+  }
+}

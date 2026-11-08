@@ -1,6 +1,7 @@
 packages:
   - "apps/*"
   - "packages/*"
+  - "e2e"
 
 # One version per dependency across the workspace. Packages reference these
 # with "catalog:". Entries for libraries not yet used are reserved for the

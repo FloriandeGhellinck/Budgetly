@@ -1,0 +1,210 @@
+{
+  "app": {
+    "name": "expense",
+    "description": "Track your expenses and income.",
+    "shortName": "expense"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "transactions": "Transactions",
+    "accounts": "Accounts",
+    "categories": "Categories",
+    "tags": "Tags",
+    "settings": "Settings",
+    "add": "Add transaction",
+    "main": "Main navigation"
+  },
+  "login": {
+    "title": "Sign in to expense",
+    "description": "We'll email you a link to sign in. No password needed.",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "sendLink": "Email me a sign-in link",
+    "sending": "Sending…",
+    "sent": "Check your inbox: we sent a sign-in link to {email}.",
+    "or": "or",
+    "google": "Continue with Google",
+    "invalidEmail": "Enter a valid email address.",
+    "failed": "We couldn't send the link. Try again in a minute.",
+    "linkInvalid": "This sign-in link is invalid or has expired. Ask for a new one."
+  },
+  "mfa": {
+    "title": "Two-factor authentication",
+    "description": "Enter the 6-digit code from your authenticator app.",
+    "code": "Code",
+    "verify": "Verify",
+    "invalidCode": "That code didn't work. Check your app and try again.",
+    "signOut": "Sign in with another account"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "comingSoon": "Monthly figures will appear here.",
+    "addFirst": "Add a transaction"
+  },
+  "accounts": {
+    "title": "Accounts",
+    "comingSoon": "Manage your accounts and shares here soon."
+  },
+  "categories": {
+    "title": "Categories",
+    "comingSoon": "Edit your categories here soon."
+  },
+  "tags": {
+    "title": "Tags",
+    "comingSoon": "Browse your tags here soon."
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "languageDescription": "The language of the app.",
+    "theme": "Theme",
+    "themeDescription": "Light, dark, or follow your device.",
+    "themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "account": "Account",
+    "signedInAs": "Signed in as {email}",
+    "signOut": "Sign out",
+    "security": "Two-factor authentication",
+    "securityDescription": "Protect your account with an authenticator app."
+  },
+  "security": {
+    "title": "Two-factor authentication",
+    "enabled": "Two-factor authentication is on.",
+    "disabled": "Two-factor authentication is off.",
+    "enable": "Set up an authenticator app",
+    "scan": "Scan this QR code with your authenticator app, then enter the 6-digit code it shows.",
+    "secret": "Can't scan? Enter this key: {secret}",
+    "code": "Code",
+    "confirm": "Turn on",
+    "cancel": "Cancel",
+    "remove": "Turn off",
+    "turnedOn": "Two-factor authentication is on.",
+    "turnedOff": "Two-factor authentication is off.",
+    "invalidCode": "That code didn't work. Check your app and try again.",
+    "failed": "Something went wrong. Try again.",
+    "back": "Back to settings"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Français"
+  },
+  "transactions": {
+    "title": "Transactions",
+    "add": "Add",
+    "empty": "No transactions yet.",
+    "emptyFiltered": "No transactions match these filters.",
+    "loadMore": "Load more",
+    "loading": "Loading…",
+    "uncategorized": "Uncategorized",
+    "transfer": "Transfer",
+    "actions": "Actions for {name}",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleted": "Transaction deleted",
+    "transferDeleted": "Transfer deleted",
+    "undo": "Undo",
+    "restored": "Restored",
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Search name or note",
+      "direction": "Type",
+      "account": "Account",
+      "category": "Category",
+      "from": "From",
+      "to": "To",
+      "all": "All",
+      "clear": "Clear filters"
+    }
+  },
+  "directions": {
+    "expense": "Expense",
+    "income": "Income",
+    "transfer_out": "Transfer out",
+    "transfer_in": "Transfer in"
+  },
+  "entry": {
+    "newTitle": "New transaction",
+    "editTitle": "Edit transaction",
+    "transferTitle": "New transfer",
+    "description": "Amounts are in euros.",
+    "kind": "Type",
+    "expense": "Expense",
+    "income": "Income",
+    "transfer": "Transfer",
+    "amount": "Amount",
+    "amountPlaceholder": "0.00",
+    "invalidAmount": "Enter an amount above zero, with at most two decimals.",
+    "name": "Name",
+    "namePlaceholder": "Supermarket, rent, salary…",
+    "nameRequired": "Enter a name.",
+    "suggested": "Filled in from your history.",
+    "date": "Date",
+    "account": "Account",
+    "category": "Category",
+    "categoryPlaceholder": "Pick a category",
+    "noCategory": "No category",
+    "noMatch": "Nothing found.",
+    "beneficiary": "For whom",
+    "noBeneficiary": "No one in particular",
+    "tags": "Tags",
+    "tagsPlaceholder": "Add a tag",
+    "createTag": "Create “{name}”",
+    "from": "From account",
+    "to": "To account",
+    "received": "Amount received",
+    "receivedHint": "Leave empty when it equals the amount sent.",
+    "sameAccount": "Pick two different accounts.",
+    "save": "Save",
+    "saving": "Saving…",
+    "cancel": "Cancel",
+    "saved": "Saved",
+    "transferSaved": "Transfer saved"
+  },
+  "errors": {
+    "NOT_FOUND": "This item no longer exists. Refresh the page.",
+    "CATEGORY_DIRECTION_MISMATCH": "This category is for the other type (expense or income). Pick another one.",
+    "CATEGORY_IN_USE": "Transactions still use this category.",
+    "TRANSFER_SAME_ACCOUNT": "Pick two different accounts.",
+    "TRANSFER_LEG": "This is part of a transfer: change it as a transfer.",
+    "IDEMPOTENCY_KEY_CONFLICT": "This was already saved. Close the form and check the list.",
+    "INVALID_CURSOR": "The list changed. Refresh the page.",
+    "INVALID_INPUT": "Some fields are invalid. Check the form.",
+    "UNEXPECTED": "Something went wrong. Try again."
+  },
+  "seed": {
+    "accounts": {
+      "main": "Main"
+    },
+    "beneficiaries": {
+      "me": "Me"
+    },
+    "categoryGroups": {
+      "daily_life": "Daily life",
+      "leisure": "Leisure",
+      "investment": "Investment",
+      "debt": "Debt",
+      "income": "Income"
+    },
+    "categories": {
+      "groceries": "Groceries",
+      "health": "Health",
+      "clothing": "Clothing",
+      "furniture": "Furniture",
+      "childcare": "Childcare",
+      "holidays": "Holidays",
+      "outings": "Outings",
+      "gifts": "Gifts",
+      "sport": "Sport",
+      "stocks": "Stocks",
+      "crypto": "Crypto",
+      "real_estate": "Real estate",
+      "loan_repayment": "Loan repayment",
+      "salary": "Salary",
+      "meal_vouchers": "Meal vouchers",
+      "other_income": "Other income"
+    }
+  }
+}

@@ -1,10 +1,44 @@
+import type { Metadata, Viewport } from "next";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
+import { Providers } from "@/components/providers";
 import "./globals.css";
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("app");
+  return {
+    title: { default: t("name"), template: `%s · ${t("name")}` },
+    description: t("description"),
+    applicationName: t("name"),
+    appleWebApp: { capable: true, title: t("name"), statusBarStyle: "default" },
+    icons: {
+      icon: [{ url: "/icons/icon.svg", type: "image/svg+xml" }],
+      apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180" }],
+    },
+  };
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+};
+
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const locale = await getLocale();
   return (
-    <html lang="en">
-      <body>{children}</body>
+    // next-themes sets the class on <html> before hydration.
+    <html lang={locale} suppressHydrationWarning>
+      <body className="min-h-dvh bg-background font-sans text-foreground antialiased">
+        <NextIntlClientProvider>
+          <Providers>{children}</Providers>
+        </NextIntlClientProvider>
+      </body>
     </html>
   );
 }

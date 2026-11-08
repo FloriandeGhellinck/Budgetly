@@ -9,6 +9,7 @@
     "checks": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm boundaries && pnpm schema-drift",
     "test": "vitest run",
     "test:watch": "vitest",
+    "e2e": "pnpm --filter @expense/e2e test",
     "typecheck": "tsc -p tsconfig.json && pnpm -r typecheck",
     "lint": "oxlint --type-aware --deny-warnings",
     "lint:fix": "oxlint --type-aware --fix",
