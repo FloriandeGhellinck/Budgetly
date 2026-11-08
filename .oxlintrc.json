@@ -1,0 +1,128 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "import", "react", "jsx-a11y", "nextjs", "vitest"],
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": [
+              "@expense/web",
+              "@expense/web/*",
+              "@expense/api",
+              "@expense/api/*",
+              "**/apps/**",
+              "**/web/src/**",
+              "**/api/src/**"
+            ],
+            "message": "Nothing imports from an app (ADR 0014). Shared code belongs in packages/*; API types come from @expense/contract."
+          }
+        ]
+      }
+    ]
+  },
+  "ignorePatterns": ["**/dist/**", "**/.next/**", "**/next-env.d.ts"],
+  "overrides": [
+    {
+      "files": ["apps/web/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@expense/web",
+                  "@expense/web/*",
+                  "@expense/api",
+                  "@expense/api/*",
+                  "**/apps/**",
+                  "**/web/src/**",
+                  "**/api/src/**"
+                ],
+                "message": "Nothing imports from an app (ADR 0014). Shared code belongs in packages/*; API types come from @expense/contract."
+              },
+              {
+                "group": ["@expense/db", "@expense/db/*", "**/packages/db/**"],
+                "message": "apps/web never touches the database: call apps/api from the server (ADR 0013, 0014)."
+              },
+              {
+                "group": ["@expense/test-db", "@expense/test-db/*", "**/packages/test-db/**"],
+                "message": "apps/web never touches the database, not even in tests: test procedures in apps/api."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["packages/contract/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@expense/web",
+                  "@expense/web/*",
+                  "@expense/api",
+                  "@expense/api/*",
+                  "**/apps/**",
+                  "**/web/src/**",
+                  "**/api/src/**"
+                ],
+                "message": "Nothing imports from an app (ADR 0014). Shared code belongs in packages/*; API types come from @expense/contract."
+              },
+              {
+                "group": ["@expense/db", "@expense/db/*", "**/packages/db/**"],
+                "message": "The contract ships to apps/web, so it may only `import type` from @expense/db.",
+                "allowTypeImports": true
+              },
+              {
+                "group": ["@expense/test-db", "@expense/test-db/*", "**/packages/test-db/**"],
+                "message": "Contracts are pure; DB tests live next to the code that queries."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["packages/ui/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@expense/web",
+                  "@expense/web/*",
+                  "@expense/api",
+                  "@expense/api/*",
+                  "**/apps/**",
+                  "**/web/src/**",
+                  "**/api/src/**"
+                ],
+                "message": "Nothing imports from an app (ADR 0014). Shared code belongs in packages/*; API types come from @expense/contract."
+              },
+              {
+                "group": ["@expense/db", "@expense/db/*", "**/packages/db/**"],
+                "message": "UI components are presentational: no data access."
+              },
+              {
+                "group": ["@expense/test-db", "@expense/test-db/*", "**/packages/test-db/**"],
+                "message": "UI components are presentational: no data access."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
