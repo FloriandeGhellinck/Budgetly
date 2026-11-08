@@ -1,0 +1,87 @@
+# Domain glossary
+
+Canonical vocabulary for `expense`. Code, API procedures, MCP tools and docs
+use these terms. Decisions live in `docs/adr/`.
+
+## User
+
+The tenant. A person with a login who owns all of their data (accounts,
+transactions, categories, tags). Users never see each other's data
+(ADR 0023).
+
+## Transaction
+
+A single money movement recorded by the user: one purchase, one salary
+payment, one investment contribution. Every expense and every income is a
+transaction; there is no separate income table and no hand-entered monthly
+total. Monthly summaries are computed from transactions.
+
+## Direction
+
+Whether a transaction takes money out (`expense`) or brings money in
+(`income`). The two legs of a transfer use `transfer_out` and `transfer_in`
+and are excluded from income and spending figures.
+
+## Amount
+
+The absolute value of a transaction, stored as a positive integer in minor
+units (cents of EUR, ADR 0006). The sign comes from the
+direction, never from the amount. Example: `{ direction: "expense",
+amountMinor: 2068 }` is 20.68 € spent. Currency is a label on the account,
+not on the transaction.
+
+## Beneficiary
+
+Who a transaction is for ("pour qui"): `Me`, `Children`. Independent of the
+category (ADR 0010).
+
+## Category / Category group
+
+What a transaction is for ("pour quoi"). Each category (Groceries, Health)
+belongs to a group (Daily life, Leisure, Investment, Debt). Income uses its
+own categories (Salary, Meal vouchers…).
+
+## Category kind
+
+Set on the category group: `spending` (money consumed: groceries, childcare, holidays) or `saving`
+(money set aside: stocks, crypto, kids' savings). Saving still leaves the
+account as an `expense` transaction but is reported apart from spending.
+
+## Account
+
+A place money is held or spent from: the joint bank account (shared), a personal card
+account (Broker), a crypto card account (Crypto card). Every transaction
+belongs to one account.
+
+## Transfer
+
+Money moving between two accounts of the same user (e.g. joint account
+→ Broker). Not spending, not income. Excluded from consumption and
+savings-rate figures. Stored as two transaction rows (legs), one per account:
+a `transfer_out` leg and a `transfer_in` leg sharing the same `transferId`,
+each with its own amount (ADR 0006).
+
+## Cashback-eligible
+
+In the Notion data, `Carte = Oui` means the purchase was paid by card and so
+earned cashback; `Non` means card payment was not possible (direct debit,
+bank transfer). In `expense` this is derived from the account / payment
+method used.
+
+## Tracked account
+
+An account whose movements `expense` records. Anything outside is out of
+scope: money sent there is an expense (often of kind `saving`), money coming
+from there is income (ADR 0007).
+
+## Shared account / Share
+
+An account the user co-owns with someone else (the joint account). Its
+**share** is the user's percentage (50 %). Transactions are recorded at their
+real amount; reports count `amount × share` ("my part"). Personal accounts
+have a 100 % share.
+
+## Tag
+
+A free-form label grouping transactions across categories, usually an event
+or trip ("Summer trip 2026"). A transaction can have several tags.
