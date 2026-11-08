@@ -13,14 +13,18 @@ newer than most training data: read `node_modules/next/dist/docs/` first.
   quick-entry dialog (`useEntry().openNew()` / `openEdit(tx)`).
 - `src/lib/api/server.ts`: `getApi()`, the only API client (server-only).
   `src/lib/supabase/*`: the only Supabase clients. `src/lib/entry-options.ts`:
-  accounts, categories, beneficiaries and tags with translated labels.
+  accounts, categories, beneficiaries and tags with translated labels;
+  `optionLabels` translates the stored names reports return.
+- `src/components/reports`: dashboard pieces (tiles, trend chart, ranked
+  bars). Series colours are `--chart-1..3` (income, spending, saving).
 
 ## Patterns
 
 - **Read** in a server component: `const api = await getApi()`.
 - **Write** through a server action in `src/lib/<area>/actions.ts` that wraps
-  the call in `runAction` and returns `ActionResult`; show
-  the `errors.<code>` message on failure. Money writes send an idempotency key
+  the call in `runWrite` (`runAction` for reads) and returns `ActionResult`;
+  show the `errors.<code>` message on failure. Small settings forms use
+  `FormDialog` / `NameDialog` (`src/components/forms`). Money writes send an idempotency key
   generated once per form (`useRef(crypto.randomUUID())`).
 - **Filters** live in the URL: parse `searchParams` with a schema that drops
   bad values (`src/lib/transactions/filters.ts`).
