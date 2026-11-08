@@ -140,6 +140,7 @@ beforeAll(async () => {
   await transfer(dave, dave.accountId, daveSavings, 10000, "2026-05-25");
   const deletedTransfer = await transfer(dave, dave.accountId, daveSavings, 7000, "2026-05-26");
   await dave.client.transfers.delete({ transferId: deletedTransfer.transferId });
+  await dave.client.accounts.archive({ id: daveSavings });
 
   const erinJoint = (await erin.client.accounts.create({ name: "Joint", shareBps: 5000 })).id;
   for (const amountMinor of [1, 1, 1, 3333]) {
@@ -449,6 +450,15 @@ describe("reports.accounts", () => {
         receivedMinor: 10000,
         count: 1,
       },
+    ]);
+  });
+
+  it("keeps archived accounts, with their archive date", async () => {
+    const result = await dave.client.reports.accounts({});
+
+    expect(result.accounts.map((a) => [a.name, a.archivedAt === null])).toEqual([
+      ["Main", true],
+      ["Savings", false],
     ]);
   });
 
