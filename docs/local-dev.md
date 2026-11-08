@@ -58,6 +58,34 @@ restart Supabase, and set `AUTH_GOOGLE_ENABLED=true` in
 Settings → Two-factor authentication → scan the QR code with any TOTP app.
 The next sign-in asks for a code after the magic link.
 
+## Import the Notion history (one-off)
+
+Export the expenses table and the monthly summary from Notion as CSV, keep
+them outside the repo, and pass their paths (ADR 0009, 0033):
+
+```sh
+pnpm --filter @expense/api import:notion --dry-run \
+  --expenses ~/Downloads/expenses.csv --summary ~/Downloads/summary.csv
+```
+
+`--dry-run` opens no database: it prints counts and totals per beneficiary,
+group / category, tag and month (next to Notion's own `DEPENSES`), the
+skipped rows and any `Enfants` sub-category without a group mapping. Then
+import for real, as a user who signed in once:
+
+```sh
+pnpm --filter @expense/api import:notion \
+  --expenses ~/Downloads/expenses.csv --summary ~/Downloads/summary.csv \
+  --user <user uuid>
+```
+
+It writes through the API procedures on `DATABASE_URL` from `apps/api/.env`
+(`app_runtime`). Re-running it adds nothing already imported. `--user` also
+takes an email when `DATABASE_ADMIN_URL` points at the `postgres` role
+(locally `postgres://postgres:postgres@127.0.0.1:56322/postgres`). The
+summary has no years: they start at the year of the oldest expense, or at
+`--summary-start-year`.
+
 ## Tests
 
 ```sh

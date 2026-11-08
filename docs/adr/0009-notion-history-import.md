@@ -1,6 +1,6 @@
 # 9. Import Notion history as-is into a legacy account
 
-Status: accepted (2026-11-07)
+Status: accepted (2026-11-07). Amended by ADR 0033.
 
 ## Context
 
