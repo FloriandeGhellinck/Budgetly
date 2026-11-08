@@ -38,8 +38,10 @@ category (ADR 0010).
 ## Category / Category group
 
 What a transaction is for ("pour quoi"). Each category (Groceries, Health)
-belongs to a group (Daily life, Leisure, Investment, Debt). Income uses its
-own categories (Salary, Meal vouchers…).
+belongs to a group (Daily life, Leisure, Investment, Debt). Each group has a
+direction, `expense` or `income`, and its categories only classify
+transactions of that direction: income uses its own group (Income) and
+categories (Salary, Meal vouchers…).
 
 ## Category kind
 
