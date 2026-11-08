@@ -3,7 +3,10 @@
 // references are looked up before they are created, and each transaction
 // carries a deterministic idempotency key.
 import type { Contract } from "@expense/contract";
+import type { Db } from "@expense/db";
 import type { ContractRouterClient } from "@orpc/contract";
+import { createRouterClient } from "@orpc/server";
+import { router } from "../router.ts";
 import {
   ACCOUNT_NAME,
   CHILDREN_BENEFICIARY,
@@ -13,6 +16,20 @@ import {
 } from "./mapping.ts";
 
 export type ImportClient = ContractRouterClient<Contract>;
+
+// The real router in-process, as this user: handlers, withUser and RLS apply.
+// Holding the database URL already grants access to every user's rows, so the
+// import trusts the operator instead of a Supabase token (ADR 0033).
+export function createImportClient(db: Db, userId: string): ImportClient {
+  const token = "notion-import";
+  return createRouterClient(router, {
+    context: {
+      db,
+      authorization: `Bearer ${token}`,
+      verifyToken: async (candidate) => (candidate === token ? { userId, aal: "aal2" } : null),
+    },
+  });
+}
 
 export type ImportResult = {
   // Recorded by this run vs. already recorded by an earlier one.

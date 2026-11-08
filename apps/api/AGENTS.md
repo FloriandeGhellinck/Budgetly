@@ -15,6 +15,9 @@ transaction bound to them for RLS. No MCP endpoint yet (ADR 0018).
   `context.userId` and `context.tx`.
 - `src/<namespace>/repo.ts` (Drizzle, always filtered on `userId`) →
   `handler.ts` (exports `<namespace>Router`) → `src/router.ts`.
+- `src/import-notion/`: the one-off Notion history import CLI
+  (`import:notion`, ADR 0033). Not a procedure: it calls the router
+  in-process as a user.
 - `src/pg-errors.ts`: `onConstraint` maps a constraint to the call site's
   typed error (ADR 0027).
 

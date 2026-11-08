@@ -4,14 +4,12 @@
 // --dry-run reads and maps both files and prints what would be written,
 // without touching any database.
 import { createDb } from "@expense/db";
-import { createRouterClient } from "@orpc/server";
 import { readFileSync } from "node:fs";
 import { parseArgs } from "node:util";
 import { z } from "zod";
-import { router } from "../router.ts";
 import { planImport } from "./mapping.ts";
 import { parseExpenses, parseSummary } from "./parse.ts";
-import { runImport, type ImportClient } from "./run.ts";
+import { createImportClient, runImport } from "./run.ts";
 import { formatPlanSummary } from "./summary.ts";
 
 const { values } = parseArgs({
@@ -74,17 +72,7 @@ async function resolveUserId(user: string): Promise<string> {
 
 const userId = await resolveUserId(values.user);
 const db = createDb(databaseUrl);
-// The real router in-process, as this user: handlers, withUser and RLS apply.
-// Holding DATABASE_URL already grants access to every user's rows, so the
-// import trusts the operator instead of a Supabase token (ADR 0033).
-const token = "notion-import";
-const client: ImportClient = createRouterClient(router, {
-  context: {
-    db,
-    authorization: `Bearer ${token}`,
-    verifyToken: async (candidate) => (candidate === token ? { userId, aal: "aal2" } : null),
-  },
-});
+const client = createImportClient(db, userId);
 
 try {
   const result = await runImport(client, plan, (done, total) => {

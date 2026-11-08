@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createTestApi, signUpSeeded, type SeededUser, type TestApi } from "../test-support.ts";
 import { planImport, type ImportPlan } from "./mapping.ts";
 import { parseExpenses, parseSummary } from "./parse.ts";
-import { runImport, type ImportResult } from "./run.ts";
+import { createImportClient, runImport, type ImportResult } from "./run.ts";
 
 // Synthetic exports. Amounts are chosen so every figure checks on paper:
 // January: spending 1000 + 550 + 1000 = 2550, saving 10000, income 305000.
@@ -75,6 +75,12 @@ describe("runImport", () => {
     expect(items.map((t) => [t.name, t.tags, t.accountId])).toEqual([
       ["Toy", ["Birthday"], history[0]?.id],
     ]);
+  });
+
+  it("reaches the same user's data through the CLI's in-process client", async () => {
+    const client = createImportClient(api.admin, user.userId);
+    const result = await runImport(client, plan);
+    expect([result.created, result.replayed]).toEqual([0, 9]);
   });
 
   it("gives reports.monthOverview the expected figures", async () => {
