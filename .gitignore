@@ -39,3 +39,8 @@ playwright-report/
 
 # Schema drift probe (scripts/check-schema-drift.ts)
 .schema-drift-probe/
+
+# Local Supabase: private JWT signing key (scripts/db-start.ts) and secrets
+supabase/signing_keys.json
+supabase/.temp/
+supabase/.branches/

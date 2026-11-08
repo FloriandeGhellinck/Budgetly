@@ -1,0 +1,125 @@
+# Local Supabase for development and e2e (ADR 0013, 0025). Only Postgres and
+# Auth are used; the other services are off. Ports are 563xx so this stack can
+# run next to other local Supabase projects (which default to 543xx).
+# Start with `pnpm db:start` (docs/local-dev.md).
+project_id = "expense"
+
+[api]
+enabled = true
+port = 56321
+# anon and authenticated hold no grants in public (ADR 0013, 0026), so
+# PostgREST exposes nothing even though the schema is listed.
+schemas = ["public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 56322
+shadow_port = 56320
+major_version = 17
+
+[db.pooler]
+enabled = false
+port = 56329
+
+[db.migrations]
+enabled = true
+
+[db.seed]
+# Local-only setup: gives app_runtime a password (see seed.sql).
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[realtime]
+enabled = false
+
+[studio]
+enabled = true
+port = 56323
+api_url = "http://127.0.0.1"
+
+# Mailpit: magic-link emails land at http://127.0.0.1:56324 (web UI and API).
+[local_smtp]
+enabled = true
+port = 56324
+
+[storage]
+enabled = false
+
+[edge_runtime]
+enabled = false
+
+[analytics]
+enabled = false
+port = 56327
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = [
+  "http://localhost:3000/auth/callback",
+  "http://127.0.0.1:3000/auth/callback",
+]
+jwt_expiry = 3600
+# Asymmetric keys (ES256): apps/api verifies tokens against the JWKS and
+# refuses HS256 (ADR 0027). `pnpm db:start` generates this file when missing;
+# it holds a private key and is gitignored.
+signing_keys_path = "./signing_keys.json"
+enable_refresh_token_rotation = true
+refresh_token_reuse_interval = 10
+enable_signup = true
+enable_anonymous_sign_ins = false
+enable_manual_linking = false
+
+[auth.rate_limit]
+# Generous locally so repeated e2e runs never hit the hourly email cap.
+email_sent = 1000
+sign_in_sign_ups = 1000
+token_verifications = 1000
+token_refresh = 1000
+
+# Magic link only (ADR 0022): no passwords are ever set.
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = false
+secure_password_change = false
+max_frequency = "1s"
+otp_length = 6
+otp_expiry = 3600
+
+# Both templates link to /auth/confirm with a token hash, which the web app
+# exchanges server-side (verifyOtp) for an httpOnly cookie session.
+[auth.email.template.magic_link]
+subject = "Your sign-in link"
+content_path = "./supabase/templates/magic-link.html"
+
+[auth.email.template.confirmation]
+subject = "Your sign-in link"
+content_path = "./supabase/templates/magic-link.html"
+
+[auth.sms]
+enable_signup = false
+
+[auth.mfa]
+max_enrolled_factors = 10
+
+# TOTP two-factor authentication, available to every user (ADR 0022).
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
+
+[auth.mfa.phone]
+enroll_enabled = false
+verify_enabled = false
+
+# Google sign-in (ADR 0022). Off locally: to try it, create an OAuth client
+# with redirect URI http://127.0.0.1:56321/auth/v1/callback, put its id and
+# secret in supabase/.env, and set enabled = true (docs/local-dev.md).
+[auth.external.google]
+enabled = false
+client_id = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
+redirect_uri = ""
+# Required for local sign-in with Google.
+skip_nonce_check = true

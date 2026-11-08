@@ -12,6 +12,7 @@ catalog:
   oxfmt: ^0.77.0
   oxlint: ^1.92.0
   oxlint-tsgolint: ^7.0.2006
+  supabase: ^3.0.0
   tsdown: ^0.23.7
   typescript: 7.0.2
   vitest: ^5.1.0
@@ -59,5 +60,6 @@ catalog:
 allowBuilds:
   esbuild: true
   lefthook: true
+  supabase: true
   sharp: false
   unrs-resolver: false
