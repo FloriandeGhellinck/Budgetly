@@ -95,7 +95,7 @@ export default async function TagPage({ params }: PageProps<"/tags/[id]">) {
         <CardHeader>
           <CardTitle>{t("spent")}</CardTitle>
           <CardDescription>
-            {[t("count", { count: report.count }), span].filter(Boolean).join(" · ")}
+            {[tTx("count", { count: report.count }), span].filter(Boolean).join(" · ")}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-wrap items-baseline gap-x-6 gap-y-1">

@@ -45,7 +45,7 @@ export async function Breakdown({
                 {
                   key: "group",
                   label: groupLabel,
-                  detail: t("count", { count: group.count }),
+                  detail: tTx("count", { count: group.count }),
                   totalMinor: group.totalMinor,
                   color,
                   ...(group.groupId

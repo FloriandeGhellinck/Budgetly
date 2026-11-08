@@ -92,38 +92,18 @@ export function FilterBar({ filters }: { filters: TransactionFilters }) {
           className="pl-8"
         />
       </div>
-      <Select
+      <FilterSelect
+        label={t("direction")}
         items={directionItems}
-        value={filters.direction ?? ALL}
-        onValueChange={(v: string | null) => set("direction", v)}
-      >
-        <SelectTrigger aria-label={t("direction")} className="w-36">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {directionItems.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
-              {item.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Select
+        value={filters.direction}
+        onChange={(v) => set("direction", v)}
+      />
+      <FilterSelect
+        label={t("account")}
         items={accountItems}
-        value={filters.accountId ?? ALL}
-        onValueChange={(v: string | null) => set("accountId", v)}
-      >
-        <SelectTrigger aria-label={t("account")} className="w-36">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {accountItems.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
-              {item.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+        value={filters.accountId}
+        onChange={(v) => set("accountId", v)}
+      />
       <Select
         items={categoryItems}
         value={filters.categoryId ?? ALL}
@@ -146,22 +126,12 @@ export function FilterBar({ filters }: { filters: TransactionFilters }) {
           ))}
         </SelectContent>
       </Select>
-      <Select
+      <FilterSelect
+        label={t("beneficiary")}
         items={beneficiaryItems}
-        value={filters.beneficiaryId ?? ALL}
-        onValueChange={(v: string | null) => set("beneficiaryId", v)}
-      >
-        <SelectTrigger aria-label={t("beneficiary")} className="w-36">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {beneficiaryItems.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
-              {item.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+        value={filters.beneficiaryId}
+        onChange={(v) => set("beneficiaryId", v)}
+      />
       <Input
         type="date"
         aria-label={t("from")}
@@ -202,5 +172,33 @@ export function FilterBar({ filters }: { filters: TransactionFilters }) {
         </Button>
       )}
     </div>
+  );
+}
+
+// One flat filter: "All" or one value.
+function FilterSelect({
+  label,
+  items,
+  value,
+  onChange,
+}: {
+  label: string;
+  items: { value: string; label: string }[];
+  value: string | undefined;
+  onChange: (value: string | null) => void;
+}) {
+  return (
+    <Select items={items} value={value ?? ALL} onValueChange={(v: string | null) => onChange(v)}>
+      <SelectTrigger aria-label={label} className="w-36">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {items.map((item) => (
+          <SelectItem key={item.value} value={item.value}>
+            {item.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }

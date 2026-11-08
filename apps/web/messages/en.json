@@ -64,7 +64,6 @@
     "forWhom": "For whom",
     "everyone": "Everyone",
     "categoriesOf": "Categories in {group}",
-    "count": "{count, plural, one {# transaction} other {# transactions}}",
     "breakdownEmpty": "No spending or saving recorded this month.",
     "breakdownEmptyFiltered": "Nothing recorded for this person this month."
   },
@@ -126,7 +125,6 @@
     "seeTransactions": "See transactions",
     "spent": "Spent",
     "received": "Received",
-    "count": "{count, plural, one {# transaction} other {# transactions}}",
     "byCategory": "Spending by category",
     "incomeByCategory": "Income by category",
     "noTransactions": "No transactions use this tag any more."
@@ -174,6 +172,7 @@
     "add": "Add",
     "empty": "No transactions yet.",
     "emptyFiltered": "No transactions match these filters.",
+    "count": "{count, plural, one {# transaction} other {# transactions}}",
     "loadMore": "Load more",
     "loading": "Loading…",
     "uncategorized": "Uncategorized",

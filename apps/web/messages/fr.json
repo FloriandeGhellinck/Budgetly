@@ -64,7 +64,6 @@
     "forWhom": "Pour qui",
     "everyone": "Tout le monde",
     "categoriesOf": "Catégories de {group}",
-    "count": "{count, plural, one {# transaction} other {# transactions}}",
     "breakdownEmpty": "Aucune dépense ni épargne ce mois-ci.",
     "breakdownEmptyFiltered": "Rien d'enregistré pour cette personne ce mois-ci."
   },
@@ -126,7 +125,6 @@
     "seeTransactions": "Voir les transactions",
     "spent": "Dépensé",
     "received": "Reçu",
-    "count": "{count, plural, one {# transaction} other {# transactions}}",
     "byCategory": "Dépenses par catégorie",
     "incomeByCategory": "Revenus par catégorie",
     "noTransactions": "Plus aucune transaction n'utilise cette étiquette."
@@ -174,6 +172,7 @@
     "add": "Ajouter",
     "empty": "Aucune transaction pour l'instant.",
     "emptyFiltered": "Aucune transaction ne correspond à ces filtres.",
+    "count": "{count, plural, one {# transaction} other {# transactions}}",
     "loadMore": "Afficher plus",
     "loading": "Chargement…",
     "uncategorized": "Sans catégorie",
