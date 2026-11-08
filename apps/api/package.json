@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "node --env-file-if-exists=.env --watch src/local-server.ts",
     "start": "node src/local-server.ts",
+    "import:notion": "node --env-file-if-exists=.env src/import-notion/cli.ts",
     "typecheck": "tsc"
   },
   "dependencies": {
