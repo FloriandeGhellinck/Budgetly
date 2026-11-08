@@ -123,6 +123,31 @@
           }
         ]
       }
+    },
+    // shadcn-generated files stay unedited so `shadcn add --overwrite` can
+    // refresh them; each override turns off only the rules that file trips.
+    {
+      "files": ["packages/ui/src/components/label.tsx"],
+      "rules": { "jsx-a11y/label-has-associated-control": "off" }
+    },
+    {
+      "files": [
+        "packages/ui/src/components/field.tsx",
+        "packages/ui/src/components/input-group.tsx"
+      ],
+      "rules": {
+        "jsx-a11y/prefer-tag-over-role": "off",
+        "jsx-a11y/click-events-have-key-events": "off",
+        "jsx-a11y/no-noninteractive-element-interactions": "off"
+      }
+    },
+    {
+      "files": ["packages/ui/src/components/chart.tsx"],
+      "rules": { "typescript/restrict-template-expressions": "off" }
+    },
+    {
+      "files": ["packages/ui/src/hooks/use-mobile.ts"],
+      "rules": { "react/set-state-in-effect": "off" }
     }
   ]
 }

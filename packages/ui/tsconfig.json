@@ -2,7 +2,12 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "lib": ["ES2024", "DOM", "DOM.Iterable"],
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    // Stylistic only; off so shadcn's generated code (calendar.tsx) compiles unedited.
+    "noPropertyAccessFromIndexSignature": false,
+    "paths": {
+      "@expense/ui/*": ["./src/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["src", "vitest.config.ts"]
 }
