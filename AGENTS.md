@@ -30,8 +30,9 @@ in `packages/ui`.
 - **Money**: positive integer cents (`amountMinor`) plus a `direction`. Signs
   and floats appear only at the display edge.
 - **Contracts are written for agents**: each procedure has an agent-facing
-  description, input examples, a read-only or mutating hint, and create
-  procedures take an idempotency key (ADR 0018).
+  description, input examples, a read-only or mutating hint, and procedures
+  that write money (`transactions.create`, `transfers.create`) take an
+  idempotency key (ADR 0018, 0027).
 - **One procedure = contract → `repo.ts` (Drizzle) → `handler.ts` → router.**
 
 ## Reuse before invention

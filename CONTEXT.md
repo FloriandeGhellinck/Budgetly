@@ -87,3 +87,10 @@ have a 100 % share.
 
 A free-form label grouping transactions across categories, usually an event
 or trip ("Summer trip 2026"). A transaction can have several tags.
+
+## Idempotency key
+
+A string the caller picks for one money write (`transactions.create`,
+`transfers.create`). Sending the same key again returns the original
+transaction or transfer instead of recording it twice, so an agent or a
+flaky network can retry safely (ADR 0027).

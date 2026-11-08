@@ -1,6 +1,6 @@
 # 18. oRPC 1.x now, MCP-ready contracts, MCP server later
 
-Status: accepted (2026-11-08)
+Status: accepted (2026-11-08). Amended by ADR 0027 (idempotency keys on money writes only).
 
 ## Context
 
