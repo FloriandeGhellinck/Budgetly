@@ -15,6 +15,9 @@ export default defineConfig({
   use: {
     baseURL: WEB_URL,
     locale: "en-GB",
+    // The app's time zone (ADR 0031), so "today" in the browser and "this
+    // month" on the dashboard agree at month ends.
+    timezoneId: "Europe/Brussels",
     trace: "retain-on-failure",
   },
   projects: [

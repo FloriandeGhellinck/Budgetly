@@ -39,8 +39,7 @@ calls, for server actions, for the first sign-in and for MFA.
 
 - An XSS cannot read the token, but every auth interaction is a server round
   trip; no client-side `onAuthStateChange`.
-- `apps/api` does not yet check `aal`: a user with TOTP who signs in by
-  magic link only is stopped by the web app, not by the API. Enforcing it in
-  the API needs the user's factors there (follow-up).
+- `apps/api` also refuses an `aal1` token from a user with a verified
+  factor (`MFA_REQUIRED`, ADR 0032).
 - A future screen reads data in a server component with `getApi()` and
   writes through a server action in `src/lib/<area>/actions.ts`.
