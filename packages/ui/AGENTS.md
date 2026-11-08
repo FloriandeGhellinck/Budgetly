@@ -12,7 +12,10 @@ v4 styles. Exported from source; `apps/web` transpiles it.
 - The app root mounts `TooltipProvider` (tooltip) and next-themes'
   `ThemeProvider` (sonner's `Toaster` reads the theme).
 - Money is shown with `<Money amountMinor locale direction />`, never formatted
-  by hand.
+  by hand; typed amounts become cents with `parseAmountMinor` (and back with
+  `formatAmountInput`) from `lib/money`.
+- Forms that open over a page use `ResponsiveDialog` (Drawer on phones,
+  Dialog from md up).
 
 ## Adding a component
 
@@ -25,7 +28,7 @@ v4 styles. Exported from source; `apps/web` transpiles it.
 - Base UI 1.x is newer than most training data: before wrapping a part, read
   `node_modules/@base-ui/react/<part>/index.d.ts`. Composition uses the
   `render` prop, not `asChild`.
-- Our own components (`money`, `date-picker`) sit next to the generated ones;
+- Our own components (`money`, `date-picker`, `responsive-dialog`) sit next to the generated ones;
   their pure logic lives in `src/lib` with a `*.test.ts`.
 
 ## Boundaries (enforced by `pnpm checks`)

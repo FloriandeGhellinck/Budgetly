@@ -13,6 +13,7 @@ and AI agents alike.
 - [`CONTEXT.md`](./CONTEXT.md): domain glossary
 - [`docs/adr/`](./docs/adr/): architecture decision records
 - [`AGENTS.md`](./AGENTS.md): conventions for contributors and coding agents
+- [`docs/local-dev.md`](./docs/local-dev.md): run it locally
 
 ## Stack
 

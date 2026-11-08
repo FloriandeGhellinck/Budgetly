@@ -47,7 +47,8 @@ diverge, fix the shared piece instead of patching each screen.
 Follow `docs/what-to-test.md`. Every oRPC procedure has at least one
 integration test on a real Postgres that also proves another user cannot read
 or change the data. Run the smallest relevant test while iterating, the full
-suite before pushing.
+suite before pushing. Smoke journeys run in `e2e/` against the local stack
+(`pnpm e2e`, see `docs/local-dev.md`), outside `pnpm test`.
 
 ## Done means
 
