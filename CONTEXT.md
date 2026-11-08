@@ -83,6 +83,35 @@ An account the user co-owns with someone else (the joint account). Its
 real amount; reports count `amount × share` ("my part"). Personal accounts
 have a 100 % share.
 
+## My part
+
+The user's share of an amount: `amount × share`, rounded half up to the cent
+per transaction (ADR 0029). Every report figure is "my part"; account
+balances are not.
+
+## Spending / Saving / Income (report figures)
+
+Spending: "my part" of expenses whose group kind is `spending`, plus
+uncategorized expenses. Saving: expenses whose group kind is `saving`.
+Income: income on personal accounts; inflows to a shared account are ignored
+(ADR 0023). Transfers and deleted transactions never count.
+
+## Net
+
+Income − spending − saving for a period, in signed cents (`netMinor`).
+
+## Savings rate
+
+Saving / income for a period, in basis points (`savingsRateBps`, 2500 =
+25 %). Null when there is no income.
+
+## Balance
+
+The real amount an account holds as of a day: income and incoming transfers
+minus expenses and outgoing transfers, not weighted by share. Relative for
+now: there is no opening balance, so it is the net of what was recorded
+(ADR 0029).
+
 ## Tag
 
 A free-form label grouping transactions across categories, usually an event

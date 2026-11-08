@@ -6,6 +6,9 @@ export const Id = z.uuid();
 // A calendar day, `YYYY-MM-DD`.
 export const IsoDate = z.iso.date();
 
+// A calendar month, `YYYY-MM`.
+export const YearMonth = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/, "Expected YYYY-MM");
+
 // An instant, ISO 8601 in UTC.
 export const Timestamp = z.iso.datetime();
 
@@ -41,4 +44,5 @@ export const EXAMPLE_IDS = {
   beneficiary: "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f6a",
   transaction: "6e7f8a9b-0c1d-4e2f-8a3b-4c5d6e7f8a9b",
   transfer: "8f9a0b1c-2d3e-4f5a-9b6c-7d8e9f0a1b2c",
+  tag: "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
 } as const;

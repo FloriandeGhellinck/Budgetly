@@ -16,6 +16,7 @@ export const ERRORS = {
         "beneficiary",
         "transaction",
         "transfer",
+        "tag",
       ]),
     }),
   },
