@@ -18,7 +18,12 @@
     "prepare": "tsdown",
     "typecheck": "tsc"
   },
+  "dependencies": {
+    "@orpc/contract": "catalog:",
+    "zod": "catalog:"
+  },
   "devDependencies": {
+    "@expense/db": "workspace:*",
     "@types/node": "catalog:",
     "tsdown": "catalog:",
     "typescript": "catalog:"

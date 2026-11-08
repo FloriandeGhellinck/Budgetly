@@ -2,14 +2,30 @@
   "name": "@expense/api",
   "version": "0.0.0",
   "private": true,
-  "description": "Hono + oRPC API server and MCP endpoint. The single door to data.",
+  "description": "Hono + oRPC API server. The single door to data.",
   "license": "AGPL-3.0-only",
   "type": "module",
   "scripts": {
+    "dev": "node --env-file-if-exists=.env --watch src/server.ts",
+    "start": "node src/server.ts",
     "typecheck": "tsc"
   },
+  "dependencies": {
+    "@expense/contract": "workspace:*",
+    "@expense/db": "workspace:*",
+    "@hono/node-server": "catalog:",
+    "@orpc/server": "catalog:",
+    "drizzle-orm": "catalog:",
+    "hono": "catalog:",
+    "jose": "catalog:",
+    "zod": "catalog:"
+  },
   "devDependencies": {
+    "@expense/test-db": "workspace:*",
+    "@orpc/client": "catalog:",
+    "@orpc/contract": "catalog:",
     "@types/node": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }
