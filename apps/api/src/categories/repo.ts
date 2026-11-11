@@ -1,4 +1,11 @@
-import type { Category, CategoryGroup } from "@budgetly/contract";
+import {
+  asCategoryColor,
+  asCategoryIcon,
+  NEUTRAL_ICON,
+  NEUTRAL_COLOR,
+  type Category,
+  type CategoryGroup,
+} from "@budgetly/contract";
 import { categories, categoryGroups, type Tx } from "@budgetly/db";
 import { and, asc, eq, sql } from "drizzle-orm";
 
@@ -22,6 +29,8 @@ function toCategory(row: CategoryRow): Category {
     name: row.name,
     sortOrder: row.sortOrder,
     seedKey: row.seedKey,
+    color: asCategoryColor(row.color),
+    icon: asCategoryIcon(row.icon),
   };
 }
 
@@ -33,6 +42,8 @@ function toGroup(row: GroupRow, members: Category[]): CategoryGroup {
     kind: row.kind,
     sortOrder: row.sortOrder,
     seedKey: row.seedKey,
+    color: asCategoryColor(row.color) ?? NEUTRAL_COLOR,
+    icon: asCategoryIcon(row.icon) ?? NEUTRAL_ICON,
     categories: members,
   };
 }
@@ -76,7 +87,7 @@ export async function findCategoryDirection(
 export async function insertCategory(
   tx: Tx,
   userId: string,
-  values: { groupId: string; name: string },
+  values: { groupId: string; name: string; color?: string | undefined; icon?: string | undefined },
 ): Promise<Category | "group_not_found"> {
   const group = await findGroup(tx, userId, values.groupId);
   if (!group) return "group_not_found";
@@ -87,6 +98,8 @@ export async function insertCategory(
       groupId: group.id,
       direction: group.direction,
       name: values.name,
+      color: values.color ?? null,
+      icon: values.icon ?? null,
       // Appended after the group's existing categories.
       sortOrder: sql`(select coalesce(max(${categories.sortOrder}) + 1, 0) from ${categories} where ${categories.groupId} = ${group.id})`,
     })
@@ -103,6 +116,8 @@ export async function updateCategory(
     name?: string | undefined;
     groupId?: string | undefined;
     sortOrder?: number | undefined;
+    color?: string | null | undefined;
+    icon?: string | null | undefined;
   },
 ): Promise<Category | "not_found" | "group_not_found" | "direction_mismatch"> {
   const owned = and(eq(categories.userId, userId), eq(categories.id, id));
@@ -122,12 +137,40 @@ export async function updateCategory(
       ...(renamed ? { name: patch.name, seedKey: null } : {}),
       ...(patch.groupId !== undefined ? { groupId: patch.groupId } : {}),
       ...(patch.sortOrder !== undefined ? { sortOrder: patch.sortOrder } : {}),
+      ...(patch.color !== undefined ? { color: patch.color } : {}),
+      ...(patch.icon !== undefined ? { icon: patch.icon } : {}),
       updatedAt: new Date(),
     })
     .where(owned)
     .returning();
   if (!row) throw new Error("updateCategory: no row returned");
   return toCategory(row);
+}
+
+// The group with its categories after the change, or null when the caller has
+// no such group.
+export async function updateCategoryGroup(
+  tx: Tx,
+  userId: string,
+  id: string,
+  patch: { color?: string | undefined; icon?: string | undefined },
+): Promise<CategoryGroup | null> {
+  const [row] = await tx
+    .update(categoryGroups)
+    .set({
+      ...(patch.color !== undefined ? { color: patch.color } : {}),
+      ...(patch.icon !== undefined ? { icon: patch.icon } : {}),
+      updatedAt: new Date(),
+    })
+    .where(and(eq(categoryGroups.userId, userId), eq(categoryGroups.id, id)))
+    .returning();
+  if (!row) return null;
+  const members = await tx
+    .select()
+    .from(categories)
+    .where(and(eq(categories.userId, userId), eq(categories.groupId, row.id)))
+    .orderBy(asc(categories.sortOrder), asc(categories.name), asc(categories.id));
+  return toGroup(row, members.map(toCategory));
 }
 
 // False when the caller has no such category. A category still referenced by

@@ -1,65 +1,83 @@
 import { eq } from "drizzle-orm";
 import type { Tx } from "./client";
-import { accounts, beneficiaries, categories, categoryGroups } from "./schema";
+import {
+  accounts,
+  beneficiaries,
+  categories,
+  categoryGroups,
+  type CategoryPaletteColor,
+} from "./schema";
 
 // The defaults a new user starts with (ADR 0021 as amended by 0023). Names are
 // stored in English; the UI translates rows that still carry their seed key.
+// Colours and icons come from the contract's allow-lists (ADR 0034); the
+// backfill migration 20261111095706 repeats them for older users.
 const DEFAULT_GROUPS = [
   {
     seedKey: "daily_life",
+    color: "teal",
+    icon: "house",
     name: "Daily life",
     direction: "expense",
     kind: "spending",
     categories: [
-      { seedKey: "groceries", name: "Groceries" },
-      { seedKey: "health", name: "Health" },
-      { seedKey: "clothing", name: "Clothing" },
-      { seedKey: "furniture", name: "Furniture" },
-      { seedKey: "childcare", name: "Childcare" },
+      { seedKey: "groceries", name: "Groceries", icon: "shopping-cart" },
+      { seedKey: "health", name: "Health", icon: "pill" },
+      { seedKey: "clothing", name: "Clothing", icon: "shirt" },
+      { seedKey: "furniture", name: "Furniture", icon: "sofa" },
+      { seedKey: "childcare", name: "Childcare", icon: "baby" },
     ],
   },
   {
     seedKey: "leisure",
+    color: "orange",
+    icon: "party-popper",
     name: "Leisure",
     direction: "expense",
     kind: "spending",
     categories: [
-      { seedKey: "holidays", name: "Holidays" },
-      { seedKey: "outings", name: "Outings" },
-      { seedKey: "gifts", name: "Gifts" },
-      { seedKey: "sport", name: "Sport" },
+      { seedKey: "holidays", name: "Holidays", icon: "tree-palm" },
+      { seedKey: "outings", name: "Outings", icon: "ticket" },
+      { seedKey: "gifts", name: "Gifts", icon: "gift" },
+      { seedKey: "sport", name: "Sport", icon: "dumbbell" },
     ],
   },
   {
     seedKey: "investment",
+    color: "violet",
+    icon: "piggy-bank",
     name: "Investment",
     direction: "expense",
     kind: "saving",
     categories: [
-      { seedKey: "stocks", name: "Stocks" },
-      { seedKey: "crypto", name: "Crypto" },
-      { seedKey: "real_estate", name: "Real estate" },
+      { seedKey: "stocks", name: "Stocks", icon: "trending-up" },
+      { seedKey: "crypto", name: "Crypto", icon: "bitcoin" },
+      { seedKey: "real_estate", name: "Real estate", icon: "building-2" },
     ],
   },
   {
     seedKey: "debt",
+    color: "slate",
+    icon: "landmark",
     name: "Debt",
     direction: "expense",
     kind: "spending",
-    categories: [{ seedKey: "loan_repayment", name: "Loan repayment" }],
+    categories: [{ seedKey: "loan_repayment", name: "Loan repayment", icon: "hand-coins" }],
   },
   {
     seedKey: "income",
+    color: "green",
+    icon: "wallet",
     name: "Income",
     direction: "income",
     kind: null,
     categories: [
-      { seedKey: "salary", name: "Salary" },
-      { seedKey: "meal_vouchers", name: "Meal vouchers" },
-      { seedKey: "other_income", name: "Other income" },
+      { seedKey: "salary", name: "Salary", icon: "briefcase" },
+      { seedKey: "meal_vouchers", name: "Meal vouchers", icon: "utensils" },
+      { seedKey: "other_income", name: "Other income", icon: "coins" },
     ],
   },
-] as const;
+] as const satisfies readonly ({ color: CategoryPaletteColor } & Record<string, unknown>)[];
 
 type DefaultGroup = (typeof DEFAULT_GROUPS)[number];
 
@@ -93,6 +111,8 @@ export async function seedNewUser(tx: Tx, userId: string): Promise<void> {
         name: group.name,
         direction: group.direction,
         kind: group.kind,
+        color: group.color,
+        icon: group.icon,
         sortOrder: index,
       })),
     )
@@ -110,6 +130,7 @@ export async function seedNewUser(tx: Tx, userId: string): Promise<void> {
           direction: group.direction,
           seedKey: category.seedKey,
           name: category.name,
+          icon: category.icon,
           sortOrder: index,
         };
       }),

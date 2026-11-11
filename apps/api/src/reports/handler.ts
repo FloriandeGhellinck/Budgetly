@@ -1,3 +1,4 @@
+import { asCategoryColor, asCategoryIcon } from "@budgetly/contract";
 import { authed } from "../orpc.ts";
 import { figuresChange, monthFigures, previousMonth } from "./figures.ts";
 import {
@@ -60,12 +61,16 @@ export const breakdown = authed.reports.breakdown.handler(async ({ input, contex
         groupId,
         name: categories[0]?.groupName ?? null,
         kind: groupId === null ? uncategorizedKind : (categories[0]?.groupKind ?? null),
+        color: asCategoryColor(categories[0]?.groupColor ?? null),
+        icon: asCategoryIcon(categories[0]?.groupIcon ?? null),
         totalMinor: sum(categories),
         count: countOf(categories),
         categories: categories
           .map((c) => ({
             categoryId: c.categoryId,
             name: c.categoryName,
+            color: asCategoryColor(c.categoryColor),
+            icon: asCategoryIcon(c.categoryIcon),
             totalMinor: c.totalMinor,
             count: c.count,
           }))

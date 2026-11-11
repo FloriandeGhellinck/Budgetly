@@ -68,4 +68,30 @@ describe("seedNewUser", () => {
       .orderBy(asc(categories.sortOrder));
     expect(rows.map((row) => row.seedKey)).toEqual(["salary", "meal_vouchers", "other_income"]);
   });
+
+  it("gives each default group a colour and an icon, and categories an icon only", async () => {
+    const groups = await db.admin
+      .select({
+        seedKey: categoryGroups.seedKey,
+        color: categoryGroups.color,
+        icon: categoryGroups.icon,
+      })
+      .from(categoryGroups)
+      .where(eq(categoryGroups.userId, ALICE))
+      .orderBy(asc(categoryGroups.sortOrder));
+    expect(groups.map((g) => [g.seedKey, g.color, g.icon])).toEqual([
+      ["daily_life", "teal", "house"],
+      ["leisure", "orange", "party-popper"],
+      ["investment", "violet", "piggy-bank"],
+      ["debt", "slate", "landmark"],
+      ["income", "green", "wallet"],
+    ]);
+    const rows = await db.admin
+      .select({ seedKey: categories.seedKey, color: categories.color, icon: categories.icon })
+      .from(categories)
+      .where(eq(categories.userId, ALICE));
+    // Null colour: a default category wears its group's colour.
+    expect(rows.every((row) => row.color === null && row.icon !== null)).toBe(true);
+    expect(rows.find((row) => row.seedKey === "groceries")?.icon).toBe("shopping-cart");
+  });
 });

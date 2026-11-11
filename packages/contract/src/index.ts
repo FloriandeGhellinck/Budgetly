@@ -23,6 +23,7 @@ export const contract = defineContract({
 export type Contract = typeof contract;
 
 export * from "./accounts";
+export * from "./appearance";
 export * from "./beneficiaries";
 export * from "./categories";
 export * from "./common";

@@ -1,6 +1,12 @@
 import { authed } from "../orpc.ts";
 import { onConstraint } from "../pg-errors.ts";
-import { deleteCategory, insertCategory, listCategoryGroups, updateCategory } from "./repo.ts";
+import {
+  deleteCategory,
+  insertCategory,
+  listCategoryGroups,
+  updateCategory,
+  updateCategoryGroup,
+} from "./repo.ts";
 
 const categoryNotFound = {
   message: "No category with this id for the caller. List categories with categories.list.",
@@ -39,6 +45,15 @@ export const update = authed.categories.update.handler(async ({ input, context, 
   }
 });
 
+export const updateGroup = authed.categories.updateGroup.handler(
+  async ({ input, context, errors }) => {
+    const { id, ...patch } = input;
+    const group = await updateCategoryGroup(context.tx, context.userId, id, patch);
+    if (!group) throw errors.NOT_FOUND(groupNotFound);
+    return group;
+  },
+);
+
 export const del = authed.categories.delete.handler(async ({ input, context, errors }) => {
   const deleted = await onConstraint(deleteCategory(context.tx, context.userId, input.id), {
     transactions_category_fk: () => errors.CATEGORY_IN_USE(),
@@ -47,4 +62,4 @@ export const del = authed.categories.delete.handler(async ({ input, context, err
   return { id: input.id };
 });
 
-export const categoriesRouter = { list, create, update, delete: del };
+export const categoriesRouter = { list, create, update, updateGroup, delete: del };

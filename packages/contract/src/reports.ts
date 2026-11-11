@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { CategoryColor, CategoryIcon } from "./appearance";
 import { EXAMPLE_IDS, Id, IsoDate, Timestamp, YearMonth } from "./common";
 import { errors } from "./errors";
 import { procedure } from "./procedure";
@@ -71,6 +72,9 @@ const BreakdownCategorySchema = z.object({
   // Null for transactions without a category.
   categoryId: Id.nullable(),
   name: z.string().nullable(),
+  // What the category wears (its own, else its group's); null when uncategorized.
+  color: CategoryColor.nullable(),
+  icon: CategoryIcon.nullable(),
   totalMinor: z.int(),
   count: z.int(),
 });
@@ -81,13 +85,16 @@ const BreakdownGroupSchema = z.object({
   name: z.string().nullable(),
   // spending or saving for expense groups (uncategorized counts as spending); null for income.
   kind: z.enum(["spending", "saving"]).nullable(),
+  // Null for the uncategorized bucket.
+  color: CategoryColor.nullable(),
+  icon: CategoryIcon.nullable(),
   totalMinor: z.int(),
   count: z.int(),
   categories: z.array(BreakdownCategorySchema),
 });
 
 const breakdown = procedure({
-  description: `Totals per category group, and per category inside each group, for one direction (expense by default, or income) between from and to (YYYY-MM-DD, inclusive). Groups and categories are sorted by total, largest first; count is the number of transactions counted. Transactions without a category form a bucket with null ids. Optional filters: beneficiaryId (beneficiaries.list) and groupId (categories.list); an id the caller does not own simply matches nothing. ${COUNTING}`,
+  description: `Totals per category group, and per category inside each group, for one direction (expense by default, or income) between from and to (YYYY-MM-DD, inclusive). Groups and categories are sorted by total, largest first; count is the number of transactions counted. Transactions without a category form a bucket with null ids. Each group and category carries the color and icon the UI shows (a category without its own wears its group's). Optional filters: beneficiaryId (beneficiaries.list) and groupId (categories.list); an id the caller does not own simply matches nothing. ${COUNTING}`,
   examples: [
     { from: "2026-11-01", to: "2026-11-30" },
     { from: "2026-01-01", to: "2026-12-31", beneficiaryId: EXAMPLE_IDS.beneficiary },

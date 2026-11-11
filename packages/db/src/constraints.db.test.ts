@@ -1,4 +1,5 @@
 import { pgError } from "@budgetly/test-db";
+import { eq } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { accounts, categories, categoryGroups, tags, transactions } from "./schema";
 import {
@@ -147,6 +148,23 @@ describe("category groups and categories", () => {
         .values({ userId: ALICE, name: "Moves", direction: "transfer_out", kind: "spending" }),
     );
     expect(error).toEqual({ code: "23514", constraint: "category_groups_direction" });
+  });
+
+  it("rejects a colour outside the palette", async () => {
+    const groupError = await pgError(
+      db.admin
+        .update(categoryGroups)
+        .set({ color: "#ff0000" })
+        .where(eq(categoryGroups.id, alice.groupId)),
+    );
+    expect(groupError).toEqual({ code: "23514", constraint: "category_groups_color" });
+    const categoryError = await pgError(
+      db.admin
+        .update(categories)
+        .set({ color: "mauve" })
+        .where(eq(categories.id, alice.categoryId)),
+    );
+    expect(categoryError).toEqual({ code: "23514", constraint: "categories_color" });
   });
 });
 

@@ -274,22 +274,35 @@ describe("reports.breakdown", () => {
           groupId: dave.groupId("investment"),
           name: "Investment",
           kind: "saving",
+          color: "violet",
+          icon: "piggy-bank",
           totalMinor: 75000,
           count: 1,
           categories: [
-            { categoryId: dave.categoryId("stocks"), name: "Stocks", totalMinor: 75000, count: 1 },
+            {
+              categoryId: dave.categoryId("stocks"),
+              name: "Stocks",
+              color: "violet",
+              icon: "trending-up",
+              totalMinor: 75000,
+              count: 1,
+            },
           ],
         },
         {
           groupId: dave.groupId("daily_life"),
           name: "Daily life",
           kind: "spending",
+          color: "teal",
+          icon: "house",
           totalMinor: 50000,
           count: 1,
           categories: [
             {
               categoryId: dave.categoryId("groceries"),
               name: "Groceries",
+              color: "teal",
+              icon: "shopping-cart",
               totalMinor: 50000,
               count: 1,
             },
@@ -299,12 +312,32 @@ describe("reports.breakdown", () => {
           groupId: null,
           name: null,
           kind: "spending",
+          color: null,
+          icon: null,
           totalMinor: 1000,
           count: 1,
-          categories: [{ categoryId: null, name: null, totalMinor: 1000, count: 1 }],
+          categories: [
+            { categoryId: null, name: null, color: null, icon: null, totalMinor: 1000, count: 1 },
+          ],
         },
       ],
     });
+  });
+
+  it("shows a category's own colour and icon over its group's", async () => {
+    await erin.client.categories.update({
+      id: erin.categoryId("groceries"),
+      color: "red",
+      icon: "shopping-basket",
+    });
+
+    const { groups } = await erin.client.reports.breakdown({
+      from: "2026-06-01",
+      to: "2026-06-30",
+    });
+
+    expect(groups[0]).toMatchObject({ color: "teal", icon: "house" });
+    expect(groups[0]?.categories[0]).toMatchObject({ color: "red", icon: "shopping-basket" });
   });
 
   it("adds up to the month overview's spending plus saving", async () => {

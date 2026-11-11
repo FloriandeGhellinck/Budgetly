@@ -27,8 +27,12 @@ function counted(userId: string, where: SQL = sql``) {
       g.name as group_name,
       g.kind as group_kind,
       g.sort_order as group_sort,
+      g.color as group_color,
+      g.icon as group_icon,
       c.id as category_id,
-      c.name as category_name
+      c.name as category_name,
+      coalesce(c.color, g.color) as category_color,
+      coalesce(c.icon, g.icon) as category_icon
     from transactions t
     join accounts a on a.user_id = t.user_id and a.id = t.account_id
     left join categories c on c.user_id = t.user_id and c.id = t.category_id
@@ -89,8 +93,13 @@ export type CategoryTotal = {
   groupName: string | null;
   groupKind: "spending" | "saving" | null;
   groupSort: number | null;
+  groupColor: string | null;
+  groupIcon: string | null;
   categoryId: string | null;
   categoryName: string | null;
+  // The category's own colour and icon, else its group's.
+  categoryColor: string | null;
+  categoryIcon: string | null;
   totalMinor: number;
   count: number;
   firstOn: string;
@@ -104,8 +113,12 @@ async function categoryTotals(tx: Tx, userId: string, where: SQL): Promise<Categ
     group_name: string | null;
     group_kind: "spending" | "saving" | null;
     group_sort: number | null;
+    group_color: string | null;
+    group_icon: string | null;
     category_id: string | null;
     category_name: string | null;
+    category_color: string | null;
+    category_icon: string | null;
     total: string;
     count: string;
     first_on: string;
@@ -113,21 +126,27 @@ async function categoryTotals(tx: Tx, userId: string, where: SQL): Promise<Categ
   }>(sql`
     with rows as (${counted(userId, where)})
     select
-      direction, group_id, group_name, group_kind, group_sort, category_id, category_name,
+      direction, group_id, group_name, group_kind, group_sort, group_color, group_icon,
+      category_id, category_name, category_color, category_icon,
       sum(part) as total,
       count(*) as count,
       to_char(min(occurred_on), 'YYYY-MM-DD') as first_on,
       to_char(max(occurred_on), 'YYYY-MM-DD') as last_on
     from rows
-    group by direction, group_id, group_name, group_kind, group_sort, category_id, category_name`);
+    group by direction, group_id, group_name, group_kind, group_sort, group_color, group_icon,
+      category_id, category_name, category_color, category_icon`);
   return rows.map((row) => ({
     direction: row.direction,
     groupId: row.group_id,
     groupName: row.group_name,
     groupKind: row.group_kind,
     groupSort: row.group_sort,
+    groupColor: row.group_color,
+    groupIcon: row.group_icon,
     categoryId: row.category_id,
     categoryName: row.category_name,
+    categoryColor: row.category_color,
+    categoryIcon: row.category_icon,
     totalMinor: toInt(row.total),
     count: toInt(row.count),
     firstOn: row.first_on,
