@@ -179,6 +179,7 @@
     "transfer": "Transfer",
     "actions": "Actions for {name}",
     "edit": "Edit",
+    "duplicate": "Duplicate",
     "delete": "Delete",
     "deleted": "Transaction deleted",
     "transferDeleted": "Transfer deleted",
@@ -186,7 +187,7 @@
     "restored": "Restored",
     "filters": {
       "search": "Search",
-      "searchPlaceholder": "Search name or note",
+      "searchPlaceholder": "Search…",
       "direction": "Type",
       "account": "Account",
       "category": "Category",

@@ -21,6 +21,7 @@ import { fromIsoDay, toIsoDay } from "@/lib/dates";
 import type { EntryOptions } from "@/lib/entry-options";
 import { createTransaction, suggestForName, updateTransaction } from "@/lib/transactions/actions";
 import { CategoryCombobox } from "./category-combobox";
+import type { TransactionDraft } from "./duplicate";
 import { applySuggestion, type SuggestableField, type SuggestedFields } from "./suggestion";
 import { TagsInput } from "./tags-input";
 import { useCalendarLocale } from "./use-calendar-locale";
@@ -39,6 +40,7 @@ export function TransactionForm({
   directionTouched,
   onDirectionChange,
   transaction,
+  draft,
   options,
   onDone,
   onCancel,
@@ -48,6 +50,8 @@ export function TransactionForm({
   directionTouched: boolean;
   onDirectionChange: (direction: Direction) => void;
   transaction?: Transaction | undefined;
+  // Starting values copied from another entry (Duplicate); saving creates.
+  draft?: TransactionDraft | undefined;
   options: EntryOptions;
   onDone: () => void;
   onCancel: () => void;
@@ -58,25 +62,27 @@ export function TransactionForm({
   const calendarLocale = useCalendarLocale();
   const id = useId();
   const [pending, startTransition] = useTransition();
-  const idempotencyKey = useRef(crypto.randomUUID());
+  const idempotencyKey = useRef(draft?.idempotencyKey ?? crypto.randomUUID());
+  const source = transaction ?? draft;
 
   const activeAccounts = useMemo(
     () => options.accounts.filter((a) => !a.archived || a.id === transaction?.accountId),
     [options.accounts, transaction?.accountId],
   );
-  const [amount, setAmount] = useState(
-    transaction ? formatAmountInput(transaction.amountMinor, locale) : "",
-  );
-  const [name, setName] = useState(transaction?.name ?? "");
+  const [amount, setAmount] = useState(source ? formatAmountInput(source.amountMinor, locale) : "");
+  const [name, setName] = useState(source?.name ?? "");
   const [date, setDate] = useState<Date>(() =>
-    transaction ? fromIsoDay(transaction.occurredOn) : new Date(),
+    transaction ? fromIsoDay(transaction.occurredOn) : (draft?.occurredOn ?? new Date()),
   );
-  const [fields, setFields] = useState<Omit<SuggestedFields, "direction">>({
-    accountId: transaction?.accountId ?? activeAccounts[0]?.id ?? "",
-    categoryId: transaction?.categoryId ?? null,
-    beneficiaryId: transaction?.beneficiaryId ?? null,
-  });
-  const [tags, setTags] = useState<string[]>(transaction?.tags ?? []);
+  const [fields, setFields] = useState<Omit<SuggestedFields, "direction">>(() => ({
+    // A duplicate of an entry on an archived account lands on an active one.
+    accountId: activeAccounts.some((a) => a.id === source?.accountId)
+      ? (source?.accountId ?? "")
+      : (activeAccounts[0]?.id ?? ""),
+    categoryId: source?.categoryId ?? null,
+    beneficiaryId: source?.beneficiaryId ?? null,
+  }));
+  const [tags, setTags] = useState<string[]>(source?.tags ?? []);
   const touched = useRef(new Set<SuggestableField>());
   const [suggested, setSuggested] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -101,7 +107,8 @@ export function TransactionForm({
     latest.current = { direction, directionTouched, fields };
   });
   useEffect(() => {
-    if (transaction) return;
+    // A duplicate keeps its copied fields, even when the user edits the name.
+    if (transaction || draft) return;
     const query = name.trim();
     if (query.length < 2) return;
     const timer = setTimeout(async () => {
@@ -125,7 +132,7 @@ export function TransactionForm({
       setSuggested(true);
     }, SUGGEST_DELAY_MS);
     return () => clearTimeout(timer);
-  }, [name, transaction, activeAccounts, onDirectionChange]);
+  }, [name, transaction, draft, activeAccounts, onDirectionChange]);
 
   function setField<K extends keyof typeof fields>(key: K, value: (typeof fields)[K]) {
     touched.current.add(key);

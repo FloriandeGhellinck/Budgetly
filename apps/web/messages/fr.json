@@ -179,6 +179,7 @@
     "transfer": "Virement",
     "actions": "Actions pour {name}",
     "edit": "Modifier",
+    "duplicate": "Dupliquer",
     "delete": "Supprimer",
     "deleted": "Transaction supprimée",
     "transferDeleted": "Virement supprimé",
@@ -186,7 +187,7 @@
     "restored": "Restaurée",
     "filters": {
       "search": "Rechercher",
-      "searchPlaceholder": "Rechercher un nom ou une note",
+      "searchPlaceholder": "Rechercher…",
       "direction": "Type",
       "account": "Compte",
       "category": "Catégorie",

@@ -10,10 +10,11 @@ import {
   DropdownMenuTrigger,
 } from "@budgetly/ui/components/dropdown-menu";
 import { Money } from "@budgetly/ui/components/money";
-import { MoreHorizontalIcon, PencilIcon, Trash2Icon } from "lucide-react";
+import { CopyIcon, MoreHorizontalIcon, PencilIcon, Trash2Icon } from "lucide-react";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
+import { draftFromTransaction, draftFromTransferLegs } from "@/components/transactions/duplicate";
 import { useEntry } from "@/components/transactions/entry-context";
 import { fromIsoDay } from "@/lib/dates";
 import {
@@ -93,6 +94,13 @@ function DayGroups({ items }: { items: Transaction[] }) {
       byDay.set(item.occurredOn, [...(byDay.get(item.occurredOn) ?? []), item]);
     return [...byDay];
   }, [items]);
+  // Both legs of each loaded transfer, so Duplicate knows both accounts.
+  const legsByTransfer = useMemo(() => {
+    const legs = new Map<string, Transaction[]>();
+    for (const item of items)
+      if (item.transferId) legs.set(item.transferId, [...(legs.get(item.transferId) ?? []), item]);
+    return legs;
+  }, [items]);
   return days.map(([day, dayItems]) => (
     <section key={day} aria-labelledby={`day-${day}`}>
       <h2 id={`day-${day}`} className="pb-1 text-xs font-medium text-muted-foreground uppercase">
@@ -100,18 +108,28 @@ function DayGroups({ items }: { items: Transaction[] }) {
       </h2>
       <ul className="divide-y rounded-xl ring-1 ring-foreground/10">
         {dayItems.map((item) => (
-          <TransactionRow key={item.id} transaction={item} />
+          <TransactionRow
+            key={item.id}
+            transaction={item}
+            legs={item.transferId ? legsByTransfer.get(item.transferId) : undefined}
+          />
         ))}
       </ul>
     </section>
   ));
 }
 
-function TransactionRow({ transaction }: { transaction: Transaction }) {
+function TransactionRow({
+  transaction,
+  legs,
+}: {
+  transaction: Transaction;
+  legs?: Transaction[] | undefined;
+}) {
   const t = useTranslations("transactions");
   const tError = useTranslations("errors");
   const locale = useLocale();
-  const { options, openEdit } = useEntry();
+  const { options, openEdit, openDuplicate } = useEntry();
   const isTransfer = transaction.transferId !== null;
 
   const account = options.accounts.find((a) => a.id === transaction.accountId)?.label;
@@ -123,6 +141,32 @@ function TransactionRow({ transaction }: { transaction: Transaction }) {
     return null;
   }, [options.categoryGroups, transaction.categoryId]);
   const detail = isTransfer ? t("transfer") : (category ?? t("uncategorized"));
+
+  async function duplicate() {
+    const { transferId } = transaction;
+    if (!transferId) {
+      openDuplicate(draftFromTransaction(transaction));
+      return;
+    }
+    let known = legs ?? [transaction];
+    // The other leg may be filtered out or on a page not loaded yet.
+    if (known.length < 2) {
+      const result = await loadTransactions(
+        {
+          from: transaction.occurredOn,
+          to: transaction.occurredOn,
+          direction: transaction.direction === "transfer_out" ? "transfer_in" : "transfer_out",
+        },
+        null,
+      );
+      if (!result.ok) {
+        toast.error(tError(result.error));
+        return;
+      }
+      known = [...known, ...result.data.items.filter((item) => item.transferId === transferId)];
+    }
+    openDuplicate(draftFromTransferLegs(known));
+  }
 
   async function remove() {
     const { transferId } = transaction;
@@ -211,6 +255,10 @@ function TransactionRow({ transaction }: { transaction: Transaction }) {
               {t("edit")}
             </DropdownMenuItem>
           )}
+          <DropdownMenuItem onClick={() => void duplicate()}>
+            <CopyIcon />
+            {t("duplicate")}
+          </DropdownMenuItem>
           <DropdownMenuItem variant="destructive" onClick={() => void remove()}>
             <Trash2Icon />
             {t("delete")}

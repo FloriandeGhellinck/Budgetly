@@ -31,7 +31,7 @@ export function EntryDialog({
       {/* Keyed so each opening starts from a fresh form and idempotency key. */}
       {target && (
         <EntryDialogBody
-          key={target.mode === "edit" ? target.transaction.id : `new-${target.kind}`}
+          key={entryKey(target)}
           target={target}
           options={options}
           onClose={onClose}
@@ -39,6 +39,18 @@ export function EntryDialog({
       )}
     </ResponsiveDialog>
   );
+}
+
+function entryKey(target: EntryTarget): string {
+  if (target.mode === "edit") return target.transaction.id;
+  if (target.mode === "duplicate") return `duplicate-${target.draft.idempotencyKey}`;
+  return `new-${target.kind}`;
+}
+
+function initialKind(target: EntryTarget): EntryKind {
+  if (target.mode === "new") return target.kind;
+  if (target.mode === "duplicate") return target.draft.kind;
+  return target.transaction.direction === "income" ? "income" : "expense";
 }
 
 function EntryDialogBody({
@@ -51,14 +63,9 @@ function EntryDialogBody({
   onClose: () => void;
 }) {
   const t = useTranslations("entry");
-  const [kind, setKind] = useState<EntryKind>(
-    target.mode === "new"
-      ? target.kind
-      : target.transaction.direction === "income"
-        ? "income"
-        : "expense",
-  );
-  const [kindTouched, setKindTouched] = useState(target.mode === "edit");
+  const [kind, setKind] = useState<EntryKind>(() => initialKind(target));
+  const [kindTouched, setKindTouched] = useState(target.mode !== "new");
+  const draft = target.mode === "duplicate" ? target.draft : undefined;
   const title =
     target.mode === "edit"
       ? t("editTitle")
@@ -92,20 +99,26 @@ function EntryDialogBody({
         <ToggleGroupItem value="income" className="flex-1">
           {t("income")}
         </ToggleGroupItem>
-        {target.mode === "new" && (
+        {target.mode !== "edit" && (
           <ToggleGroupItem value="transfer" className="flex-1">
             {t("transfer")}
           </ToggleGroupItem>
         )}
       </ToggleGroup>
       {kind === "transfer" ? (
-        <TransferForm options={options} onDone={onClose} onCancel={onClose} />
+        <TransferForm
+          draft={draft?.kind === "transfer" ? draft : undefined}
+          options={options}
+          onDone={onClose}
+          onCancel={onClose}
+        />
       ) : (
         <TransactionForm
           direction={kind}
           directionTouched={kindTouched}
           onDirectionChange={setKind}
           transaction={target.mode === "edit" ? target.transaction : undefined}
+          draft={draft?.kind === "transfer" ? undefined : draft}
           options={options}
           onDone={onClose}
           onCancel={onClose}

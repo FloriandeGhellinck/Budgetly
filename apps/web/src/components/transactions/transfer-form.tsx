@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@budgetly/ui/components/select";
-import { parseAmountMinor } from "@budgetly/ui/lib/money";
+import { formatAmountInput, parseAmountMinor } from "@budgetly/ui/lib/money";
 import { useLocale, useTranslations } from "next-intl";
 import { useId, useMemo, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
@@ -19,15 +19,19 @@ import type { ActionErrorCode } from "@/lib/action-result";
 import { toIsoDay } from "@/lib/dates";
 import type { EntryOptions } from "@/lib/entry-options";
 import { createTransfer } from "@/lib/transactions/actions";
+import type { TransferDraft } from "./duplicate";
 import { useCalendarLocale } from "./use-calendar-locale";
 
 // Money moving between two of the user's accounts (ADR 0005, 0006). Like a
 // new transaction, it carries one idempotency key for the life of the form.
 export function TransferForm({
+  draft,
   options,
   onDone,
   onCancel,
 }: {
+  // Starting values copied from another transfer (Duplicate).
+  draft?: TransferDraft | undefined;
   options: EntryOptions;
   onDone: () => void;
   onCancel: () => void;
@@ -38,16 +42,25 @@ export function TransferForm({
   const calendarLocale = useCalendarLocale();
   const id = useId();
   const [pending, startTransition] = useTransition();
-  const idempotencyKey = useRef(crypto.randomUUID());
+  const idempotencyKey = useRef(draft?.idempotencyKey ?? crypto.randomUUID());
 
   const accounts = useMemo(() => options.accounts.filter((a) => !a.archived), [options.accounts]);
   const items = accounts.map((a) => ({ value: a.id, label: a.label }));
-  const [fromAccountId, setFrom] = useState(accounts[0]?.id ?? "");
-  const [toAccountId, setTo] = useState(accounts[1]?.id ?? "");
-  const [amount, setAmount] = useState("");
-  const [received, setReceived] = useState("");
-  const [name, setName] = useState("");
-  const [date, setDate] = useState(() => new Date());
+  // A copied account that is archived or unknown falls back to the default.
+  const activeOr = (id: string | undefined, fallback: string) =>
+    id && accounts.some((a) => a.id === id) ? id : fallback;
+  const [fromAccountId, setFrom] = useState(() =>
+    activeOr(draft?.fromAccountId, accounts[0]?.id ?? ""),
+  );
+  const [toAccountId, setTo] = useState(() => activeOr(draft?.toAccountId, accounts[1]?.id ?? ""));
+  const [amount, setAmount] = useState(() =>
+    draft?.sentAmountMinor ? formatAmountInput(draft.sentAmountMinor, locale) : "",
+  );
+  const [received, setReceived] = useState(() =>
+    draft?.receivedAmountMinor ? formatAmountInput(draft.receivedAmountMinor, locale) : "",
+  );
+  const [name, setName] = useState(draft?.name ?? "");
+  const [date, setDate] = useState(() => draft?.occurredOn ?? new Date());
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<ActionErrorCode | null>(null);
 

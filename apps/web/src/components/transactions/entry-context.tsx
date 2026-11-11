@@ -13,18 +13,21 @@ import {
 } from "react";
 import type { EntryOptions } from "@/lib/entry-options";
 import { ADD_PARAM } from "@/lib/quick-entry";
+import type { EntryDraft } from "./duplicate";
 import { EntryDialog } from "./entry-dialog";
 
 export type EntryKind = "expense" | "income" | "transfer";
 
 export type EntryTarget =
   | { mode: "new"; kind: EntryKind }
-  | { mode: "edit"; transaction: Transaction };
+  | { mode: "edit"; transaction: Transaction }
+  | { mode: "duplicate"; draft: EntryDraft };
 
 type EntryContextValue = {
   options: EntryOptions;
   openNew: (kind?: EntryKind) => void;
   openEdit: (transaction: Transaction) => void;
+  openDuplicate: (draft: EntryDraft) => void;
 };
 
 const EntryContext = createContext<EntryContextValue | null>(null);
@@ -72,7 +75,14 @@ export function EntryProvider({
     (transaction: Transaction) => setTarget({ mode: "edit", transaction }),
     [],
   );
-  const value = useMemo(() => ({ options, openNew, openEdit }), [options, openNew, openEdit]);
+  const openDuplicate = useCallback(
+    (draft: EntryDraft) => setTarget({ mode: "duplicate", draft }),
+    [],
+  );
+  const value = useMemo(
+    () => ({ options, openNew, openEdit, openDuplicate }),
+    [options, openNew, openEdit, openDuplicate],
+  );
 
   return (
     <EntryContext value={value}>

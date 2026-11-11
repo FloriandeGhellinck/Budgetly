@@ -10,7 +10,7 @@ newer than most training data: read `node_modules/next/dist/docs/` first.
 - `src/app/(auth)`: login and the MFA step; `src/app/auth/*`: magic-link and
   OAuth returns. `src/app/(app)`: signed-in pages, wrapped by the shell
   (sidebar on desktop, bottom bar on phones) and `EntryProvider`, the one
-  quick-entry dialog (`useEntry().openNew()` / `openEdit(tx)`).
+  quick-entry dialog (`useEntry().openNew()` / `openEdit(tx)` / `openDuplicate(draft)`).
 - `src/lib/api/server.ts`: `getApi()`, the only API client (server-only).
   `src/lib/supabase/*`: the only Supabase clients. `src/lib/entry-options.ts`:
   accounts, categories, beneficiaries and tags with translated labels;
