@@ -1,3 +1,4 @@
+import { paletteVar } from "@budgetly/ui/lib/palette";
 import { Button } from "@budgetly/ui/components/button";
 import {
   Card,
@@ -13,11 +14,12 @@ import Link from "next/link";
 import { cache } from "react";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/app-shell/page-header";
-import { KIND_COLOR } from "@/components/reports/breakdown";
 import { RankedBars } from "@/components/reports/ranked-bars";
+import { CategoryChip, NO_CATEGORY_COLOR } from "@/components/categories/category-chip";
 import { orNotFound } from "@/lib/api/not-found";
 import { getApi } from "@/lib/api/server";
 import { fromIsoDay } from "@/lib/dates";
+import { categoryLookup } from "@/lib/categories/lookup";
 import { getEntryOptions, optionLabels } from "@/lib/entry-options";
 import { transactionsHref } from "@/lib/transactions/filters";
 
@@ -43,6 +45,7 @@ export default async function TagPage({ params }: PageProps<"/tags/[id]">) {
     getEntryOptions(),
   ]);
   const labels = optionLabels(options);
+  const findCategory = categoryLookup(options.categoryGroups);
   const tag = report.tag.name;
   const span =
     report.firstOn && report.lastOn
@@ -53,16 +56,20 @@ export default async function TagPage({ params }: PageProps<"/tags/[id]">) {
   const byDirection = (direction: "expense" | "income") =>
     report.categories
       .filter((row) => row.direction === direction)
-      .map((row) => ({
-        key: row.categoryId ?? "none",
-        label: labels.category(row.categoryId, row.categoryName) ?? tTx("uncategorized"),
-        detail: labels.group(row.groupId, row.groupName) ?? undefined,
-        totalMinor: row.totalMinor,
-        color: direction === "income" ? "var(--chart-1)" : KIND_COLOR.spending,
-        ...(row.categoryId
-          ? { href: transactionsHref({ tag, categoryId: row.categoryId, direction }) }
-          : {}),
-      }));
+      .map((row) => {
+        const category = findCategory(row.categoryId);
+        return {
+          key: row.categoryId ?? "none",
+          label: labels.category(row.categoryId, row.categoryName) ?? tTx("uncategorized"),
+          detail: labels.group(row.groupId, row.groupName) ?? undefined,
+          totalMinor: row.totalMinor,
+          color: paletteVar(category?.color ?? NO_CATEGORY_COLOR),
+          leading: <CategoryChip color={category?.color ?? null} icon={category?.icon ?? null} />,
+          ...(row.categoryId
+            ? { href: transactionsHref({ tag, categoryId: row.categoryId, direction }) }
+            : {}),
+        };
+      });
   const expenses = byDirection("expense");
   const incomes = byDirection("income");
 

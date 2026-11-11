@@ -15,8 +15,10 @@ newer than most training data: read `node_modules/next/dist/docs/` first.
   `src/lib/supabase/*`: the only Supabase clients. `src/lib/entry-options.ts`:
   accounts, categories, beneficiaries and tags with translated labels;
   `optionLabels` translates the stored names reports return.
-- `src/components/reports`: dashboard pieces (tiles, trend chart, ranked
-  bars). Series colours are `--chart-1..3` (income, spending, saving).
+- `src/components/reports`: dashboard pieces (hero card, breakdown tiles and
+  donut, trend chart, ranked bars). Series colours are `--chart-1..3`
+  (income, spending, saving); groups and categories wear their look
+  (`--cat-<token>*`, `CategoryChip` in `src/components/categories`, ADR 0034).
 
 ## Patterns
 

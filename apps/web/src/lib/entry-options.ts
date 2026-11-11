@@ -1,4 +1,5 @@
 import "server-only";
+import type { CategoryColor, CategoryIcon } from "@budgetly/contract";
 import { getMessages } from "next-intl/server";
 import { cache } from "react";
 import { getApi } from "@/lib/api/server";
@@ -6,10 +7,15 @@ import { seedLabel } from "@/lib/i18n/seed-label";
 
 export type Option = { id: string; label: string };
 export type AccountOption = Option & { archived: boolean };
-export type CategoryGroupOption = Option & {
-  direction: "expense" | "income";
-  categories: Option[];
-};
+// The colour and icon a group or category is shown with (ADR 0034).
+export type Appearance = { color: CategoryColor; icon: CategoryIcon };
+// A category's appearance is resolved: its own, else its group's.
+export type CategoryOption = Option & Appearance;
+export type CategoryGroupOption = Option &
+  Appearance & {
+    direction: "expense" | "income";
+    categories: CategoryOption[];
+  };
 
 // Everything a transaction form or list needs to name accounts, categories,
 // beneficiaries and tags, with defaults translated. Fetched once per request.
@@ -50,9 +56,13 @@ export const getEntryOptions = cache(async (): Promise<EntryOptions> => {
       id: group.id,
       label: seedLabel(seed, "categoryGroups", group),
       direction: group.direction,
+      color: group.color,
+      icon: group.icon,
       categories: group.categories.map((c) => ({
         id: c.id,
         label: seedLabel(seed, "categories", c),
+        color: c.color ?? group.color,
+        icon: c.icon ?? group.icon,
       })),
     })),
     beneficiaries: beneficiaries.items.map((b) => ({

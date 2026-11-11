@@ -43,6 +43,13 @@ direction, `expense` or `income`, and its categories only classify
 transactions of that direction: income uses its own group (Income) and
 categories (Salary, Meal vouchers…).
 
+## Category look
+
+The colour and icon a category group or category is shown with: a palette
+token (`teal`, `orange`…) and a lucide icon name from fixed allow-lists. A
+group always has both; a category without its own wears its group's
+(ADR 0034).
+
 ## Category kind
 
 Set on the category group: `spending` (money consumed: groceries, childcare, holidays) or `saving`

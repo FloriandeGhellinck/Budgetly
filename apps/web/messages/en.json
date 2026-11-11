@@ -65,7 +65,20 @@
     "everyone": "Everyone",
     "categoriesOf": "Categories in {group}",
     "breakdownEmpty": "No spending or saving recorded this month.",
-    "breakdownEmptyFiltered": "Nothing recorded for this person this month."
+    "breakdownEmptyFiltered": "Nothing recorded for this person this month.",
+    "leftThisMonth": "{month} · what's left",
+    "saved": "saved",
+    "groupsTitle": "Spending by group",
+    "savingBadge": "Saving",
+    "splitTitle": "Split by group",
+    "thisMonth": "this month",
+    "legend": "Groups",
+    "other": "Other",
+    "topCategories": "Top categories",
+    "noCategories": "No categorized spending this month.",
+    "recentTitle": "Latest transactions",
+    "recentEmpty": "No transactions this month.",
+    "seeAll": "See all"
   },
   "accounts": {
     "title": "Accounts",
@@ -116,7 +129,26 @@
     "addBeneficiary": "Add a person",
     "newBeneficiaryTitle": "New person",
     "renameBeneficiaryTitle": "Rename person",
-    "beneficiarySaved": "Saved"
+    "beneficiarySaved": "Saved",
+    "style": "Colour and icon",
+    "styleOf": "Colour and icon of {name}",
+    "styleTitle": "Colour and icon",
+    "color": "Colour",
+    "icon": "Icon",
+    "sameAsGroup": "Same as the group",
+    "searchIcon": "Search icons (in English)",
+    "noIcon": "No icon matches.",
+    "colors": {
+      "blue": "Blue",
+      "teal": "Teal",
+      "green": "Green",
+      "amber": "Amber",
+      "orange": "Orange",
+      "red": "Red",
+      "pink": "Pink",
+      "violet": "Violet",
+      "slate": "Slate"
+    }
   },
   "tags": {
     "title": "Tags",

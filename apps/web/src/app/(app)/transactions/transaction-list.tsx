@@ -9,13 +9,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@budgetly/ui/components/dropdown-menu";
+import { IconChip } from "@budgetly/ui/components/icon-chip";
 import { Money } from "@budgetly/ui/components/money";
-import { CopyIcon, MoreHorizontalIcon, PencilIcon, Trash2Icon } from "lucide-react";
+import {
+  ArrowLeftRightIcon,
+  CopyIcon,
+  MoreHorizontalIcon,
+  PencilIcon,
+  Trash2Icon,
+} from "lucide-react";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
+import { CategoryChip, NO_CATEGORY_COLOR } from "@/components/categories/category-chip";
 import { draftFromTransaction, draftFromTransferLegs } from "@/components/transactions/duplicate";
 import { useEntry } from "@/components/transactions/entry-context";
+import { categoryLookup } from "@/lib/categories/lookup";
 import { fromIsoDay } from "@/lib/dates";
 import {
   deleteTransaction,
@@ -119,28 +128,40 @@ function DayGroups({ items }: { items: Transaction[] }) {
   ));
 }
 
+// A short list of transactions outside the day groups (dashboard), each row
+// with its date.
+export function RecentTransactionList({ items, label }: { items: Transaction[]; label: string }) {
+  return (
+    <ul aria-label={label} className="divide-y">
+      {items.map((item) => (
+        <TransactionRow key={item.id} transaction={item} showDate />
+      ))}
+    </ul>
+  );
+}
+
 function TransactionRow({
   transaction,
   legs,
+  showDate = false,
 }: {
   transaction: Transaction;
   legs?: Transaction[] | undefined;
+  showDate?: boolean;
 }) {
   const t = useTranslations("transactions");
+  const format = useFormatter();
   const tError = useTranslations("errors");
   const locale = useLocale();
   const { options, openEdit, openDuplicate } = useEntry();
   const isTransfer = transaction.transferId !== null;
 
   const account = options.accounts.find((a) => a.id === transaction.accountId)?.label;
-  const category = useMemo(() => {
-    for (const group of options.categoryGroups) {
-      const found = group.categories.find((c) => c.id === transaction.categoryId);
-      if (found) return found.label;
-    }
-    return null;
-  }, [options.categoryGroups, transaction.categoryId]);
-  const detail = isTransfer ? t("transfer") : (category ?? t("uncategorized"));
+  const category = useMemo(
+    () => categoryLookup(options.categoryGroups)(transaction.categoryId),
+    [options.categoryGroups, transaction.categoryId],
+  );
+  const detail = isTransfer ? t("transfer") : (category?.label ?? t("uncategorized"));
 
   async function duplicate() {
     const { transferId } = transaction;
@@ -196,9 +217,22 @@ function TransactionRow({
 
   const summary = (
     <>
-      <span className="flex min-w-0 flex-col">
+      {isTransfer ? (
+        <IconChip color={NO_CATEGORY_COLOR}>
+          <ArrowLeftRightIcon />
+        </IconChip>
+      ) : (
+        <CategoryChip color={category?.color ?? null} icon={category?.icon ?? null} />
+      )}
+      <span className="flex min-w-0 flex-1 flex-col">
         <span className="truncate font-medium">{transaction.name}</span>
         <span className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">
+          {showDate && (
+            <span>
+              {format.dateTime(fromIsoDay(transaction.occurredOn), { dateStyle: "medium" })}
+            </span>
+          )}
+          {showDate && <span aria-hidden>·</span>}
           <span>{detail}</span>
           {account && <span aria-hidden>·</span>}
           {account && <span>{account}</span>}

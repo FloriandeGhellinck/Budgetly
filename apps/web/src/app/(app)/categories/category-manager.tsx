@@ -9,19 +9,39 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@budgetly/ui/components/dropdown-menu";
-import { MoreHorizontalIcon, PencilIcon, PlusIcon, Trash2Icon } from "lucide-react";
+import { MoreHorizontalIcon, PaletteIcon, PencilIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
+import { AppearanceDialog, type AppearanceValue } from "@/components/categories/appearance-dialog";
+import { CategoryChip } from "@/components/categories/category-chip";
 import { NameDialog } from "@/components/forms/name-dialog";
 import type { ActionResult } from "@/lib/action-result";
 import { createBeneficiary, renameBeneficiary } from "@/lib/beneficiaries/actions";
-import { createCategory, deleteCategory, renameCategory } from "@/lib/categories/actions";
-import type { Option } from "@/lib/entry-options";
+import {
+  createCategory,
+  deleteCategory,
+  renameCategory,
+  restyleCategory,
+  restyleGroup,
+} from "@/lib/categories/actions";
+import type { Appearance, CategoryOption, Option } from "@/lib/entry-options";
 
-export type GroupView = Option & {
-  kind: "spending" | "saving" | null;
-  categories: Option[];
+// A category with its resolved look and its own (null = the group's).
+export type CategoryView = CategoryOption & { own: AppearanceValue };
+export type GroupView = Option &
+  Appearance & {
+    kind: "spending" | "saving" | null;
+    categories: CategoryView[];
+  };
+
+// The look being edited: a group (no inheritance) or a category.
+type Styling = {
+  key: string;
+  name: string;
+  initial: AppearanceValue;
+  inherited?: Appearance;
+  save: (value: AppearanceValue) => Promise<ActionResult<unknown>>;
 };
 
 // One name dialog for every create and rename on this screen.
@@ -45,6 +65,7 @@ export function CategoryManager({
   const t = useTranslations("categories");
   const tError = useTranslations("errors");
   const [editing, setEditing] = useState<Editing | null>(null);
+  const [styling, setStyling] = useState<Styling | null>(null);
 
   async function remove(category: Option) {
     const result = await deleteCategory(category.id);
@@ -61,10 +82,31 @@ export function CategoryManager({
         <Card key={group.id} size="sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
+              <CategoryChip color={group.color} icon={group.icon} size="sm" />
               {group.label}
               {group.kind === "saving" && <Badge variant="outline">{t("saving")}</Badge>}
             </CardTitle>
-            <CardAction>
+            <CardAction className="flex gap-1">
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                aria-label={t("styleOf", { name: group.label })}
+                onClick={() =>
+                  setStyling({
+                    key: `group-${group.id}`,
+                    name: group.label,
+                    initial: { color: group.color, icon: group.icon },
+                    // A group always has its own look: the dialog offers no null.
+                    save: ({ color, icon }) =>
+                      restyleGroup(group.id, {
+                        color: color ?? group.color,
+                        icon: icon ?? group.icon,
+                      }),
+                  })
+                }
+              >
+                <PaletteIcon />
+              </Button>
               <Button
                 variant="ghost"
                 size="sm"
@@ -90,6 +132,15 @@ export function CategoryManager({
               <NameList
                 label={group.label}
                 items={group.categories}
+                onStyle={(category) =>
+                  setStyling({
+                    key: category.id,
+                    name: category.label,
+                    initial: category.own,
+                    inherited: { color: group.color, icon: group.icon },
+                    save: (look) => restyleCategory(category.id, look),
+                  })
+                }
                 onRename={(category) =>
                   setEditing({
                     key: category.id,
@@ -146,6 +197,19 @@ export function CategoryManager({
         </CardContent>
       </Card>
 
+      {styling && (
+        <AppearanceDialog
+          key={styling.key}
+          open
+          onOpenChange={(open) => !open && setStyling(null)}
+          title={t("styleTitle")}
+          name={styling.name}
+          initial={styling.initial}
+          inherited={styling.inherited}
+          onSave={styling.save}
+        />
+      )}
+
       {editing && (
         <NameDialog
           key={editing.key}
@@ -166,22 +230,27 @@ export function CategoryManager({
   );
 }
 
-function NameList({
+function NameList<T extends Option & Partial<Appearance>>({
   label,
   items,
   onRename,
+  onStyle,
   onDelete,
 }: {
   label: string;
-  items: Option[];
-  onRename: (item: Option) => void;
-  onDelete?: (item: Option) => void;
+  items: T[];
+  onRename: (item: T) => void;
+  onStyle?: (item: T) => void;
+  onDelete?: (item: T) => void;
 }) {
   const t = useTranslations("categories");
   return (
     <ul aria-label={label} className="flex flex-col divide-y">
       {items.map((item) => (
         <li key={item.id} className="flex items-center gap-2 py-1">
+          {item.color && item.icon && (
+            <CategoryChip color={item.color} icon={item.icon} size="sm" />
+          )}
           <span className="flex-1 truncate text-sm">{item.label}</span>
           <DropdownMenu>
             <DropdownMenuTrigger
@@ -200,6 +269,12 @@ function NameList({
                 <PencilIcon />
                 {t("rename")}
               </DropdownMenuItem>
+              {onStyle && (
+                <DropdownMenuItem onClick={() => onStyle(item)}>
+                  <PaletteIcon />
+                  {t("style")}
+                </DropdownMenuItem>
+              )}
               {onDelete && (
                 <DropdownMenuItem variant="destructive" onClick={() => onDelete(item)}>
                   <Trash2Icon />

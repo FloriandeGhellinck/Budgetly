@@ -17,9 +17,15 @@ export default async function CategoriesPage() {
     getTranslations("categories"),
     getEntryOptions(),
   ]);
-  // Options carry the translated labels; the list adds each group's kind.
+  // Options carry the translated labels; the list adds each group's kind and
+  // each category's own look (null = the group's), which the editor needs.
   const { groups } = await api.categories.list({});
   const kinds = new Map(groups.map((group) => [group.id, group.kind]));
+  const own = new Map(
+    groups.flatMap((group) =>
+      group.categories.map((c) => [c.id, { color: c.color, icon: c.icon }]),
+    ),
+  );
   return (
     <>
       <PageHeader title={t("title")} />
@@ -28,6 +34,10 @@ export default async function CategoriesPage() {
         groups={options.categoryGroups.map((group) => ({
           ...group,
           kind: kinds.get(group.id) ?? null,
+          categories: group.categories.map((category) => ({
+            ...category,
+            own: own.get(category.id) ?? { color: null, icon: null },
+          })),
         }))}
         beneficiaries={options.beneficiaries}
       />

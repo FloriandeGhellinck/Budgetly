@@ -13,6 +13,8 @@ export type RankedBar = {
   href?: string;
   // A CSS colour for the bar: the series this part belongs to.
   color: string;
+  // Shown before the label, e.g. the category's icon chip.
+  leading?: ReactNode;
 };
 
 // Parts of a total as ranked horizontal bars, largest first, each with its
@@ -42,7 +44,7 @@ export function RankedBars({
     <ul aria-label={label} className={cn("flex flex-col", className)}>
       {items.map((item, index) => (
         <li key={item.key}>
-          <Row href={item.href}>
+          <Row href={item.href} leading={item.leading}>
             <span className="flex items-baseline justify-between gap-3">
               <span className={cn("min-w-0 truncate", inset && "ps-4")}>
                 {item.label}
@@ -52,7 +54,7 @@ export function RankedBars({
               </span>
               <Money amountMinor={item.totalMinor} locale={locale} className="font-medium" />
             </span>
-            <span aria-hidden className="block h-2 w-full">
+            <span aria-hidden className="block h-2 w-full rounded-full bg-foreground/8">
               <span
                 className="block h-full min-w-0.5 rounded-full"
                 style={{ width: `${widths[index] ?? 0}%`, backgroundColor: item.color }}
@@ -65,13 +67,27 @@ export function RankedBars({
   );
 }
 
-function Row({ href, children }: { href: string | undefined; children: ReactNode }) {
-  const className = "flex flex-col gap-1 rounded-md px-2 py-1.5";
+function Row({
+  href,
+  leading,
+  children,
+}: {
+  href: string | undefined;
+  leading: ReactNode;
+  children: ReactNode;
+}) {
+  const className = "flex items-center gap-3 rounded-md px-2 py-1.5";
+  const body = (
+    <>
+      {leading}
+      <span className="flex min-w-0 flex-1 flex-col gap-1">{children}</span>
+    </>
+  );
   return href ? (
     <Link href={href} className={cn(className, "hover:bg-muted focus-visible:bg-muted")}>
-      {children}
+      {body}
     </Link>
   ) : (
-    <div className={className}>{children}</div>
+    <div className={className}>{body}</div>
   );
 }

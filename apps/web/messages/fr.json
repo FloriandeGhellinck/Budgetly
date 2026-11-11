@@ -65,7 +65,20 @@
     "everyone": "Tout le monde",
     "categoriesOf": "Catégories de {group}",
     "breakdownEmpty": "Aucune dépense ni épargne ce mois-ci.",
-    "breakdownEmptyFiltered": "Rien d'enregistré pour cette personne ce mois-ci."
+    "breakdownEmptyFiltered": "Rien d'enregistré pour cette personne ce mois-ci.",
+    "leftThisMonth": "{month} · ce qu'il reste",
+    "saved": "épargné",
+    "groupsTitle": "Dépenses par groupe",
+    "savingBadge": "Épargne",
+    "splitTitle": "Répartition par groupe",
+    "thisMonth": "ce mois-ci",
+    "legend": "Groupes",
+    "other": "Autres",
+    "topCategories": "Top catégories",
+    "noCategories": "Aucune dépense catégorisée ce mois-ci.",
+    "recentTitle": "Dernières transactions",
+    "recentEmpty": "Aucune transaction ce mois-ci.",
+    "seeAll": "Tout voir"
   },
   "accounts": {
     "title": "Comptes",
@@ -116,7 +129,26 @@
     "addBeneficiary": "Ajouter une personne",
     "newBeneficiaryTitle": "Nouvelle personne",
     "renameBeneficiaryTitle": "Renommer la personne",
-    "beneficiarySaved": "Enregistré"
+    "beneficiarySaved": "Enregistré",
+    "style": "Couleur et icône",
+    "styleOf": "Couleur et icône de {name}",
+    "styleTitle": "Couleur et icône",
+    "color": "Couleur",
+    "icon": "Icône",
+    "sameAsGroup": "Comme le groupe",
+    "searchIcon": "Chercher une icône (en anglais)",
+    "noIcon": "Aucune icône ne correspond.",
+    "colors": {
+      "blue": "Bleu",
+      "teal": "Sarcelle",
+      "green": "Vert",
+      "amber": "Ambre",
+      "orange": "Orange",
+      "red": "Rouge",
+      "pink": "Rose",
+      "violet": "Violet",
+      "slate": "Ardoise"
+    }
   },
   "tags": {
     "title": "Étiquettes",

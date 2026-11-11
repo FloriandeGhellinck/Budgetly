@@ -1,5 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { barWidths, changeTone, formatPoints, formatRate, signedMoney } from "./figures";
+import {
+  barWidths,
+  changeTone,
+  donutSegments,
+  foldTail,
+  formatPoints,
+  formatRate,
+  ringShare,
+  shareBps,
+  signedMoney,
+} from "./figures";
 
 describe("signedMoney", () => {
   it.each([
@@ -59,5 +69,53 @@ describe("barWidths", () => {
 
   it("draws nothing when every total is zero", () => {
     expect(barWidths([0, 0])).toEqual([0, 0]);
+  });
+});
+
+describe("shareBps", () => {
+  it("gives the share in basis points, 0 without a total", () => {
+    expect(shareBps(1, 3)).toBe(3333);
+    expect(shareBps(2, 3)).toBe(6667);
+    expect(shareBps(5, 0)).toBe(0);
+  });
+});
+
+describe("ringShare", () => {
+  it("clamps the rate to an empty or full ring", () => {
+    expect(ringShare(2550)).toBe(25.5);
+    expect(ringShare(12000)).toBe(100);
+    expect(ringShare(-100)).toBe(0);
+  });
+});
+
+describe("donutSegments", () => {
+  it("lays parts end to end on 100 units, each shortened by the gap", () => {
+    const segments = donutSegments(
+      [{ totalMinor: 300 }, { totalMinor: 100 }, { totalMinor: 0 }],
+      1,
+    );
+    expect(segments.map((s) => [s.offset, s.length])).toEqual([
+      [0, 74],
+      [75, 24],
+    ]);
+  });
+
+  it("draws a lone part as a full ring", () => {
+    expect(donutSegments([{ totalMinor: 5 }], 1).map((s) => s.length)).toEqual([100]);
+  });
+});
+
+describe("foldTail", () => {
+  const other = (rest: readonly { totalMinor: number }[]) => ({
+    totalMinor: rest.reduce((sum, item) => sum + item.totalMinor, 0),
+  });
+
+  it("sums the parts past max - 1 into one", () => {
+    const items = [5, 4, 3, 2, 1].map((totalMinor) => ({ totalMinor }));
+    expect(foldTail(items, 3, other).map((i) => i.totalMinor)).toEqual([5, 4, 6]);
+  });
+
+  it("keeps a list that fits", () => {
+    expect(foldTail([{ totalMinor: 1 }], 3, other)).toHaveLength(1);
   });
 });
