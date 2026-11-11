@@ -1,4 +1,4 @@
-# expense
+# Budgetly
 
 Open-source personal finance tracker: record expenses and income across your
 accounts (including accounts shared with a partner), classify them by who and

@@ -1,6 +1,6 @@
 -- Row-level security (ADR 0013, 0026). apps/api connects as app_runtime, a
 -- login role that is neither superuser nor BYPASSRLS, and runs each call in a
--- transaction that sets app.current_user_id (withUser in @expense/db).
+-- transaction that sets app.current_user_id (withUser in @budgetly/db).
 
 -- Created without a password so this runs everywhere; the password is set out
 -- of band. Roles are cluster-wide: test databases sharing a server race here.

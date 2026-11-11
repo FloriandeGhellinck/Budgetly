@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@expense/ui/components/button";
+import { Button } from "@budgetly/ui/components/button";
 import {
   Sidebar,
   SidebarContent,
@@ -11,7 +11,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@expense/ui/components/sidebar";
+} from "@budgetly/ui/components/sidebar";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -28,7 +28,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <span className="px-2 py-1 text-base font-semibold group-data-[collapsible=icon]:hidden">
-          expense
+          Budgetly
         </span>
         <Button onClick={() => openNew()} className="w-full justify-start gap-2">
           <PlusIcon />

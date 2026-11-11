@@ -1,5 +1,5 @@
-import type { Beneficiary } from "@expense/contract";
-import { beneficiaries, type Tx } from "@expense/db";
+import type { Beneficiary } from "@budgetly/contract";
+import { beneficiaries, type Tx } from "@budgetly/db";
 import { and, asc, eq } from "drizzle-orm";
 
 type BeneficiaryRow = typeof beneficiaries.$inferSelect;

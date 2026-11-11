@@ -1,6 +1,6 @@
 ---
 name: add-procedure
-description: Add or change an oRPC procedure in expense end to end (contract, repo, handler, router, tests with a cross-user check, agent metadata). Use when adding an API endpoint, a new namespace, or a new error code.
+description: Add or change an oRPC procedure in Budgetly end to end (contract, repo, handler, router, tests with a cross-user check, agent metadata). Use when adding an API endpoint, a new namespace, or a new error code.
 ---
 
 # Add a procedure
@@ -18,7 +18,7 @@ filters, idempotency and constraint mapping).
    - Money writes take `idempotencyKey: IdempotencyKey` (`src/common.ts`).
    - New namespace: add it to `defineContract({...})` and `export *` in
      `src/index.ts`.
-   - `pnpm --filter @expense/contract build` (the API and tests run `dist/`).
+   - `pnpm --filter @budgetly/contract build` (the API and tests run `dist/`).
 2. **Repo**: `apps/api/src/<namespace>/repo.ts`. Takes `(tx, userId, …)` and
    filters every query on `userId` (RLS is the backup, not the scope).
    Return `null` or a string union for "not found"/refusals; no oRPC here.

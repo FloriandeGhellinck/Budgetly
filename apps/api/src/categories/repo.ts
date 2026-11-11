@@ -1,5 +1,5 @@
-import type { Category, CategoryGroup } from "@expense/contract";
-import { categories, categoryGroups, type Tx } from "@expense/db";
+import type { Category, CategoryGroup } from "@budgetly/contract";
+import { categories, categoryGroups, type Tx } from "@budgetly/db";
 import { and, asc, eq, sql } from "drizzle-orm";
 
 type CategoryRow = typeof categories.$inferSelect;

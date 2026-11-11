@@ -4,6 +4,6 @@ export default defineConfig({
   test: {
     name: "db",
     environment: "node",
-    globalSetup: ["@expense/test-db/global-setup"],
+    globalSetup: ["@budgetly/test-db/global-setup"],
   },
 });

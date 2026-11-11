@@ -1,14 +1,14 @@
 "use client";
 
-import { Badge } from "@expense/ui/components/badge";
-import { Button } from "@expense/ui/components/button";
+import { Badge } from "@budgetly/ui/components/badge";
+import { Button } from "@budgetly/ui/components/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@expense/ui/components/dropdown-menu";
-import { Money } from "@expense/ui/components/money";
+} from "@budgetly/ui/components/dropdown-menu";
+import { Money } from "@budgetly/ui/components/money";
 import {
   ArchiveIcon,
   ArchiveRestoreIcon,

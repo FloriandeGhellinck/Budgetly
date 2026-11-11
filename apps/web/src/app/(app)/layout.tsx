@@ -1,4 +1,4 @@
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@expense/ui/components/sidebar";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@budgetly/ui/components/sidebar";
 import { cookies } from "next/headers";
 import type { ReactNode } from "react";
 import { AppSidebar } from "@/components/app-shell/app-sidebar";

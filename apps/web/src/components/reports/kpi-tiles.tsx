@@ -1,7 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@expense/ui/components/card";
-import { Money } from "@expense/ui/components/money";
-import { formatMoney } from "@expense/ui/lib/money";
-import { cn } from "@expense/ui/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@budgetly/ui/components/card";
+import { Money } from "@budgetly/ui/components/money";
+import { formatMoney } from "@budgetly/ui/lib/money";
+import { cn } from "@budgetly/ui/lib/utils";
 import { ArrowDownRightIcon, ArrowUpRightIcon, MinusIcon } from "lucide-react";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";

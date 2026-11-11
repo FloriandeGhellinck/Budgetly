@@ -24,15 +24,15 @@ transaction bound to them for RLS. No MCP endpoint yet (ADR 0018).
 ## Run
 
 `cp .env.example .env`, start local Supabase, then
-`pnpm --filter @expense/api dev` (port 8787). Relative imports name the `.ts`
+`pnpm --filter @budgetly/api dev` (port 8787). Relative imports name the `.ts`
 file: Node runs `src/` directly.
 
 ## Boundaries (enforced by `pnpm checks`)
 
-- Implements the procedures declared in `@expense/contract`; `os.router`
+- Implements the procedures declared in `@budgetly/contract`; `os.router`
   does not compile while one is missing. Add one with the `add-procedure`
   skill.
-- Never import from another app (`@expense/web` or `../web`).
-- `@expense/test-db` is for test files and `src/test-support.ts` only.
+- Never import from another app (`@budgetly/web` or `../web`).
+- `@budgetly/test-db` is for test files and `src/test-support.ts` only.
 - Every procedure has an integration test on a real Postgres that also proves
   another user cannot read or change the data (`docs/what-to-test.md`).

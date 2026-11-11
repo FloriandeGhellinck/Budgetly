@@ -4,8 +4,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@expense/ui/components/card";
-import { Money } from "@expense/ui/components/money";
+} from "@budgetly/ui/components/card";
+import { Money } from "@budgetly/ui/components/money";
 import { ArrowRightIcon } from "lucide-react";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";

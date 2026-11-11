@@ -1,4 +1,4 @@
-import { formatAmountInput } from "@expense/ui/lib/money";
+import { formatAmountInput } from "@budgetly/ui/lib/money";
 import { formatRate } from "../reports/figures";
 
 // An account's share is stored and sent as basis points (ADR 0026, 0027); the

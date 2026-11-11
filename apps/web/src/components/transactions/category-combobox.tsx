@@ -10,7 +10,7 @@ import {
   ComboboxItem,
   ComboboxLabel,
   ComboboxList,
-} from "@expense/ui/components/combobox";
+} from "@budgetly/ui/components/combobox";
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import type { CategoryGroupOption, Option } from "@/lib/entry-options";

@@ -11,8 +11,8 @@ const nextConfig: NextConfig = {
   // apps/web/AGENTS.md is hand-written; it points at Next's bundled docs itself.
   agentRules: false,
   turbopack: { root: workspaceRoot },
-  // @expense/ui ships source; transpiling keeps its per-file "use client" boundaries.
-  transpilePackages: ["@expense/ui"],
+  // @budgetly/ui ships source; transpiling keeps its per-file "use client" boundaries.
+  transpilePackages: ["@budgetly/ui"],
 };
 
 const withNextIntl = createNextIntlPlugin("./src/lib/i18n/request.ts");

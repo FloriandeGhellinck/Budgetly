@@ -1,4 +1,4 @@
-import type { Direction } from "@expense/db";
+import type { Direction } from "@budgetly/db";
 import { z } from "zod";
 
 export const Id = z.uuid();

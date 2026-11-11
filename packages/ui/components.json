@@ -13,11 +13,11 @@
   "iconLibrary": "lucide",
   "rtl": false,
   "aliases": {
-    "components": "@expense/ui/components",
-    "utils": "@expense/ui/lib/utils",
-    "ui": "@expense/ui/components",
-    "lib": "@expense/ui/lib",
-    "hooks": "@expense/ui/hooks"
+    "components": "@budgetly/ui/components",
+    "utils": "@budgetly/ui/lib/utils",
+    "ui": "@budgetly/ui/components",
+    "lib": "@budgetly/ui/lib",
+    "hooks": "@budgetly/ui/hooks"
   },
   "menuColor": "default",
   "menuAccent": "subtle",

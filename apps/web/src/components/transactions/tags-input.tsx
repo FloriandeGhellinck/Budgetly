@@ -10,7 +10,7 @@ import {
   ComboboxList,
   ComboboxValue,
   useComboboxAnchor,
-} from "@expense/ui/components/combobox";
+} from "@budgetly/ui/components/combobox";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 

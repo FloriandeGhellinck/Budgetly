@@ -3,7 +3,7 @@ export type Locale = (typeof LOCALES)[number];
 
 export const DEFAULT_LOCALE: Locale = "en";
 // Set by the language picker in settings; wins over Accept-Language.
-export const LOCALE_COOKIE = "expense-locale";
+export const LOCALE_COOKIE = "budgetly-locale";
 
 export function isLocale(value: unknown): value is Locale {
   return typeof value === "string" && (LOCALES as readonly string[]).includes(value);

@@ -1,5 +1,5 @@
 {
-  "name": "@expense/root",
+  "name": "@budgetly/root",
   "version": "0.0.0",
   "private": true,
   "license": "AGPL-3.0-only",
@@ -9,7 +9,7 @@
     "checks": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm boundaries && pnpm schema-drift",
     "test": "vitest run",
     "test:watch": "vitest",
-    "e2e": "pnpm --filter @expense/e2e test",
+    "e2e": "pnpm --filter @budgetly/e2e test",
     "typecheck": "tsc -p tsconfig.json && pnpm -r typecheck",
     "lint": "oxlint --type-aware --deny-warnings",
     "lint:fix": "oxlint --type-aware --fix",
@@ -20,7 +20,7 @@
     "db:stop": "supabase stop",
     "db:reset": "supabase db reset",
     "db:status": "supabase status",
-    "schema-drift": "pnpm --filter @expense/db db:check && node scripts/check-schema-drift.ts"
+    "schema-drift": "pnpm --filter @budgetly/db db:check && node scripts/check-schema-drift.ts"
   },
   "devDependencies": {
     "@types/node": "catalog:",

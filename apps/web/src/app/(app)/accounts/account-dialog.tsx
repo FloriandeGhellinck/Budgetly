@@ -6,15 +6,15 @@ import {
   FieldDescription,
   FieldError,
   FieldLabel,
-} from "@expense/ui/components/field";
-import { Input } from "@expense/ui/components/input";
+} from "@budgetly/ui/components/field";
+import { Input } from "@budgetly/ui/components/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
   InputGroupText,
-} from "@expense/ui/components/input-group";
-import { Switch } from "@expense/ui/components/switch";
+} from "@budgetly/ui/components/input-group";
+import { Switch } from "@budgetly/ui/components/switch";
 import { useLocale, useTranslations } from "next-intl";
 import { useId, useState } from "react";
 import { FormDialog } from "@/components/forms/form-dialog";

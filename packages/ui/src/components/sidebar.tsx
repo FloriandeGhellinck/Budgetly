@@ -6,19 +6,19 @@ import { useRender } from "@base-ui/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "cn";
 
-import { useIsMobile } from "@expense/ui/hooks/use-mobile";
-import { Button } from "@expense/ui/components/button";
-import { Input } from "@expense/ui/components/input";
-import { Separator } from "@expense/ui/components/separator";
+import { useIsMobile } from "@budgetly/ui/hooks/use-mobile";
+import { Button } from "@budgetly/ui/components/button";
+import { Input } from "@budgetly/ui/components/input";
+import { Separator } from "@budgetly/ui/components/separator";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@expense/ui/components/sheet";
-import { Skeleton } from "@expense/ui/components/skeleton";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@expense/ui/components/tooltip";
+} from "@budgetly/ui/components/sheet";
+import { Skeleton } from "@budgetly/ui/components/skeleton";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@budgetly/ui/components/tooltip";
 import { PanelLeftIcon } from "lucide-react";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";

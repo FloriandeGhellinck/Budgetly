@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@expense/ui/components/button";
-import { Field, FieldError, FieldLabel } from "@expense/ui/components/field";
-import { Input } from "@expense/ui/components/input";
+import { Button } from "@budgetly/ui/components/button";
+import { Field, FieldError, FieldLabel } from "@budgetly/ui/components/field";
+import { Input } from "@budgetly/ui/components/input";
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { type MfaState, signOut, verifyMfa } from "@/lib/auth-actions";

@@ -1,5 +1,5 @@
-import type { Transaction, Transfer } from "@expense/contract";
-import { transactions, type Tx } from "@expense/db";
+import type { Transaction, Transfer } from "@budgetly/contract";
+import { transactions, type Tx } from "@budgetly/db";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "node:crypto";
 import { authed } from "../orpc.ts";

@@ -1,6 +1,6 @@
 "use server";
 
-import type { Account } from "@expense/contract";
+import type { Account } from "@budgetly/contract";
 import type { ActionResult } from "@/lib/action-result";
 import { runWrite } from "@/lib/api/action";
 import type { Api } from "@/lib/api/server";

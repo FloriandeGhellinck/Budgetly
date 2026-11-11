@@ -1,4 +1,4 @@
-import { pgError } from "@expense/test-db";
+import { pgError } from "@budgetly/test-db";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { accounts, categories, categoryGroups, tags, transactions } from "./schema";
 import {

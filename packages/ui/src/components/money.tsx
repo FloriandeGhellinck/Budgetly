@@ -1,7 +1,7 @@
 import type * as React from "react";
 import { cn } from "cn";
 
-import { formatMoney, type MoneyDirection } from "@expense/ui/lib/money";
+import { formatMoney, type MoneyDirection } from "@budgetly/ui/lib/money";
 
 type MoneyProps = Omit<React.ComponentProps<"span">, "children"> & {
   /** Positive integer cents of EUR. Never a float. */

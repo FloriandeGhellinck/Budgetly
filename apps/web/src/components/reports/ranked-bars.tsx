@@ -1,5 +1,5 @@
-import { Money } from "@expense/ui/components/money";
-import { cn } from "@expense/ui/lib/utils";
+import { Money } from "@budgetly/ui/components/money";
+import { cn } from "@budgetly/ui/lib/utils";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { barWidths } from "@/lib/reports/figures";

@@ -1,11 +1,11 @@
 // One-off import of the Notion history (ADR 0009, 0033):
-//   pnpm --filter @expense/api import:notion --expenses <csv> --summary <csv> \
+//   pnpm --filter @budgetly/api import:notion --expenses <csv> --summary <csv> \
 //     --user <uuid|email> [--summary-start-year 2025] [--dry-run] \
 //     [--children-sub-category <name>]...
 // --dry-run reads and maps both files and prints what would be written,
 // without touching any database. Each --children-sub-category names a
 // sub-category that makes a non-Enfants row the children's (ADR 0010).
-import { createDb } from "@expense/db";
+import { createDb } from "@budgetly/db";
 import { readFileSync } from "node:fs";
 import { parseArgs } from "node:util";
 import { z } from "zod";

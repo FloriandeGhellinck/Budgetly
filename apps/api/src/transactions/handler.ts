@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { transactions } from "@expense/db";
+import { transactions } from "@budgetly/db";
 import { authed } from "../orpc.ts";
 import { onConstraint } from "../pg-errors.ts";
 import { decodeCursor, encodeCursor } from "./cursor.ts";

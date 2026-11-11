@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@expense/ui/components/card";
+import { Card, CardContent } from "@budgetly/ui/components/card";
 import { ChevronRightIcon, TagIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";

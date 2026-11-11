@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@expense/ui/components/button";
-import { cn } from "@expense/ui/lib/utils";
+import { Button } from "@budgetly/ui/components/button";
+import { cn } from "@budgetly/ui/lib/utils";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

@@ -5,7 +5,7 @@ import postgres from "postgres";
 
 // Point this at a server the tests may create and drop databases on, or leave
 // it unset and the globalSetup starts a throwaway container.
-export const SERVER_URL_ENV = "EXPENSE_TEST_DATABASE_URL";
+export const SERVER_URL_ENV = "BUDGETLY_TEST_DATABASE_URL";
 
 // Pinned by digest (multi-arch index) so every machine runs the same server.
 const IMAGE =
@@ -51,7 +51,7 @@ async function waitForServer(url: string): Promise<void> {
 }
 
 export async function startPostgres(): Promise<PostgresServer> {
-  const name = `expense-test-db-${randomUUID().slice(0, 8)}`;
+  const name = `budgetly-test-db-${randomUUID().slice(0, 8)}`;
   try {
     // Data lives in memory with durability off: the server dies with the run.
     docker(
@@ -61,7 +61,7 @@ export async function startPostgres(): Promise<PostgresServer> {
       "--name",
       name,
       "--label",
-      "expense.purpose=test-db",
+      "budgetly.purpose=test-db",
       "--tmpfs",
       "/var/lib/postgresql/data:rw",
       "--publish",
@@ -104,7 +104,7 @@ export function serverUrl(): string {
   const url = process.env[SERVER_URL_ENV];
   if (!url) {
     throw new Error(
-      `test-db: no test Postgres. Add @expense/test-db/global-setup to the Vitest project, or set ${SERVER_URL_ENV}.`,
+      `test-db: no test Postgres. Add @budgetly/test-db/global-setup to the Vitest project, or set ${SERVER_URL_ENV}.`,
     );
   }
   return url;
@@ -113,7 +113,7 @@ export function serverUrl(): string {
 // An empty database of its own, so test files never see each other's rows.
 export async function createTestDatabase(): Promise<TestDatabase> {
   const server = serverUrl();
-  const name = `expense_t_${randomUUID().replaceAll("-", "")}`;
+  const name = `budgetly_t_${randomUUID().replaceAll("-", "")}`;
   const admin = postgres(server, { max: 1, onnotice: () => {} });
   try {
     await admin.unsafe(`create database ${name}`);

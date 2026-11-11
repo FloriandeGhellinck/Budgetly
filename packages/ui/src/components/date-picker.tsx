@@ -5,9 +5,9 @@ import { cn } from "cn";
 import { CalendarIcon } from "lucide-react";
 import type { Locale } from "react-day-picker";
 
-import { Button } from "@expense/ui/components/button";
-import { Calendar } from "@expense/ui/components/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@expense/ui/components/popover";
+import { Button } from "@budgetly/ui/components/button";
+import { Calendar } from "@budgetly/ui/components/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@budgetly/ui/components/popover";
 
 // shadcn has no date-picker registry item for Base UI; this is its documented popover + calendar recipe.
 type DatePickerProps = {

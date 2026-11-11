@@ -1,5 +1,5 @@
 import "server-only";
-import { ERRORS, type ErrorCode } from "@expense/contract";
+import { ERRORS, type ErrorCode } from "@budgetly/contract";
 import { ORPCError } from "@orpc/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";

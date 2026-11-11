@@ -1,4 +1,4 @@
-import { pgError } from "@expense/test-db";
+import { pgError } from "@budgetly/test-db";
 import { sql } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import {

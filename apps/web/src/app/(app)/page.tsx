@@ -5,7 +5,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@expense/ui/components/card";
+} from "@budgetly/ui/components/card";
 import type { Metadata } from "next";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/app-shell/page-header";

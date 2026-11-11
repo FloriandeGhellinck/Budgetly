@@ -1,4 +1,4 @@
-import type { Suggestion } from "@expense/contract";
+import type { Suggestion } from "@budgetly/contract";
 import { describe, expect, it } from "vitest";
 import { applySuggestion, type SuggestableField, type SuggestedFields } from "./suggestion";
 

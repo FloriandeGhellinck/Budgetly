@@ -1,5 +1,5 @@
-import type { Tag } from "@expense/contract";
-import { tags, type Tx } from "@expense/db";
+import type { Tag } from "@budgetly/contract";
+import { tags, type Tx } from "@budgetly/db";
 import { asc, eq, sql } from "drizzle-orm";
 
 export async function listTags(tx: Tx, userId: string): Promise<Tag[]> {

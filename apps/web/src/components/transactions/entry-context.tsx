@@ -1,6 +1,6 @@
 "use client";
 
-import type { Transaction } from "@expense/contract";
+import type { Transaction } from "@budgetly/contract";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   createContext,

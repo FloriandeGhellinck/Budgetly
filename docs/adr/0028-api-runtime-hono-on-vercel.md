@@ -17,7 +17,7 @@ server assets, workers and bundling tweaks. `apps/api` has none of that.
   reads and validates the environment at boot and wires production
   dependencies. Tests build the same app with a test database and a local
   JWKS.
-- Locally, `pnpm --filter @expense/api dev` runs `src/local-server.ts`
+- Locally, `pnpm --filter @budgetly/api dev` runs `src/local-server.ts`
   with Node's built-in TypeScript support and `@hono/node-server`. It is not
   named `server.ts`, which Vercel would also take for an entry point.
   Relative imports in `apps/api` therefore name the `.ts` file.

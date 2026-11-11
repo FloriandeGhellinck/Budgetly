@@ -1,6 +1,6 @@
 # Domain glossary
 
-Canonical vocabulary for `expense`. Code, API procedures, MCP tools and docs
+Canonical vocabulary for Budgetly. Code, API procedures, MCP tools and docs
 use these terms. Decisions live in `docs/adr/`.
 
 ## User
@@ -67,12 +67,12 @@ each with its own amount (ADR 0006).
 
 In the Notion data, `Carte = Oui` means the purchase was paid by card and so
 earned cashback; `Non` means card payment was not possible (direct debit,
-bank transfer). In `expense` this is derived from the account / payment
+bank transfer). In Budgetly this is derived from the account / payment
 method used.
 
 ## Tracked account
 
-An account whose movements `expense` records. Anything outside is out of
+An account whose movements Budgetly records. Anything outside is out of
 scope: money sent there is an expense (often of kind `saving`), money coming
 from there is income (ADR 0007).
 

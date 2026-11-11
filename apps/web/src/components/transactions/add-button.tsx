@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@expense/ui/components/button";
+import { Button } from "@budgetly/ui/components/button";
 import { PlusIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { type EntryKind, useEntry } from "./entry-context";

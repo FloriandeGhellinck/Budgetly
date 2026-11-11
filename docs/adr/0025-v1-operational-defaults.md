@@ -11,5 +11,5 @@ Status: accepted (2026-11-08)
    staging environment while the project has a single maintainer.
 3. **Soft delete** for transactions (`deletedAt`) so mistakes by the user or
    an agent can be undone. No full audit log in v1.
-4. **Repository**: public GitHub repo `expense` with README, `LICENSE`
+4. **Repository**: public GitHub repo `budgetly` with README, `LICENSE`
    (AGPL-3.0) and a minimal `CONTRIBUTING.md`.

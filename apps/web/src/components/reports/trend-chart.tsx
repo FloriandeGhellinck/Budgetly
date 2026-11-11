@@ -7,7 +7,7 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@expense/ui/components/chart";
+} from "@budgetly/ui/components/chart";
 import {
   Table,
   TableBody,
@@ -15,8 +15,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@expense/ui/components/table";
-import { formatMoney } from "@expense/ui/lib/money";
+} from "@budgetly/ui/components/table";
+import { formatMoney } from "@budgetly/ui/lib/money";
 import { useLocale, useTranslations } from "next-intl";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 

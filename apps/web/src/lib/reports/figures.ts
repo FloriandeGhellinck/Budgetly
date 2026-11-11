@@ -1,4 +1,4 @@
-import type { MoneyDirection } from "@expense/ui/lib/money";
+import type { MoneyDirection } from "@budgetly/ui/lib/money";
 
 // Display helpers for report figures (ADR 0029). Inputs are integers: signed
 // cents and basis points. Values reach Intl as exact decimal strings, never

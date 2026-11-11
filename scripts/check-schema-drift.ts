@@ -61,7 +61,7 @@ try {
     const ddl = emitted.map((f) => readFileSync(join(probe, f), "utf8")).join("\n");
     fail([
       "Schema drift: packages/db/src/schema and the latest migration snapshot disagree.",
-      "Generate the migration:  pnpm --filter @expense/db db:generate --name=<slug>",
+      "Generate the migration:  pnpm --filter @budgetly/db db:generate --name=<slug>",
       "",
       ddl.trimEnd(),
     ]);

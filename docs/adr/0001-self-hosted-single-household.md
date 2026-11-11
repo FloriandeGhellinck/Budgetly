@@ -4,7 +4,7 @@ Status: superseded by ADR 0012 (2026-11-08)
 
 ## Context
 
-`expense` is an open-source personal finance tracker (expenses and income).
+Budgetly is an open-source personal finance tracker (expenses and income).
 We had to choose between a self-hosted app, a multi-tenant SaaS, and a
 local-first app.
 

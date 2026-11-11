@@ -1,7 +1,7 @@
 "use client";
 
-import { Field, FieldError, FieldLabel } from "@expense/ui/components/field";
-import { Input } from "@expense/ui/components/input";
+import { Field, FieldError, FieldLabel } from "@budgetly/ui/components/field";
+import { Input } from "@budgetly/ui/components/input";
 import { useTranslations } from "next-intl";
 import { useId, useState } from "react";
 import type { ActionResult } from "@/lib/action-result";

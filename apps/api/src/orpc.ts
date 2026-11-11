@@ -1,10 +1,10 @@
-import { contract, ERRORS } from "@expense/contract";
-import { withUser, type Db, type Tx } from "@expense/db";
+import { contract, ERRORS } from "@budgetly/contract";
+import { withUser, type Db, type Tx } from "@budgetly/db";
 import { implement, ORPCError } from "@orpc/server";
 import { sql } from "drizzle-orm";
 import { bearerToken, type VerifyToken } from "./auth.ts";
 
-export type { Tx } from "@expense/db";
+export type { Tx } from "@budgetly/db";
 
 // What the HTTP layer hands every call. Nothing here comes from the caller
 // except the raw Authorization header, which is verified below.

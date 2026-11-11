@@ -25,7 +25,7 @@ different failure mode, and name it for that failure mode.
 ## 2. Every procedure: one integration test with a cross-user check
 
 Each oRPC procedure has at least one test that calls it through the real
-router, middleware and Postgres (`@expense/test-db`), as a real user. That
+router, middleware and Postgres (`@budgetly/test-db`), as a real user. That
 test, or one next to it, also proves that **another user** cannot read,
 change or delete the data: the call returns nothing or `NOT_FOUND`, and the
 row is unchanged. Tenancy bugs are the costliest bug this app can have.
@@ -56,6 +56,6 @@ row is unchanged. Tenancy bugs are the costliest bug this app can have.
   `it.each` with labelled cases.
 - **One reason to fail** per test.
 - **Mock at the process boundary only**: HTTP, time, Supabase Auth. Never
-  `@expense/ui` or sibling modules.
+  `@budgetly/ui` or sibling modules.
 - **Name DB-backed files `*.db.test.ts`** and share read-only fixtures in a
   `beforeAll`.

@@ -1,4 +1,4 @@
-import { monthIndex } from "@expense/contract";
+import { monthIndex } from "@budgetly/contract";
 
 // A calendar day as `YYYY-MM-DD` in the user's local time zone; the API's day
 // format (ADR 0027). toISOString() would give the UTC day instead.

@@ -1,8 +1,8 @@
-import { Button } from "@expense/ui/components/button";
+import { Button } from "@budgetly/ui/components/button";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
-import { monthIndex } from "@expense/contract";
+import { monthIndex } from "@budgetly/contract";
 import { monthOf, monthStart, shiftMonth } from "@/lib/dates";
 import { type DashboardParams, dashboardHref } from "@/lib/reports/params";
 

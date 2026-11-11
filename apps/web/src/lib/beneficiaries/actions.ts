@@ -1,6 +1,6 @@
 "use server";
 
-import type { Beneficiary } from "@expense/contract";
+import type { Beneficiary } from "@budgetly/contract";
 import type { ActionResult } from "@/lib/action-result";
 import { runWrite } from "@/lib/api/action";
 

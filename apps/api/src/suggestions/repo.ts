@@ -1,4 +1,4 @@
-import { transactions, type Tx } from "@expense/db";
+import { transactions, type Tx } from "@budgetly/db";
 import { and, desc, eq, ilike, inArray, isNull } from "drizzle-orm";
 import { containsPattern } from "../like.ts";
 import type { Candidate } from "./rank.ts";

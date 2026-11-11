@@ -1,4 +1,4 @@
-import type { Suggestion } from "@expense/contract";
+import type { Suggestion } from "@budgetly/contract";
 
 export type SuggestedFields = {
   direction: "expense" | "income";

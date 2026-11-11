@@ -1,4 +1,4 @@
-import { createDb } from "@expense/db";
+import { createDb } from "@budgetly/db";
 import { createRemoteJWKSet } from "jose";
 import { createApp } from "./app.ts";
 import { createTokenVerifier } from "./auth.ts";

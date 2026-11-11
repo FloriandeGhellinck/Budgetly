@@ -13,7 +13,7 @@ browser session, valid for an hour, for a script run once.
 
 ## Decision
 
-- `pnpm --filter @expense/api import:notion` builds the real oRPC router
+- `pnpm --filter @budgetly/api import:notion` builds the real oRPC router
   in-process (`createRouterClient`) on `DATABASE_URL` (`app_runtime`, so RLS
   applies), with a `verifyToken` that resolves one fixed in-process token to
   the chosen user at `aal2`. Every write still goes through the handlers,

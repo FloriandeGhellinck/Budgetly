@@ -1,17 +1,17 @@
 "use client";
 
-import { Button } from "@expense/ui/components/button";
-import { DatePicker } from "@expense/ui/components/date-picker";
-import { Field, FieldDescription, FieldError, FieldLabel } from "@expense/ui/components/field";
-import { Input } from "@expense/ui/components/input";
+import { Button } from "@budgetly/ui/components/button";
+import { DatePicker } from "@budgetly/ui/components/date-picker";
+import { Field, FieldDescription, FieldError, FieldLabel } from "@budgetly/ui/components/field";
+import { Input } from "@budgetly/ui/components/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@expense/ui/components/select";
-import { parseAmountMinor } from "@expense/ui/lib/money";
+} from "@budgetly/ui/components/select";
+import { parseAmountMinor } from "@budgetly/ui/lib/money";
 import { useLocale, useTranslations } from "next-intl";
 import { useId, useMemo, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";

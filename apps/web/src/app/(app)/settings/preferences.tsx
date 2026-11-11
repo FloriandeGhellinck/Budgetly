@@ -6,7 +6,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@expense/ui/components/select";
+} from "@budgetly/ui/components/select";
 import { useTheme } from "next-themes";
 import { useTranslations } from "next-intl";
 import { useTransition } from "react";

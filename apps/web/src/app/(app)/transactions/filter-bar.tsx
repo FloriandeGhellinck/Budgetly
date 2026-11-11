@@ -1,8 +1,8 @@
 "use client";
 
-import { DIRECTIONS } from "@expense/contract";
-import { Button } from "@expense/ui/components/button";
-import { Input } from "@expense/ui/components/input";
+import { DIRECTIONS } from "@budgetly/contract";
+import { Button } from "@budgetly/ui/components/button";
+import { Input } from "@budgetly/ui/components/input";
 import {
   Select,
   SelectContent,
@@ -11,7 +11,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@expense/ui/components/select";
+} from "@budgetly/ui/components/select";
 import { SearchIcon, XIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";

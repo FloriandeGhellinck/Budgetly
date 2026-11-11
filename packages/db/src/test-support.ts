@@ -1,5 +1,5 @@
 // Shared by the *.db.test.ts files; not exported from the package.
-import { appRoleUrl, createTestDatabase, migrate } from "@expense/test-db";
+import { appRoleUrl, createTestDatabase, migrate } from "@budgetly/test-db";
 import { createDb, type Db } from "./client";
 import {
   accounts,

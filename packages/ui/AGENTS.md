@@ -5,9 +5,9 @@ v4 styles. Exported from source; `apps/web` transpiles it.
 
 ## Using it
 
-- `import { Button } from "@expense/ui/components/button"`; one entry per file
+- `import { Button } from "@budgetly/ui/components/button"`; one entry per file
   in `src/components`, `src/lib`, `src/hooks`. No barrel.
-- The app's CSS imports `@expense/ui/globals.css` (Tailwind, `tw-animate-css`,
+- The app's CSS imports `@budgetly/ui/globals.css` (Tailwind, `tw-animate-css`,
   light and dark tokens; dark mode is the `.dark` class).
 - The app root mounts `TooltipProvider` (tooltip) and next-themes'
   `ThemeProvider` (sonner's `Toaster` reads the theme).
@@ -33,7 +33,7 @@ v4 styles. Exported from source; `apps/web` transpiles it.
 
 ## Boundaries (enforced by `pnpm checks`)
 
-- Presentational only: never import `@expense/db` or `@expense/test-db`.
+- Presentational only: never import `@budgetly/db` or `@budgetly/test-db`.
 - Never import from `apps/*`.
 - Reuse before invention: extend an existing component instead of adding a
   near-duplicate.

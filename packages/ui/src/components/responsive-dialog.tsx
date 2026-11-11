@@ -9,15 +9,15 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@expense/ui/components/dialog";
+} from "@budgetly/ui/components/dialog";
 import {
   Drawer,
   DrawerContent,
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-} from "@expense/ui/components/drawer";
-import { useIsMobile } from "@expense/ui/hooks/use-mobile";
+} from "@budgetly/ui/components/drawer";
+import { useIsMobile } from "@budgetly/ui/hooks/use-mobile";
 
 // A form surface that is a bottom Drawer on phones (thumb reach) and a centred
 // Dialog from the md breakpoint up. Controlled only: forms decide when to close.

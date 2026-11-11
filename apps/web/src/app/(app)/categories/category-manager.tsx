@@ -1,14 +1,14 @@
 "use client";
 
-import { Badge } from "@expense/ui/components/badge";
-import { Button } from "@expense/ui/components/button";
-import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@expense/ui/components/card";
+import { Badge } from "@budgetly/ui/components/badge";
+import { Button } from "@budgetly/ui/components/button";
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@budgetly/ui/components/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@expense/ui/components/dropdown-menu";
+} from "@budgetly/ui/components/dropdown-menu";
 import { MoreHorizontalIcon, PencilIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";

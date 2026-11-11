@@ -1,7 +1,7 @@
 "use client";
 
-import { Toaster } from "@expense/ui/components/sonner";
-import { TooltipProvider } from "@expense/ui/components/tooltip";
+import { Toaster } from "@budgetly/ui/components/sonner";
+import { TooltipProvider } from "@budgetly/ui/components/tooltip";
 import { ThemeProvider } from "next-themes";
 import type { ReactNode } from "react";
 

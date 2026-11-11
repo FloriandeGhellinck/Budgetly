@@ -1,5 +1,5 @@
 {
-  "name": "@expense/db",
+  "name": "@budgetly/db",
   "version": "0.0.0",
   "private": true,
   "description": "Drizzle schema, migrations and RLS policies.",
@@ -25,7 +25,7 @@
     "postgres": "catalog:"
   },
   "devDependencies": {
-    "@expense/test-db": "workspace:*",
+    "@budgetly/test-db": "workspace:*",
     "@types/node": "catalog:",
     "drizzle-kit": "catalog:",
     "tsdown": "catalog:",

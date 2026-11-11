@@ -1,4 +1,4 @@
-import type { ErrorCode } from "@expense/contract";
+import type { ErrorCode } from "@budgetly/contract";
 
 // What every server action returns to the client. Declared API errors keep
 // their code (ADR 0027) so the form can show the matching message; anything

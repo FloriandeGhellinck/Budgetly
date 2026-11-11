@@ -2,8 +2,8 @@
 // idempotency key applies as for any other caller (ADR 0033). Safe to re-run:
 // references are looked up before they are created, and each transaction
 // carries a deterministic idempotency key.
-import type { Contract } from "@expense/contract";
-import type { Db } from "@expense/db";
+import type { Contract } from "@budgetly/contract";
+import type { Db } from "@budgetly/db";
 import type { ContractRouterClient } from "@orpc/contract";
 import { createRouterClient } from "@orpc/server";
 import { router } from "../router.ts";

@@ -1,4 +1,4 @@
-import type { MonthFigures } from "@expense/contract";
+import type { MonthFigures } from "@budgetly/contract";
 
 export type MonthTotals = { incomeMinor: number; spendingMinor: number; savingMinor: number };
 

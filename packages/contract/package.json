@@ -1,5 +1,5 @@
 {
-  "name": "@expense/contract",
+  "name": "@budgetly/contract",
   "version": "0.0.0",
   "private": true,
   "description": "oRPC contracts shared by apps/api and apps/web.",
@@ -23,7 +23,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@expense/db": "workspace:*",
+    "@budgetly/db": "workspace:*",
     "@types/node": "catalog:",
     "tsdown": "catalog:",
     "typescript": "catalog:"

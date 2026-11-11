@@ -1,4 +1,4 @@
-import { accounts, seedNewUser, type Tx } from "@expense/db";
+import { accounts, seedNewUser, type Tx } from "@budgetly/db";
 import { eq, sql } from "drizzle-orm";
 
 export async function bootstrapUser(tx: Tx, userId: string): Promise<{ created: boolean }> {

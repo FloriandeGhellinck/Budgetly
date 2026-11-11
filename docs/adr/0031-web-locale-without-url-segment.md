@@ -10,7 +10,7 @@ sign-up are stored in English with a seed key (ADR 0026).
 
 ## Decision
 
-- **No `/[locale]` segment.** The locale is the `expense-locale` cookie,
+- **No `/[locale]` segment.** The locale is the `budgetly-locale` cookie,
   set by the language picker in Settings, else the best match in
   `Accept-Language`, else English (`src/lib/i18n/config.ts`). URLs stay
   stable and filter links are locale-free. There is no server-side user

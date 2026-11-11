@@ -1,5 +1,5 @@
-import type { Transaction } from "@expense/contract";
-import { categories, transactions, transactionTags, type Tx } from "@expense/db";
+import type { Transaction } from "@budgetly/contract";
+import { categories, transactions, transactionTags, type Tx } from "@budgetly/db";
 import {
   and,
   desc,

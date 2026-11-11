@@ -1,5 +1,5 @@
 import "server-only";
-import type { Contract } from "@expense/contract";
+import type { Contract } from "@budgetly/contract";
 import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import type { ContractRouterClient } from "@orpc/contract";

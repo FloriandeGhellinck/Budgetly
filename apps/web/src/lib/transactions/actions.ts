@@ -1,6 +1,6 @@
 "use server";
 
-import type { Suggestion, Transaction, Transfer } from "@expense/contract";
+import type { Suggestion, Transaction, Transfer } from "@budgetly/contract";
 import type { ActionResult } from "@/lib/action-result";
 import { runAction, runWrite } from "@/lib/api/action";
 import type { Api } from "@/lib/api/server";

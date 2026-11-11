@@ -1,5 +1,5 @@
 {
-  "name": "@expense/api",
+  "name": "@budgetly/api",
   "version": "0.0.0",
   "private": true,
   "description": "Hono + oRPC API server. The single door to data.",
@@ -12,8 +12,8 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@expense/contract": "workspace:*",
-    "@expense/db": "workspace:*",
+    "@budgetly/contract": "workspace:*",
+    "@budgetly/db": "workspace:*",
     "@hono/node-server": "catalog:",
     "@orpc/server": "catalog:",
     "drizzle-orm": "catalog:",
@@ -22,7 +22,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@expense/test-db": "workspace:*",
+    "@budgetly/test-db": "workspace:*",
     "@orpc/client": "catalog:",
     "@orpc/contract": "catalog:",
     "@types/node": "catalog:",

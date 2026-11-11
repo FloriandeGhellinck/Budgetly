@@ -1,4 +1,4 @@
-import type { Tx } from "@expense/db";
+import type { Tx } from "@budgetly/db";
 import { sql, type SQL } from "drizzle-orm";
 import type { MonthTotals } from "./figures.ts";
 

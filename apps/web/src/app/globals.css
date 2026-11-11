@@ -1,4 +1,4 @@
-@import "@expense/ui/globals.css";
+@import "@budgetly/ui/globals.css";
 
 /* Scan the app's own sources too. */
 @source "../**/*.{ts,tsx}";

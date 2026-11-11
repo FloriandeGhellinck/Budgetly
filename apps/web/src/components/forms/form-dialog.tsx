@@ -1,14 +1,14 @@
 "use client";
 
-import { Button } from "@expense/ui/components/button";
-import { FieldError } from "@expense/ui/components/field";
+import { Button } from "@budgetly/ui/components/button";
+import { FieldError } from "@budgetly/ui/components/field";
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
   ResponsiveDialogDescription,
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
-} from "@expense/ui/components/responsive-dialog";
+} from "@budgetly/ui/components/responsive-dialog";
 import { useTranslations } from "next-intl";
 import { type ReactNode, useState, useTransition } from "react";
 import { toast } from "sonner";

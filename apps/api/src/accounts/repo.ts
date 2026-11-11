@@ -1,5 +1,5 @@
-import type { Account } from "@expense/contract";
-import { accounts, type Tx } from "@expense/db";
+import type { Account } from "@budgetly/contract";
+import { accounts, type Tx } from "@budgetly/db";
 import { and, asc, eq, isNotNull, isNull, sql } from "drizzle-orm";
 import { iso } from "../serialize.ts";
 

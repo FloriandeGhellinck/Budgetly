@@ -2,7 +2,7 @@
 # Auth are used; the other services are off. Ports are 563xx so this stack can
 # run next to other local Supabase projects (which default to 543xx).
 # Start with `pnpm db:start` (docs/local-dev.md).
-project_id = "expense"
+project_id = "budgetly"
 
 [api]
 enabled = true

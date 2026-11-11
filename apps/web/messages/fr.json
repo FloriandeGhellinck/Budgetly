@@ -1,8 +1,8 @@
 {
   "app": {
-    "name": "expense",
+    "name": "Budgetly",
     "description": "Suivez vos dépenses et vos revenus.",
-    "shortName": "expense"
+    "shortName": "Budgetly"
   },
   "nav": {
     "dashboard": "Tableau de bord",
@@ -15,7 +15,7 @@
     "main": "Navigation principale"
   },
   "login": {
-    "title": "Connexion à expense",
+    "title": "Connexion à Budgetly",
     "description": "Nous vous envoyons un lien de connexion par e-mail. Pas de mot de passe.",
     "email": "E-mail",
     "emailPlaceholder": "vous@exemple.com",
@@ -39,7 +39,7 @@
   "dashboard": {
     "title": "Tableau de bord",
     "addFirst": "Ajouter une transaction",
-    "welcomeTitle": "Bienvenue dans expense",
+    "welcomeTitle": "Bienvenue dans Budgetly",
     "welcomeBody": "Enregistrez votre première dépense ou revenu : vos chiffres du mois, la tendance et la répartition apparaîtront ici.",
     "overview": "Résumé du mois",
     "previousMonth": "Mois précédent",

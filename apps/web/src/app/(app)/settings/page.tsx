@@ -1,11 +1,11 @@
-import { Button } from "@expense/ui/components/button";
+import { Button } from "@budgetly/ui/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@expense/ui/components/card";
+} from "@budgetly/ui/components/card";
 import { ChevronRightIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";

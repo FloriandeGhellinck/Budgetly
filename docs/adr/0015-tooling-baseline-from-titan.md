@@ -38,7 +38,7 @@ TypeScript 7 has no programmatic API (2026-11-08 scaffold):
   `typescript.ignoreBuildErrors: true` in `next.config.ts` so `next build`
   never type-checks. Only its Expo app installs `typescript@~6`, for Expo's
   use of the API.
-- **expense** uses `typescript@7.0.2` (catalog) in every package and runs
+- **Budgetly** uses `typescript@7.0.2` (catalog) in every package and runs
   `tsc` for `pnpm typecheck`. Type-aware oxlint (`oxlint-tsgolint`), tsdown
   (`dts: false`) and Vitest do not need the TS API.
 - **Next 16.4 needs no TypeScript 6** (verified 2026-11-08 with a real

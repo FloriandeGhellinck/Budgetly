@@ -1,5 +1,5 @@
 {
-  "name": "@expense/web",
+  "name": "@budgetly/web",
   "version": "0.0.0",
   "private": true,
   "description": "Next.js web app. Calls apps/api from the server only.",
@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@base-ui/react": "catalog:",
-    "@expense/contract": "workspace:*",
-    "@expense/ui": "workspace:*",
+    "@budgetly/contract": "workspace:*",
+    "@budgetly/ui": "workspace:*",
     "@orpc/client": "catalog:",
     "@orpc/contract": "catalog:",
     "@supabase/ssr": "catalog:",

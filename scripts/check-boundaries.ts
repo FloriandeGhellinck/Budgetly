@@ -5,7 +5,7 @@ import { dirname, join, relative, resolve } from "node:path";
 
 type Rule = { from: string; forbidden: string[]; why: string };
 
-const APPS = ["@expense/web", "@expense/api"];
+const APPS = ["@budgetly/web", "@budgetly/api"];
 
 const RULES: Rule[] = [
   {
@@ -14,18 +14,18 @@ const RULES: Rule[] = [
     why: "nothing depends on an app",
   },
   {
-    from: "@expense/web",
-    forbidden: ["@expense/db", "@expense/test-db"],
+    from: "@budgetly/web",
+    forbidden: ["@budgetly/db", "@budgetly/test-db"],
     why: "apps/web reaches data through apps/api only (ADR 0013, 0014)",
   },
   {
-    from: "@expense/ui",
-    forbidden: ["@expense/db", "@expense/test-db"],
+    from: "@budgetly/ui",
+    forbidden: ["@budgetly/db", "@budgetly/test-db"],
     why: "UI components are presentational",
   },
   {
-    from: "@expense/contract",
-    forbidden: ["@expense/test-db"],
+    from: "@budgetly/contract",
+    forbidden: ["@budgetly/test-db"],
     why: "contracts are pure",
   },
 ];

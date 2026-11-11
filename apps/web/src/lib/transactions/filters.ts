@@ -1,4 +1,4 @@
-import { DirectionSchema, Id, IsoDate } from "@expense/contract";
+import { DirectionSchema, Id, IsoDate } from "@budgetly/contract";
 import { z } from "zod";
 
 // Transactions per page of the list.

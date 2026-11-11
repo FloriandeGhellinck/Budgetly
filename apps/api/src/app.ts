@@ -1,4 +1,4 @@
-import type { Db } from "@expense/db";
+import type { Db } from "@budgetly/db";
 import { onError, ORPCError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
 import { Hono } from "hono";

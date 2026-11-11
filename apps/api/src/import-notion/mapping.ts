@@ -1,7 +1,7 @@
 // Notion columns → beneficiary, category group and category (ADR 0009, 0010,
 // 0033). Pure: the plan names groups by seed key and categories by name; the
 // runner resolves them to ids.
-import type { CategoryGroupSeedKey } from "@expense/db";
+import type { CategoryGroupSeedKey } from "@budgetly/db";
 import type { ExpenseRow, IncomeSeedKey, ParsedExpenses, ParsedSummary, Skipped } from "./parse.ts";
 
 export type ExpenseGroupKey = Exclude<CategoryGroupSeedKey, "income">;

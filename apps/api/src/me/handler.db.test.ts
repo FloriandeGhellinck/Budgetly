@@ -1,4 +1,4 @@
-import { accounts, beneficiaries, categories } from "@expense/db";
+import { accounts, beneficiaries, categories } from "@budgetly/db";
 import { count, eq } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { createTestApi, type TestApi } from "../test-support.ts";

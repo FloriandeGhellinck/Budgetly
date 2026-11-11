@@ -1,5 +1,5 @@
 {
-  "name": "@expense/test-db",
+  "name": "@budgetly/test-db",
   "version": "0.0.0",
   "private": true,
   "description": "Throwaway Postgres 17 in Docker for DB-backed tests.",

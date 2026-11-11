@@ -1,6 +1,6 @@
 "use server";
 
-import type { Category } from "@expense/contract";
+import type { Category } from "@budgetly/contract";
 import type { ActionResult } from "@/lib/action-result";
 import { runWrite } from "@/lib/api/action";
 

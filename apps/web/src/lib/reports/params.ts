@@ -1,4 +1,4 @@
-import { Id, YearMonth } from "@expense/contract";
+import { Id, YearMonth } from "@budgetly/contract";
 import { z } from "zod";
 import { monthOf } from "../dates";
 

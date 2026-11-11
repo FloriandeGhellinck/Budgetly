@@ -1,8 +1,8 @@
 {
   "app": {
-    "name": "expense",
+    "name": "Budgetly",
     "description": "Track your expenses and income.",
-    "shortName": "expense"
+    "shortName": "Budgetly"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -15,7 +15,7 @@
     "main": "Main navigation"
   },
   "login": {
-    "title": "Sign in to expense",
+    "title": "Sign in to Budgetly",
     "description": "We'll email you a link to sign in. No password needed.",
     "email": "Email",
     "emailPlaceholder": "you@example.com",
@@ -39,7 +39,7 @@
   "dashboard": {
     "title": "Dashboard",
     "addFirst": "Add a transaction",
-    "welcomeTitle": "Welcome to expense",
+    "welcomeTitle": "Welcome to Budgetly",
     "welcomeBody": "Record your first expense or income: your monthly figures, trend and breakdown will appear here.",
     "overview": "Month overview",
     "previousMonth": "Previous month",

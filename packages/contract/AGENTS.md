@@ -17,10 +17,10 @@ oRPC 1.x contracts shared by `apps/api` and `apps/web` (ADR 0018, 0027).
   `YYYY-MM-DD`, instants ISO strings; shares are `shareBps`.
 - Money writes (`transactions.create`, `transfers.create`) require an
   `idempotencyKey`.
-- After editing, `pnpm --filter @expense/contract build`: consumers run `dist/`.
+- After editing, `pnpm --filter @budgetly/contract build`: consumers run `dist/`.
 
 ## Boundaries (enforced by `pnpm checks`)
 
-- No runtime import of `@expense/db`: the contract ships to the web app.
-  `import type` from `@expense/db` is allowed.
+- No runtime import of `@budgetly/db`: the contract ships to the web app.
+  `import type` from `@budgetly/db` is allowed.
 - Never import from `apps/*`.

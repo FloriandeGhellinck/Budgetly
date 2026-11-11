@@ -52,7 +52,7 @@ Options considered:
 - Calls at `aal1` cost one extra indexed query; MFA users at `aal2` none.
 - Removing the last factor takes effect on the next call, without waiting for
   a token refresh.
-- Tests stub `auth.mfa_factors` (`@expense/test-db`) and sign tokens with and
+- Tests stub `auth.mfa_factors` (`@budgetly/test-db`) and sign tokens with and
   without `aal` (`apps/api/src/mfa.db.test.ts`). They run migrations as a true
   superuser, so they cannot catch a hosted project where `postgres` loses
   read access or RLS bypass on `auth.mfa_factors`; this was checked by hand on

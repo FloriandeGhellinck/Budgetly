@@ -1,8 +1,8 @@
 // Shared by the *.db.test.ts files: the real app on a migrated test database,
 // called over RPC with JWTs signed by a key pair generated for the run.
-import type { Contract } from "@expense/contract";
-import { createDb, type Db } from "@expense/db";
-import { appRoleUrl, createTestDatabase, migrate } from "@expense/test-db";
+import type { Contract } from "@budgetly/contract";
+import { createDb, type Db } from "@budgetly/db";
+import { appRoleUrl, createTestDatabase, migrate } from "@budgetly/test-db";
 import { createORPCClient, ORPCError } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import type { ContractRouterClient } from "@orpc/contract";

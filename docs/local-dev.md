@@ -24,14 +24,14 @@ stops the stack.
 
 ```sh
 cp apps/api/.env.example apps/api/.env
-pnpm --filter @expense/api dev        # http://127.0.0.1:8787/health
+pnpm --filter @budgetly/api dev        # http://127.0.0.1:8787/health
 ```
 
 ## 3. Start the web app
 
 ```sh
 cp apps/web/.env.example apps/web/.env.local
-pnpm --filter @expense/web dev        # http://localhost:3000
+pnpm --filter @budgetly/web dev        # http://localhost:3000
 ```
 
 ## 4. Sign in
@@ -64,7 +64,7 @@ Export the expenses table and the monthly summary from Notion as CSV, keep
 them outside the repo, and pass their paths (ADR 0009, 0033):
 
 ```sh
-pnpm --filter @expense/api import:notion --dry-run \
+pnpm --filter @budgetly/api import:notion --dry-run \
   --expenses ~/Downloads/expenses.csv --summary ~/Downloads/summary.csv
 ```
 
@@ -74,7 +74,7 @@ skipped rows and any `Enfants` sub-category without a group mapping. Then
 import for real, as a user who signed in once:
 
 ```sh
-pnpm --filter @expense/api import:notion \
+pnpm --filter @budgetly/api import:notion \
   --expenses ~/Downloads/expenses.csv --summary ~/Downloads/summary.csv \
   --user <user uuid> \
   --children-sub-category "Invest Child A" --children-sub-category "Invest Child B"
@@ -99,4 +99,4 @@ pnpm e2e       # Playwright smoke flows on the running local stack
 `pnpm e2e` needs Supabase running (`pnpm db:start`) and the two env files
 from steps 2 and 3; it starts the API and the web app itself unless they are
 already up. Install the browser once with
-`pnpm --filter @expense/e2e exec playwright install chromium`.
+`pnpm --filter @budgetly/e2e exec playwright install chromium`.

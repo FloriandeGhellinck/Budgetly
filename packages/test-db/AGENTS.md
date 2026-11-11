@@ -2,7 +2,7 @@
 
 Starts a throwaway Postgres 17 in Docker for DB-backed tests and hands each
 test file its own empty database. Tests need Docker running, or
-`EXPENSE_TEST_DATABASE_URL` pointing at a server they may create databases on.
+`BUDGETLY_TEST_DATABASE_URL` pointing at a server they may create databases on.
 
 ## API
 
@@ -17,7 +17,7 @@ test file its own empty database. Tests need Docker running, or
   isolation through it.
 - `pgError(promise)` → `{ code, constraint }` of the Postgres error behind a
   failed query.
-- `@expense/test-db/global-setup`: Vitest globalSetup that starts one server
+- `@budgetly/test-db/global-setup`: Vitest globalSetup that starts one server
   per run and exports its URL to workers.
 
 ## Boundaries (enforced by `pnpm checks`)

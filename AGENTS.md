@@ -1,6 +1,6 @@
 # AGENTS.md
 
-`expense` is an open-source, multi-user personal finance app: each user tracks
+Budgetly is an open-source, multi-user personal finance app: each user tracks
 their own expenses and income, with dashboards, a web UI, and (later) an MCP
 server. Licensed AGPL-3.0.
 

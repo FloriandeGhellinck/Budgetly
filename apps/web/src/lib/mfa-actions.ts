@@ -16,7 +16,7 @@ export async function startTotpEnrollment(): Promise<TotpEnrollment | null> {
   }
   const { data, error } = await supabase.auth.mfa.enroll({
     factorType: "totp",
-    friendlyName: `expense ${new Date().toISOString().slice(0, 10)}`,
+    friendlyName: `Budgetly ${new Date().toISOString().slice(0, 10)}`,
   });
   if (error) {
     console.error("mfa.enroll failed", error.message);

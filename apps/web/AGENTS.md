@@ -29,7 +29,7 @@ newer than most training data: read `node_modules/next/dist/docs/` first.
 - **Filters** live in the URL: parse `searchParams` with a schema that drops
   bad values (`src/lib/transactions/filters.ts`).
 - **Money**: parse typed amounts with `parseAmountMinor`, show them with
-  `<Money>`; both from `@expense/ui`. Never a float.
+  `<Money>`; both from `@budgetly/ui`. Never a float.
 - **i18n**: every string in `messages/en.json` and `fr.json` (same keys, type
   checked). Defaults show `seedLabel(...)` of their seed key (ADR 0031).
 
@@ -38,8 +38,8 @@ newer than most training data: read `node_modules/next/dist/docs/` first.
 - A `"use client"` file never imports a module that imports `server-only`
   (`scripts/check-boundaries.ts`); `@orpc/client` and `@supabase/*` are
   imported only under `src/lib/api` and `src/lib/supabase` (oxlint).
-- Never import `@expense/db`, `@expense/test-db` or another app.
-- UI is built from `@expense/ui`; add a missing primitive there first.
+- Never import `@budgetly/db`, `@budgetly/test-db` or another app.
+- UI is built from `@budgetly/ui`; add a missing primitive there first.
 
 ## Run and test
 

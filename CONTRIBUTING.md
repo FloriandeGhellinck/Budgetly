@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in `expense`.
+Thanks for your interest in Budgetly.
 
 - Read [`AGENTS.md`](./AGENTS.md), [`CONTEXT.md`](./CONTEXT.md) and the
   relevant ADRs in [`docs/adr/`](./docs/adr/) before changing code.

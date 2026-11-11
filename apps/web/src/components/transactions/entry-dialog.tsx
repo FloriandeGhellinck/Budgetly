@@ -6,8 +6,8 @@ import {
   ResponsiveDialogDescription,
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
-} from "@expense/ui/components/responsive-dialog";
-import { ToggleGroup, ToggleGroupItem } from "@expense/ui/components/toggle-group";
+} from "@budgetly/ui/components/responsive-dialog";
+import { ToggleGroup, ToggleGroupItem } from "@budgetly/ui/components/toggle-group";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import type { EntryOptions } from "@/lib/entry-options";

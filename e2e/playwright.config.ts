@@ -26,13 +26,13 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: "pnpm --filter @expense/api dev",
+      command: "pnpm --filter @budgetly/api dev",
       url: "http://127.0.0.1:8787/health",
       reuseExistingServer: true,
       timeout: 60_000,
     },
     {
-      command: "pnpm --filter @expense/web dev",
+      command: "pnpm --filter @budgetly/web dev",
       url: `${WEB_URL}/login`,
       reuseExistingServer: true,
       timeout: 120_000,
