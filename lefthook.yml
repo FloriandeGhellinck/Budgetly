@@ -1,0 +1,31 @@
+# Git hooks (ADR 0016, layer 1). CI runs the same checks, so --no-verify only
+# moves the failure to the PR.
+commit-msg:
+  commands:
+    conventional:
+      skip:
+        - merge
+        - rebase
+      run: |
+        if ! head -n1 {1} | grep -qE '^(feat|fix|docs|chore|ci|refactor|perf|test|build|style|revert)(\([a-z0-9-]+\))?!?: .+$'; then
+          echo "Commit message header must follow Conventional Commits:"
+          echo ""
+          echo "    <type>(<scope>)?<!>?: <subject>"
+          echo ""
+          echo "  types: feat, fix, docs, chore, ci, refactor, perf, test, build, style, revert"
+          echo "  scope: optional, kebab-case (e.g. web, api, db, contract)"
+          echo "  example: feat(api): add transaction create procedure"
+          exit 1
+        fi
+
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: "*.{js,jsx,ts,tsx,mjs,cjs,mts,cts}"
+      run: pnpm exec oxlint --deny-warnings {staged_files}
+
+pre-push:
+  commands:
+    checks:
+      run: pnpm checks

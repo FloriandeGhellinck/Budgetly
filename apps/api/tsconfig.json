@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["node"],
+    // Node runs src/ as TypeScript directly, so relative imports name the .ts file.
+    "allowImportingTsExtensions": true
+  },
+  "include": ["src", "*.config.ts"]
+}

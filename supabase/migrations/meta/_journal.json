@@ -1,0 +1,48 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1794139580548,
+      "tag": "20261108120620_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794139581797,
+      "tag": "20261108120621_rls",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794143219237,
+      "tag": "20261108130659_accounts_seed_key",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794148656421,
+      "tag": "20261108143736_mfa_factor_check",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794391024663,
+      "tag": "20261111095704_category_appearance",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794391026913,
+      "tag": "20261111095706_category_appearance_backfill",
+      "breakpoints": true
+    }
+  ]
+}

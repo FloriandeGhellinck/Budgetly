@@ -1,0 +1,198 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Scan this package's components even though apps consume it from node_modules. */
+@source "../**/*.{ts,tsx}";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-highlight: var(--highlight);
+  --color-highlight-foreground: var(--highlight-foreground);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  /* Categorical series in a fixed, CVD-checked order (blue, orange, aqua,
+     yellow, magenta); the dark steps are chosen for the dark surface. */
+  /* The one saturated card a page may lead with (dashboard hero). */
+  --highlight: #3445d4;
+  --highlight-foreground: #ffffff;
+  --chart-1: #2a78d6;
+  --chart-2: #eb6834;
+  --chart-3: #1baf7a;
+  --chart-4: #eda100;
+  --chart-5: #e87ba4;
+  /* Category palette (ADR 0034): mark = chart fill and bar (dataviz steps),
+     fg = icon ink (>= 4.5:1 on tint), tint = pastel chip/tile background. */
+  --cat-blue: #2a78d6;
+  --cat-blue-fg: #1c5cab;
+  --cat-blue-tint: #e2ecfb;
+  --cat-teal: #1baf7a;
+  --cat-teal-fg: #0b7350;
+  --cat-teal-tint: #e5f4ec;
+  --cat-green: #008300;
+  --cat-green-fg: #006400;
+  --cat-green-tint: #e0eede;
+  --cat-amber: #eda100;
+  --cat-amber-fg: #8a5a00;
+  --cat-amber-tint: #fdf2e4;
+  --cat-orange: #eb6834;
+  --cat-orange-fg: #b34514;
+  --cat-orange-tint: #ffebe4;
+  --cat-red: #e34948;
+  --cat-red-fg: #b42828;
+  --cat-red-tint: #ffe7e5;
+  --cat-pink: #e87ba4;
+  --cat-pink-fg: #b03a6a;
+  --cat-pink-tint: #feedf2;
+  --cat-violet: #6250d6;
+  --cat-violet-fg: #4a3aa7;
+  --cat-violet-tint: #e6e7fc;
+  --cat-slate: #64748b;
+  --cat-slate-fg: #475569;
+  --cat-slate-tint: #e8eaee;
+  /* Not selectable: uncategorized, "Other" and transfers, quieter than slate. */
+  --cat-none: #c3cad5;
+  --cat-none-fg: #5b6574;
+  --cat-none-tint: #f1f3f6;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --highlight: #3a4ad0;
+  --highlight-foreground: #ffffff;
+  --chart-1: #3987e5;
+  --chart-2: #d95926;
+  --chart-3: #199e70;
+  --chart-4: #c98500;
+  --chart-5: #d55181;
+  --cat-blue: #3987e5;
+  --cat-blue-fg: #86b6ef;
+  --cat-blue-tint: #223042;
+  --cat-teal: #199e70;
+  --cat-teal-fg: #5fd3a5;
+  --cat-teal-tint: #20342b;
+  --cat-green: #008300;
+  --cat-green-fg: #6cc46c;
+  --cat-green-tint: #1d2f1b;
+  --cat-amber: #c98500;
+  --cat-amber-fg: #f2c14e;
+  --cat-amber-tint: #3d2f1e;
+  --cat-orange: #d95926;
+  --cat-orange-fg: #f59a72;
+  --cat-orange-tint: #41281f;
+  --cat-red: #e66767;
+  --cat-red-fg: #f29a9a;
+  --cat-red-tint: #432a29;
+  --cat-pink: #d55181;
+  --cat-pink-fg: #f0a3c1;
+  --cat-pink-tint: #40262e;
+  --cat-violet: #9085e9;
+  --cat-violet-fg: #b8b0f2;
+  --cat-violet-tint: #302f43;
+  --cat-slate: #64748b;
+  --cat-slate-fg: #aab4c3;
+  --cat-slate-tint: #282b30;
+  --cat-none: #4b5563;
+  --cat-none-fg: #a3acb9;
+  --cat-none-tint: #24272c;
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}

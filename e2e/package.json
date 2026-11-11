@@ -1,0 +1,17 @@
+{
+  "name": "@budgetly/e2e",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Playwright smoke flows against local Supabase, apps/api and apps/web.",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "typecheck": "tsc"
+  },
+  "devDependencies": {
+    "@playwright/test": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Placeholder app icon: a euro sign on a rounded square. Full-bleed so it also works as maskable. -->
+  <rect width="512" height="512" fill="#171717"/>
+  <text x="256" y="256" fill="#fafafa" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="300" font-weight="700" text-anchor="middle" dominant-baseline="central">€</text>
+</svg>

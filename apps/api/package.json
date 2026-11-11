@@ -1,0 +1,32 @@
+{
+  "name": "@budgetly/api",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Hono + oRPC API server. The single door to data.",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env --watch src/local-server.ts",
+    "start": "node src/local-server.ts",
+    "import:notion": "node --env-file-if-exists=.env src/import-notion/cli.ts",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@budgetly/contract": "workspace:*",
+    "@budgetly/db": "workspace:*",
+    "@hono/node-server": "catalog:",
+    "@orpc/server": "catalog:",
+    "drizzle-orm": "catalog:",
+    "hono": "catalog:",
+    "jose": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@budgetly/test-db": "workspace:*",
+    "@orpc/client": "catalog:",
+    "@orpc/contract": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

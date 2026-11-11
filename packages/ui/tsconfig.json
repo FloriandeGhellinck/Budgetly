@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    // Stylistic only; off so shadcn's generated code (calendar.tsx) compiles unedited.
+    "noPropertyAccessFromIndexSignature": false,
+    "paths": {
+      "@budgetly/ui/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "vitest.config.ts"]
+}
