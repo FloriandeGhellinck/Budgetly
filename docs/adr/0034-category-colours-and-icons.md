@@ -33,8 +33,9 @@ safety and the bundle, and agents need a closed set they can send.
   category's resolved look. Transaction rows carry only `categoryId`; the web
   resolves the look from `categories.list`, like the label.
 - **Colour-blind safety**: the default group colours (teal, orange, violet,
-  slate) pass the dataviz validator all-pairs in both themes; `slate` is the
-  deliberate neutral and sits below the chroma floor. Users can pick any
+  slate) pass the dataviz validator's CVD and normal-vision checks all-pairs
+  in both themes; `slate` is the deliberate neutral below the chroma floor,
+  and light teal is under 3:1 on white, relieved by the printed labels. Users can pick any
   colours, so colour never carries identity alone: every tile, legend row,
   bar and chip shows the name, the icon and the amount. Uncategorized,
   "Other" and transfers use a quieter `--cat-none` gray outside the palette.

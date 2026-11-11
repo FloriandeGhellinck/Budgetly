@@ -87,7 +87,7 @@ const update = procedure({
 
 const updateGroup = procedure({
   description:
-    "Change a category group's color (palette token) or icon (lucide name); groupId from categories.list. Only the fields you pass change. Categories without their own color or icon follow the group. Returns the group with its categories.",
+    "Change a category group's color (palette token) or icon (lucide name); groupId from categories.list. Only the fields you pass change. Categories without their own color or icon follow the group. Returns the group with its categories. Unknown group id: NOT_FOUND.",
   examples: [{ id: EXAMPLE_IDS.group, color: "teal", icon: "house" }],
   readOnly: false,
   idempotent: true,
