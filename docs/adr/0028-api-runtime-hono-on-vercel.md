@@ -12,8 +12,10 @@ server assets, workers and bundling tweaks. `apps/api` has none of that.
 - `apps/api/src/index.ts` default-exports the Hono app. Vercel's Hono
   preset detects it (`src/index.ts` is one of its entry names) and serves
   every route as a Vercel Function on Fluid compute. No Nitro, no
-  `vercel.json`.
-- The app is built by `createApp(deps)` in `src/app.ts`; `index.ts` only
+  `vercel.json`. The preset tries `app`, `index`, `server` (root, then
+  `src/`) and keeps only files that import `"hono"`, so `index.ts` imports
+  it and no other file uses those names.
+- The app is built by `createApp(deps)` in `src/create-app.ts`; `index.ts` only
   reads and validates the environment at boot and wires production
   dependencies. Tests build the same app with a test database and a local
   JWKS.
@@ -27,5 +29,8 @@ server assets, workers and bundling tweaks. `apps/api` has none of that.
 ## Consequences
 
 - Moving to Nitro or a container later only changes the entry point.
-- The first preview deployment must confirm that Vercel's install runs the
-  workspace `prepare` scripts; if not, add `pnpm -r build` as build command.
+- Vercel's install runs the workspace `prepare` scripts on a fresh install
+  but skips them when it restores its build cache, so both Vercel projects
+  set a build command that builds the workspace packages (`docs/deploy.md`).
+- Vercel transpiles through a temporary tsconfig that extends
+  `apps/api/tsconfig.json`, so that file names its `typeRoots` explicitly.

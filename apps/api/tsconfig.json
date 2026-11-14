@@ -2,6 +2,8 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "types": ["node"],
+    // Vercel compiles through a temporary tsconfig that extends this one; an explicit root keeps @types/node resolvable.
+    "typeRoots": ["./node_modules/@types"],
     // Node runs src/ as TypeScript directly, so relative imports name the .ts file.
     "allowImportingTsExtensions": true
   },

@@ -8,7 +8,7 @@ import { RPCLink } from "@orpc/client/fetch";
 import type { ContractRouterClient } from "@orpc/contract";
 import { createLocalJWKSet, exportJWK, generateKeyPair, SignJWT } from "jose";
 import { randomUUID } from "node:crypto";
-import { createApp } from "./app.ts";
+import { createApp } from "./create-app.ts";
 import { createTokenVerifier } from "./auth.ts";
 
 export type Client = ContractRouterClient<Contract>;
