@@ -18,6 +18,10 @@ calls, for server actions, for the first sign-in and for MFA.
 - **Magic link with a token hash.** The email links to `/auth/confirm`,
   which calls `verifyOtp` server-side; Google returns a PKCE code to
   `/auth/callback`. `supabase/templates/magic-link.html` holds the link.
+  Where the default Supabase template is sent instead (production without
+  custom SMTP), its link returns a PKCE code: `signInWithOtp` sets
+  `emailRedirectTo` to `/auth/callback`, and the proxy forwards a stray
+  `code` there (only the code and a same-site `next`). See `docs/deploy.md`.
 - **One server-only API client.** `src/lib/api/server.ts` (`getApi`, cached
   per request) forwards the access token to `apps/api`. Server actions call
   it through `runAction`, which returns an `ActionResult`: declared API

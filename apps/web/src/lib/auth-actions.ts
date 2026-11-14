@@ -27,7 +27,12 @@ export async function sendMagicLink(
   const supabase = await createSupabase();
   const { error } = await supabase.auth.signInWithOtp({
     email: email.data,
-    options: { shouldCreateUser: true, emailRedirectTo: new URL("/", env().SITE_URL).toString() },
+    // The default Supabase email (production, no custom SMTP) follows this
+    // with a PKCE code; our own template links to /auth/confirm instead.
+    options: {
+      shouldCreateUser: true,
+      emailRedirectTo: new URL("/auth/callback", env().SITE_URL).toString(),
+    },
   });
   if (error) {
     console.error("signInWithOtp failed", error.message);

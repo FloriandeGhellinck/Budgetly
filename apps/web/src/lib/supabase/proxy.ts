@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { env } from "@/lib/env";
+import { callbackForwardPath } from "./auth-redirect";
 import { AUTH_COOKIE_OPTIONS } from "./cookies";
 import { isPublicPath } from "./public-paths";
 
@@ -28,8 +29,12 @@ export async function updateSession(request: NextRequest): Promise<NextResponse>
   // then verifies its signature against the cached JWKS.
   const { data } = await supabase.auth.getClaims();
   const signedIn = Boolean(data?.claims);
-  const { pathname } = request.nextUrl;
+  const { pathname, searchParams } = request.nextUrl;
 
+  if (!signedIn) {
+    const forward = callbackForwardPath(pathname, searchParams);
+    if (forward) return NextResponse.redirect(new URL(forward, request.url));
+  }
   if (!signedIn && !isPublicPath(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
