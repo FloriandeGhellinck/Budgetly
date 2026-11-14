@@ -6,7 +6,7 @@ transaction bound to them for RLS. No MCP endpoint yet (ADR 0018).
 
 ## Layout
 
-- `src/app.ts`: `createApp({ db, verifyToken })` mounts `/rpc/*` and `/health`.
+- `src/create-app.ts`: `createApp({ db, verifyToken })` mounts `/rpc/*` and `/health`.
   `src/index.ts` validates env (`src/env.ts`) and is the Vercel entry
   (ADR 0028); `src/local-server.ts` serves it locally.
 - `src/orpc.ts`: `authed` builder. Its middleware verifies the bearer token,
