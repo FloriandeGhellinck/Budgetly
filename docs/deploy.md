@@ -69,9 +69,19 @@ No service-role or secret key is used anywhere.
 
 ### Email
 
-The magic-link email must link to `/auth/confirm?token_hash=...`
-(`supabase/templates/magic-link.html`, ADR 0030), used for both the
-magic-link and the confirm-signup templates. Supabase only lets a project
-change its email templates once it sends through a custom SMTP server, and
-its built-in sender is rate limited to a few emails per hour, so production
-needs a custom SMTP provider before sign-in works.
+Sign-in works with Supabase's default email templates. Supabase only lets a
+project change its templates once it sends through a custom SMTP server, so
+without one production sends the default magic-link and confirm-signup
+emails, whose link goes through Supabase and returns with a PKCE `code`.
+`sendMagicLink` therefore passes `emailRedirectTo = <SITE_URL>/auth/callback`
+(covered by the `<web production URL>/**` allow list), and the proxy forwards
+a `code` that still lands elsewhere (Supabase falls back to the site URL) to
+`/auth/callback`. Two limits remain:
+
+- A PKCE link only works in the browser that asked for it: the code verifier
+  is a cookie there. Opened on another device it ends on `/login?error=link`.
+- The built-in sender is rate limited to a few emails per hour.
+
+A custom SMTP provider lifts both: then load `supabase/templates/magic-link.html`
+for the magic-link and confirm-signup templates. It links to
+`/auth/confirm?token_hash=...` (ADR 0030), as local dev already does.
