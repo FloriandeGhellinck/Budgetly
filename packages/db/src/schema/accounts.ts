@@ -1,5 +1,14 @@
 import { sql } from "drizzle-orm";
-import { check, integer, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
+import {
+  bigint,
+  check,
+  date,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  unique,
+} from "drizzle-orm/pg-core";
 import { id, timestamps, userId } from "./_shared";
 
 export const accounts = pgTable(
@@ -15,6 +24,10 @@ export const accounts = pgTable(
     archivedAt: timestamp("archived_at", { withTimezone: true }),
     // "main" on the default created at sign-up; cleared on rename (ADR 0026).
     seedKey: text("seed_key"),
+    // Signed cents (ADR 0035): the balance before any recorded transaction,
+    // computed by accounts.setBalance from the figure the bank showed on openingBalanceOn.
+    openingBalanceMinor: bigint("opening_balance_minor", { mode: "number" }),
+    openingBalanceOn: date("opening_balance_on"),
     ...timestamps,
   },
   (t) => [
@@ -22,5 +35,9 @@ export const accounts = pgTable(
     unique("accounts_user_id_id_key").on(t.userId, t.id),
     unique("accounts_user_id_seed_key_key").on(t.userId, t.seedKey),
     check("accounts_share_bps_range", sql`${t.shareBps} between 1 and 10000`),
+    check(
+      "accounts_opening_balance_pair",
+      sql`(${t.openingBalanceMinor} is null) = (${t.openingBalanceOn} is null)`,
+    ),
   ],
 );

@@ -175,6 +175,17 @@ describe("accounts", () => {
     );
     expect(error).toEqual({ code: "23514", constraint: "accounts_share_bps_range" });
   });
+
+  it.each([
+    { label: "an amount without a day", openingBalanceMinor: 100, openingBalanceOn: null },
+    { label: "a day without an amount", openingBalanceMinor: null, openingBalanceOn: "2026-11-01" },
+  ])("rejects an opening balance with $label", async (opening) => {
+    const { label: _label, ...values } = opening;
+    const error = await pgError(
+      db.admin.insert(accounts).values({ userId: ALICE, name: "Half set", ...values }),
+    );
+    expect(error).toEqual({ code: "23514", constraint: "accounts_opening_balance_pair" });
+  });
 });
 
 describe("tags", () => {

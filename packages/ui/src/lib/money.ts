@@ -48,7 +48,29 @@ function isAmbiguous(grouped: RegExpExecArray): boolean {
  * decimals, or beyond safe integer range. The sign comes from the direction.
  */
 export function parseAmountMinor(input: string): number | null {
+  const cents = parseCents(input.replace(NOISE, ""));
+  return cents === null || cents === 0 ? null : cents;
+}
+
+// A leading minus, ASCII or typographic, on a typed balance.
+const MINUS = /^[-−]/;
+
+/**
+ * Parses a balance typed in the UI into signed integer cents (ADR 0035): the
+ * one place money carries its own sign, since an account can be overdrawn.
+ * Accepts what `parseAmountMinor` accepts, plus zero and a leading minus
+ * ("-12,50", "−1 234.56"). Returns null for anything else.
+ */
+export function parseBalanceMinor(input: string): number | null {
   const text = input.replace(NOISE, "");
+  const negative = MINUS.test(text);
+  const cents = parseCents(text.replace(MINUS, ""));
+  if (cents === null) return null;
+  return negative && cents !== 0 ? -cents : cents;
+}
+
+// Non-negative cents from noise-free text, or null when it is not an amount.
+function parseCents(text: string): number | null {
   let euros: string;
   let cents: string;
   const plain = PLAIN.exec(text);
@@ -64,8 +86,7 @@ export function parseAmountMinor(input: string): number | null {
   }
   // Integer arithmetic on the digits: the amount never passes through a float.
   const amountMinor = Number(euros) * 100 + Number(cents.padEnd(2, "0"));
-  if (!Number.isSafeInteger(amountMinor) || amountMinor <= 0) return null;
-  return amountMinor;
+  return Number.isSafeInteger(amountMinor) ? amountMinor : null;
 }
 
 /**
@@ -81,4 +102,10 @@ export function formatAmountInput(amountMinor: number, locale: string): string {
       ?.value ?? ".";
   const cents = amountMinor % 100;
   return `${(amountMinor - cents) / 100}${separator}${String(cents).padStart(2, "0")}`;
+}
+
+/** The editable form of a signed balance: "-12,50" in French, "-12.50" in English. */
+export function formatBalanceInput(balanceMinor: number, locale: string): string {
+  const text = formatAmountInput(Math.abs(balanceMinor), locale);
+  return balanceMinor < 0 ? `-${text}` : text;
 }

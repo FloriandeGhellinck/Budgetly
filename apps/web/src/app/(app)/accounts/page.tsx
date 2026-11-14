@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations("accounts"))("title") };
 }
 
-// Accounts with real balances and transfers between them (ADR 0011, 0029).
+// Accounts with real balances and transfers between them (ADR 0011, 0029, 0035).
 export default async function AccountsPage() {
   const [api, t, locale, options] = await Promise.all([
     getApi(),
@@ -30,6 +30,7 @@ export default async function AccountsPage() {
   const labels = optionLabels(options);
   const name = (id: string, stored: string) => labels.account(id, stored) ?? stored;
   const storedNames = new Map(report.accounts.map((a) => [a.accountId, a.name]));
+  const anyRelative = report.accounts.some((a) => a.openingBalanceMinor === null);
 
   return (
     <div className="flex flex-col gap-4">
@@ -43,9 +44,12 @@ export default async function AccountsPage() {
             shareBps: a.shareBps,
             balanceMinor: a.balanceMinor,
             archived: a.archivedAt !== null,
+            relative: a.openingBalanceMinor === null,
           }))}
         />
-        <p className="pt-2 text-xs text-muted-foreground">{t("relativeBalances")}</p>
+        {anyRelative && (
+          <p className="pt-2 text-xs text-muted-foreground">{t("relativeBalances")}</p>
+        )}
       </section>
 
       {report.flows.length > 0 && (

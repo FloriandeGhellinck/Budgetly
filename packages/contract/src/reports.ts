@@ -153,7 +153,7 @@ const tag = procedure({
 
 const accounts = procedure({
   description:
-    "Balance of every account (archived ones included) at the end of asOf (YYYY-MM-DD; all recorded transactions when omitted), and the money moved between accounts. Balances use real amounts, not the caller's share: income and incoming transfers add, expenses and outgoing transfers subtract; deleted transactions do not count. There is no opening balance yet, so a balance is relative: the net of the transactions recorded on that account, not necessarily the bank's figure (ADR 0029). flows sums live transfers per from → to pair between flowsFrom and flowsTo (inclusive; defaults: from the first transfer up to asOf), with what was sent and what arrived (they differ by fees or conversion).",
+    "Balance of every account (archived ones included) at the end of asOf (YYYY-MM-DD; all recorded transactions when omitted), and the money moved between accounts. Balances use real amounts, not the caller's share: income and incoming transfers add, expenses and outgoing transfers subtract; deleted transactions do not count. A balance is the account's opening balance (set with accounts.setBalance) plus that net; an account without one (openingBalanceMinor null) has a relative balance, the net alone, not necessarily the bank's figure (ADR 0029, 0035). flows sums live transfers per from → to pair between flowsFrom and flowsTo (inclusive; defaults: from the first transfer up to asOf), with what was sent and what arrived (they differ by fees or conversion).",
   examples: [{}, { asOf: "2026-10-31" }, { flowsFrom: "2026-11-01", flowsTo: "2026-11-30" }],
   readOnly: true,
   idempotent: true,
@@ -171,8 +171,10 @@ const accounts = procedure({
         currency: z.string(),
         shareBps: z.int(),
         archivedAt: Timestamp.nullable(),
-        // Signed cents: negative when more was recorded leaving than arriving.
+        // Signed cents: negative for an overdraft or when more left than arrived.
         balanceMinor: z.int(),
+        openingBalanceMinor: z.int().nullable(),
+        openingBalanceOn: IsoDate.nullable(),
       }),
     ),
     flows: z.array(
