@@ -43,6 +43,13 @@
       "when": 1794391026913,
       "tag": "20261111095706_category_appearance_backfill",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794688310397,
+      "tag": "20261114203150_opening_balance",
+      "breakpoints": true
     }
   ]
 }

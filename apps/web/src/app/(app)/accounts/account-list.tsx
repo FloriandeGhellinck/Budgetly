@@ -15,6 +15,7 @@ import {
   MoreHorizontalIcon,
   PencilIcon,
   PlusIcon,
+  ScaleIcon,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
@@ -23,15 +24,22 @@ import { archiveAccount, unarchiveAccount } from "@/lib/accounts/actions";
 import { formatShare } from "@/lib/accounts/share";
 import { signedMoney } from "@/lib/reports/figures";
 import { AccountDialog, type EditableAccount } from "./account-dialog";
+import { BalanceDialog } from "./balance-dialog";
 
-export type AccountRow = EditableAccount & { balanceMinor: number; archived: boolean };
+export type AccountRow = EditableAccount & {
+  balanceMinor: number;
+  archived: boolean;
+  // No opening balance yet: the balance is the net of recorded transactions (ADR 0029).
+  relative: boolean;
+};
 
 type DialogTarget = { account: EditableAccount | null } | null;
 
-// Accounts with their balance; create, edit, archive and unarchive.
+// Accounts with their balance; create, edit, adjust the balance, archive and unarchive.
 export function AccountList({ accounts }: { accounts: AccountRow[] }) {
   const t = useTranslations("accounts");
   const [target, setTarget] = useState<DialogTarget>(null);
+  const [adjusting, setAdjusting] = useState<AccountRow | null>(null);
   const active = accounts.filter((a) => !a.archived);
   const archived = accounts.filter((a) => a.archived);
 
@@ -43,7 +51,12 @@ export function AccountList({ accounts }: { accounts: AccountRow[] }) {
           {t("new")}
         </Button>
       </div>
-      <Rows accounts={active} label={t("active")} onEdit={(account) => setTarget({ account })} />
+      <Rows
+        accounts={active}
+        label={t("active")}
+        onEdit={(account) => setTarget({ account })}
+        onAdjust={setAdjusting}
+      />
       {archived.length > 0 && (
         <section className="flex flex-col gap-1 pt-4">
           <h2 className="text-xs font-medium text-muted-foreground uppercase">{t("archived")}</h2>
@@ -51,6 +64,7 @@ export function AccountList({ accounts }: { accounts: AccountRow[] }) {
             accounts={archived}
             label={t("archived")}
             onEdit={(account) => setTarget({ account })}
+            onAdjust={setAdjusting}
           />
         </section>
       )}
@@ -62,6 +76,14 @@ export function AccountList({ accounts }: { accounts: AccountRow[] }) {
           onOpenChange={(open) => !open && setTarget(null)}
         />
       )}
+      {adjusting && (
+        <BalanceDialog
+          key={adjusting.id}
+          account={adjusting}
+          open
+          onOpenChange={(open) => !open && setAdjusting(null)}
+        />
+      )}
     </>
   );
 }
@@ -70,10 +92,12 @@ function Rows({
   accounts,
   label,
   onEdit,
+  onAdjust,
 }: {
   accounts: AccountRow[];
   label: string;
   onEdit: (account: AccountRow) => void;
+  onAdjust: (account: AccountRow) => void;
 }) {
   const t = useTranslations("accounts");
   const tError = useTranslations("errors");
@@ -101,6 +125,7 @@ function Rows({
               ) : (
                 t("personal")
               )}
+              {account.relative && <span>· {t("relativeBadge")}</span>}
             </span>
           </span>
           <Money
@@ -121,10 +146,14 @@ function Rows({
             >
               <MoreHorizontalIcon />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-40">
+            <DropdownMenuContent align="end" className="w-44">
               <DropdownMenuItem onClick={() => onEdit(account)}>
                 <PencilIcon />
                 {t("edit")}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => onAdjust(account)}>
+                <ScaleIcon />
+                {t("adjustBalance")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => void toggleArchive(account)}>
                 {account.archived ? <ArchiveRestoreIcon /> : <ArchiveIcon />}

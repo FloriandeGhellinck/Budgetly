@@ -1,6 +1,6 @@
 # 29. Report counting: per-transaction rounding, uncategorized is spending, relative balances
 
-Status: accepted (2026-11-08)
+Status: accepted (2026-11-08). Relative balances amended by ADR 0035 (opening balance).
 
 ## Context
 

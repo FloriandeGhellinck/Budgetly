@@ -114,10 +114,18 @@ Saving / income for a period, in basis points (`savingsRateBps`, 2500 =
 
 ## Balance
 
-The real amount an account holds as of a day: income and incoming transfers
-minus expenses and outgoing transfers, not weighted by share. Relative for
-now: there is no opening balance, so it is the net of what was recorded
-(ADR 0029).
+The real amount an account holds at the end of a day: its opening balance
+plus income and incoming transfers minus expenses and outgoing transfers, not
+weighted by share. Signed cents (`balanceMinor`). Without an opening balance
+it is **relative**: only the net of what was recorded (ADR 0029, 0035).
+
+## Opening balance
+
+What an account held before its first recorded transaction, in signed cents
+(`openingBalanceMinor`). The user never types it: "Adjust balance"
+(`accounts.setBalance`) takes the balance the bank shows on a day and derives
+it, so that opening balance + transactions up to that day = the bank's
+figure. Not a transaction: it never counts in reports (ADR 0035).
 
 ## Tag
 

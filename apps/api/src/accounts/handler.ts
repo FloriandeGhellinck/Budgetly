@@ -1,5 +1,11 @@
 import { authed } from "../orpc.ts";
-import { insertAccount, listAccounts, setAccountArchived, updateAccount } from "./repo.ts";
+import {
+  insertAccount,
+  listAccounts,
+  setAccountArchived,
+  setOpeningBalance,
+  updateAccount,
+} from "./repo.ts";
 
 const notFound = "No account with this id for the caller. List accounts with accounts.list.";
 
@@ -30,4 +36,11 @@ export const unarchive = authed.accounts.unarchive.handler(async ({ input, conte
   return account;
 });
 
-export const accountsRouter = { list, create, update, archive, unarchive };
+export const setBalance = authed.accounts.setBalance.handler(async ({ input, context, errors }) => {
+  const { id, ...observed } = input;
+  const account = await setOpeningBalance(context.tx, context.userId, id, observed);
+  if (!account) throw errors.NOT_FOUND({ message: notFound, data: { entity: "account" } });
+  return account;
+});
+
+export const accountsRouter = { list, create, update, archive, unarchive, setBalance };

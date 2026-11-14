@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { formatAmountInput, formatMoney, parseAmountMinor, type FormatMoneyOptions } from "./money";
+import {
+  formatAmountInput,
+  formatBalanceInput,
+  formatMoney,
+  parseAmountMinor,
+  parseBalanceMinor,
+  type FormatMoneyOptions,
+} from "./money";
 
 // Intl output uses U+00A0 (no-break space) and, in French, U+202F (narrow no-break space).
 const NBSP = String.fromCodePoint(0x00a0);
@@ -84,5 +91,33 @@ describe("formatAmountInput", () => {
 
   it.each(["fr", "en"])("round-trips through parseAmountMinor in %s", (locale) => {
     expect(parseAmountMinor(formatAmountInput(123456, locale))).toBe(123456);
+  });
+});
+
+describe("parseBalanceMinor", () => {
+  it.each<[string, string, number]>([
+    ["a positive balance", "1 234,56", 123456],
+    ["zero", "0", 0],
+    ["minus zero is zero", "-0,00", 0],
+    ["an overdraft", "-12,50", -1250],
+    ["a typographic minus", "−12.50", -1250],
+    ["a minus before the euro sign", "-€ 3", -300],
+  ])("reads %s", (_label, input, expected) => {
+    expect(parseBalanceMinor(input)).toBe(expected);
+  });
+
+  it.each([
+    ["empty", ""],
+    ["a bare minus", "-"],
+    ["two minus signs", "--5"],
+    ["a trailing minus", "5-"],
+    ["three decimals", "-20.685"],
+  ])("rejects %s", (_label, input) => {
+    expect(parseBalanceMinor(input)).toBeNull();
+  });
+
+  it.each(["fr", "en"])("round-trips through formatBalanceInput in %s", (locale) => {
+    expect(parseBalanceMinor(formatBalanceInput(-123456, locale))).toBe(-123456);
+    expect(parseBalanceMinor(formatBalanceInput(0, locale))).toBe(0);
   });
 });

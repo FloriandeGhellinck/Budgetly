@@ -24,3 +24,9 @@ export async function archiveAccount(id: string): Promise<ActionResult<Account>>
 export async function unarchiveAccount(id: string): Promise<ActionResult<Account>> {
   return runWrite((api) => api.accounts.unarchive({ id }));
 }
+
+export async function setAccountBalance(
+  input: Input<"setBalance">,
+): Promise<ActionResult<Account>> {
+  return runWrite((api) => api.accounts.setBalance(input));
+}

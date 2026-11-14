@@ -1,5 +1,6 @@
 import type { Tx } from "@budgetly/db";
 import { sql, type SQL } from "drizzle-orm";
+import { accountBalance } from "../balance.ts";
 import type { MonthTotals } from "./figures.ts";
 
 // Every row the reports count, one per transaction, with the caller's part
@@ -206,6 +207,8 @@ export type AccountBalance = {
   shareBps: number;
   archivedAt: string | null;
   balanceMinor: number;
+  openingBalanceMinor: number | null;
+  openingBalanceOn: string | null;
 };
 
 // Real amounts, not the caller's part: a balance is what the account holds.
@@ -221,20 +224,17 @@ export async function accountBalances(
     share_bps: number;
     archived_at: string | null;
     balance: string;
+    opening_balance_minor: string | null;
+    opening_balance_on: string | null;
   }>(sql`
     select
       a.id, a.name, a.currency, a.share_bps,
       to_char(a.archived_at at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') as archived_at,
-      coalesce(sum(
-        case when t.direction in ('income', 'transfer_in') then t.amount_minor::bigint
-             else -t.amount_minor::bigint end
-      ), 0) as balance
+      ${accountBalance("a", asOf ? sql`${asOf}::date` : undefined)} as balance,
+      a.opening_balance_minor,
+      to_char(a.opening_balance_on, 'YYYY-MM-DD') as opening_balance_on
     from accounts a
-    left join transactions t
-      on t.user_id = a.user_id and t.account_id = a.id and t.deleted_at is null
-      ${asOf ? sql`and t.occurred_on <= ${asOf}::date` : sql``}
     where a.user_id = ${userId}
-    group by a.id
     order by a.archived_at is not null, a.name, a.id`);
   return rows.map((row) => ({
     accountId: row.id,
@@ -243,6 +243,9 @@ export async function accountBalances(
     shareBps: row.share_bps,
     archivedAt: row.archived_at,
     balanceMinor: toInt(row.balance),
+    openingBalanceMinor:
+      row.opening_balance_minor === null ? null : toInt(row.opening_balance_minor),
+    openingBalanceOn: row.opening_balance_on,
   }));
 }
 
