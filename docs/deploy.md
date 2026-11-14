@@ -4,14 +4,15 @@ Production runs on Vercel (two projects) and a hosted Supabase project.
 Both Vercel projects deploy from `main` through the GitHub integration;
 pull requests get preview deployments.
 
-| Vercel project | Root directory | Framework preset |
-| -------------- | -------------- | ---------------- |
-| `budgetly-web` | `apps/web`     | Next.js          |
-| `budgetly-api` | `apps/api`     | Hono (ADR 0028)  |
+| Vercel project | Root directory | Framework preset | Build command (project setting)                                 |
+| -------------- | -------------- | ---------------- | --------------------------------------------------------------- |
+| `budgetly-web` | `apps/web`     | Next.js          | `pnpm --filter "@budgetly/web^..." run build && pnpm run build` |
+| `budgetly-api` | `apps/api`     | Hono (ADR 0028)  | `pnpm --filter "@budgetly/api^..." run build`                   |
 
-- No `vercel.json`, no build or install command override: Vercel installs
-  the whole pnpm workspace from the repo root (`packageManager` pins pnpm),
-  and the workspace packages build in their `prepare` scripts.
+- No `vercel.json`. Vercel installs the whole pnpm workspace from the repo
+  root (`packageManager` pins pnpm). The build command builds the workspace
+  packages the app imports from `dist/`: `prepare` builds them on a fresh
+  install, but not when Vercel restores its build cache.
 - Node.js 26.x, functions in `dub1` (Dublin), next to the Supabase region
   (`eu-west-1`).
 

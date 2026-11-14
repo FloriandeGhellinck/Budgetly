@@ -29,7 +29,8 @@ server assets, workers and bundling tweaks. `apps/api` has none of that.
 ## Consequences
 
 - Moving to Nitro or a container later only changes the entry point.
-- Vercel's install runs the workspace `prepare` scripts (confirmed on the
-  first deployment), so no build command is needed.
+- Vercel's install runs the workspace `prepare` scripts on a fresh install
+  but skips them when it restores its build cache, so both Vercel projects
+  set a build command that builds the workspace packages (`docs/deploy.md`).
 - Vercel transpiles through a temporary tsconfig that extends
   `apps/api/tsconfig.json`, so that file names its `typeRoots` explicitly.
