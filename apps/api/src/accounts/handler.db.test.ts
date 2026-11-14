@@ -212,6 +212,25 @@ describe("accounts.setBalance", () => {
     expect(again).toMatchObject({ openingBalanceMinor: 11500, balanceMinor: 10000 });
   });
 
+  it("moves away from the bank's figure when a transaction is back-dated, until set again", async () => {
+    const account = await user.client.accounts.create({ name: "Back-dated" });
+    await user.client.accounts.setBalance({
+      id: account.id,
+      balanceMinor: 50000,
+      asOf: "2026-11-05",
+    });
+
+    await record(account.id, { amountMinor: 2000, occurredOn: "2026-11-02" });
+    expect((await listed(account.id))?.balanceMinor).toBe(48000);
+
+    await user.client.accounts.setBalance({
+      id: account.id,
+      balanceMinor: 50000,
+      asOf: "2026-11-05",
+    });
+    expect((await listed(account.id))?.balanceMinor).toBe(50000);
+  });
+
   it("accepts an overdraft", async () => {
     const account = await user.client.accounts.create({ name: "Overdrawn" });
     await record(account.id, { direction: "income", amountMinor: 2000, occurredOn: "2026-09-01" });

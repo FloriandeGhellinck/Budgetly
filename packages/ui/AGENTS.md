@@ -13,7 +13,8 @@ v4 styles. Exported from source; `apps/web` transpiles it.
   `ThemeProvider` (sonner's `Toaster` reads the theme).
 - Money is shown with `<Money amountMinor locale direction />`, never formatted
   by hand; typed amounts become cents with `parseAmountMinor` (and back with
-  `formatAmountInput`) from `lib/money`.
+  `formatAmountInput`) from `lib/money`; a signed balance uses
+  `parseBalanceMinor` / `formatBalanceInput` (ADR 0035).
 - Forms that open over a page use `ResponsiveDialog` (Drawer on phones,
   Dialog from md up).
 

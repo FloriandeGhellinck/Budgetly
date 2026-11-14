@@ -30,8 +30,9 @@ newer than most training data: read `node_modules/next/dist/docs/` first.
   generated once per form (`useRef(crypto.randomUUID())`).
 - **Filters** live in the URL: parse `searchParams` with a schema that drops
   bad values (`src/lib/transactions/filters.ts`).
-- **Money**: parse typed amounts with `parseAmountMinor`, show them with
-  `<Money>`; both from `@budgetly/ui`. Never a float.
+- **Money**: parse typed amounts with `parseAmountMinor` (a signed balance with
+  `parseBalanceMinor`), show them with `<Money>`; both from `@budgetly/ui`.
+  Never a float.
 - **i18n**: every string in `messages/en.json` and `fr.json` (same keys, type
   checked). Defaults show `seedLabel(...)` of their seed key (ADR 0031).
 
