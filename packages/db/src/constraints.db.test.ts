@@ -1,7 +1,7 @@
 import { pgError } from "@budgetly/test-db";
 import { eq } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { accounts, categories, categoryGroups, tags, transactions } from "./schema";
+import { accounts, categories, categoryGroups, savedViews, tags, transactions } from "./schema";
 import {
   ALICE,
   createMigratedDatabase,
@@ -192,5 +192,16 @@ describe("tags", () => {
   it("rejects a name that differs only by case", async () => {
     const error = await pgError(db.admin.insert(tags).values({ userId: ALICE, name: "HOLIDAY" }));
     expect(error).toEqual({ code: "23505", constraint: "tags_user_id_name_key" });
+  });
+});
+
+describe("saved views", () => {
+  // The backfill relies on it to seed each starter view once per user.
+  it("rejects a second view with the same seed key", async () => {
+    const starter = { userId: ALICE, name: "This month", seedKey: "this_month", view: {} };
+    await db.admin.insert(savedViews).values(starter);
+
+    const error = await pgError(db.admin.insert(savedViews).values(starter));
+    expect(error).toEqual({ code: "23505", constraint: "saved_views_user_id_seed_key_key" });
   });
 });
