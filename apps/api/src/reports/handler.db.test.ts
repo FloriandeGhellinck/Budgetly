@@ -21,11 +21,16 @@ let dave: SeededUser;
 let daveSavings: string;
 // Rounding on a 50 % account, June 2026.
 let erin: SeededUser;
+// Analysis filters, July 2026: several tags on one expense, a beneficiary, a note.
+let fay: SeededUser;
+let fayTagIds: Record<string, string>;
 // Another user with data in the same months: must never show up above.
 let bob: SeededUser;
 
 type Entry = {
   direction?: "expense" | "income";
+  name?: string;
+  note?: string;
   amountMinor: number;
   occurredOn: string;
   accountId?: string;
@@ -56,7 +61,8 @@ function transfer(user: SeededUser, from: string, to: string, amount: number, on
 
 beforeAll(async () => {
   api = await createTestApi();
-  [carol, dave, erin, bob] = await Promise.all([
+  [carol, dave, erin, fay, bob] = await Promise.all([
+    signUpSeeded(api),
     signUpSeeded(api),
     signUpSeeded(api),
     signUpSeeded(api),
@@ -151,6 +157,30 @@ beforeAll(async () => {
       categoryId: erin.categoryId("groceries"),
     });
   }
+
+  await record(fay, {
+    amountMinor: 1000,
+    occurredOn: "2026-07-01",
+    categoryId: fay.categoryId("groceries"),
+    name: "Bakery",
+    tags: ["Party", "Weekend"],
+  });
+  await record(fay, {
+    amountMinor: 3000,
+    occurredOn: "2026-07-02",
+    categoryId: fay.categoryId("outings"),
+    beneficiaryId: fay.beneficiaryId,
+    name: "Cinema",
+    note: "with friends",
+    tags: ["Party"],
+  });
+  await record(fay, {
+    direction: "income",
+    amountMinor: 50000,
+    occurredOn: "2026-07-03",
+    categoryId: fay.categoryId("salary"),
+  });
+  fayTagIds = Object.fromEntries((await fay.client.tags.list({})).items.map((t) => [t.name, t.id]));
 
   await record(bob, {
     direction: "income",
@@ -511,5 +541,179 @@ describe("reports.accounts", () => {
       [bob.accountId, 770000],
     ]);
     expect(result.flows).toEqual([]);
+  });
+});
+
+describe("reports.analysis", () => {
+  const may = { from: "2026-05-01", to: "2026-05-31" };
+  const july = { from: "2026-07-01", to: "2026-07-31" };
+  const pairs = (items: { key: string | null; totalMinor: number; count: number }[]) =>
+    items.map((item) => [item.key, item.totalMinor, item.count]);
+
+  it.each([
+    {
+      label: "spending + saving vs expenses",
+      user: () => dave,
+      range: may,
+      analysis: () => ({ types: ["spending", "saving"] as const }),
+      breakdown: () => ({}),
+    },
+    {
+      label: "income vs income",
+      user: () => dave,
+      range: may,
+      analysis: () => ({ types: ["income"] as const }),
+      breakdown: () => ({ direction: "income" as const }),
+    },
+    {
+      label: "a group and a beneficiary",
+      user: () => dave,
+      range: may,
+      analysis: () => ({
+        groupIds: [dave.groupId("daily_life")],
+        beneficiaryIds: [dave.beneficiaryId],
+      }),
+      breakdown: () => ({ groupId: dave.groupId("daily_life"), beneficiaryId: dave.beneficiaryId }),
+    },
+    {
+      label: "a shared account at 50 %",
+      user: () => carol,
+      range: { from: "2026-03-01", to: "2026-03-31" },
+      analysis: () => ({}),
+      breakdown: () => ({}),
+    },
+  ])("adds up like reports.breakdown: $label", async ({ user, range, analysis, breakdown }) => {
+    const [result, expected] = await Promise.all([
+      user().client.reports.analysis({ ...range, ...analysis(), groupBy: "group" }),
+      user().client.reports.breakdown({ ...range, ...breakdown() }),
+    ]);
+
+    expect([result.totalMinor, result.count]).toEqual([expected.totalMinor, expected.count]);
+    expect(pairs(result.items)).toEqual(
+      expected.groups.map((g) => [g.groupId, g.totalMinor, g.count]),
+    );
+  });
+
+  it("splits the total per type and filters on types", async () => {
+    const [all, saving] = await Promise.all([
+      dave.client.reports.analysis({ ...may, types: ["income", "spending", "saving"] }),
+      dave.client.reports.analysis({ ...may, types: ["saving"], groupBy: "category" }),
+    ]);
+
+    expect(all).toMatchObject({
+      totalMinor: 426000,
+      count: 4,
+      byType: { incomeMinor: 300000, spendingMinor: 51000, savingMinor: 75000 },
+    });
+    expect(saving.items).toEqual([
+      {
+        key: dave.categoryId("stocks"),
+        name: "Stocks",
+        color: "violet",
+        icon: "trending-up",
+        groupId: dave.groupId("investment"),
+        totalMinor: 75000,
+        count: 1,
+      },
+    ]);
+  });
+
+  it("lists every month the range touches, empty ones as zeros", async () => {
+    const { items } = await dave.client.reports.analysis({
+      from: "2026-03-15",
+      to: "2026-06-10",
+      groupBy: "month",
+    });
+
+    expect(pairs(items)).toEqual([
+      ["2026-03", 0, 0],
+      ["2026-04", 40000, 1],
+      ["2026-05", 126000, 3],
+      ["2026-06", 0, 0],
+    ]);
+  });
+
+  it("counts an expense under each of its tags, but once in the total", async () => {
+    const result = await fay.client.reports.analysis({ ...july, groupBy: "tag" });
+
+    expect(result.items.map((i) => [i.name, i.totalMinor, i.count])).toEqual([
+      ["Party", 4000, 2],
+      ["Weekend", 1000, 1],
+    ]);
+    expect([result.totalMinor, result.count]).toEqual([4000, 2]);
+  });
+
+  it("groups by beneficiary and account, with a null bucket for no beneficiary", async () => {
+    const [byBeneficiary, byAccount] = await Promise.all([
+      fay.client.reports.analysis({ ...july, groupBy: "beneficiary" }),
+      carol.client.reports.analysis({ from: "2026-03-01", to: "2026-03-31", groupBy: "account" }),
+    ]);
+
+    expect(byBeneficiary.items.map((i) => [i.key, i.name, i.totalMinor])).toEqual([
+      [fay.beneficiaryId, "Me", 3000],
+      [null, null, 1000],
+    ]);
+    expect(byAccount.items.map((i) => [i.key, i.name, i.totalMinor])).toEqual([
+      [joint, "Joint", 90000],
+    ]);
+  });
+
+  it.each([
+    { label: "text in the note, any case", filter: () => ({ text: "FRIEND" }), total: 3000 },
+    { label: "text in the name", filter: () => ({ text: "bak" }), total: 1000 },
+    { label: "one tag", filter: () => ({ tagIds: [fayTagIds["Weekend"] ?? ""] }), total: 1000 },
+    {
+      label: "categories, either one",
+      filter: () => ({
+        categoryIds: [fay.categoryId("groceries"), fay.categoryId("outings")],
+        types: ["spending" as const, "income" as const],
+      }),
+      total: 4000,
+    },
+  ])("filters on $label", async ({ filter, total }) => {
+    const { totalMinor } = await fay.client.reports.analysis({ ...july, ...filter() });
+
+    expect(totalMinor).toBe(total);
+  });
+
+  it("totals the compare range with the same filters", async () => {
+    const result = await dave.client.reports.analysis({
+      ...may,
+      compare: { from: "2026-04-01", to: "2026-04-30" },
+    });
+
+    expect(result.comparison).toEqual({
+      from: "2026-04-01",
+      to: "2026-04-30",
+      totalMinor: 40000,
+      count: 1,
+    });
+  });
+
+  it.each([
+    { label: "from after to", input: { from: "2026-06-01", to: "2026-05-01" } },
+    { label: "no type", input: { ...may, types: [] } },
+    {
+      label: "more than 120 months by month",
+      input: { from: "2016-01-01", to: "2026-01-31", groupBy: "month" as const },
+    },
+  ])("refuses $label: BAD_REQUEST", async ({ input }) => {
+    expect(await errorCode(dave.client.reports.analysis(input))).toBe("BAD_REQUEST");
+  });
+
+  it("never counts another user's transactions, even filtered by their ids", async () => {
+    const [byTheirIds, own] = await Promise.all([
+      bob.client.reports.analysis({
+        ...may,
+        groupIds: [dave.groupId("investment")],
+        accountIds: [dave.accountId],
+        compare: { from: "2026-04-01", to: "2026-04-30" },
+      }),
+      bob.client.reports.analysis({ ...may, types: ["income", "spending", "saving"] }),
+    ]);
+
+    expect(byTheirIds).toMatchObject({ totalMinor: 0, count: 0, items: [] });
+    expect(byTheirIds.comparison?.totalMinor).toBe(0);
+    expect(own).toMatchObject({ totalMinor: 785400, count: 2 });
   });
 });

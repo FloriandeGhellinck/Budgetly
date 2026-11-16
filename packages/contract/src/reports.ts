@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { AnalysisFilters, AnalysisGroupBy } from "./analysis";
 import { CategoryColor, CategoryIcon } from "./appearance";
 import { EXAMPLE_IDS, Id, IsoDate, Timestamp, YearMonth } from "./common";
 import { errors } from "./errors";
@@ -10,6 +11,8 @@ const COUNTING =
   "Figures are the caller's part (\"my part\"): each expense counts amountMinor × its account's shareBps / 10000, rounded half up per transaction to whole cents. Income on a shared account (shareBps < 10000) is ignored; income on a personal account counts in full. Transfer legs and deleted transactions never count. Spending = expenses in groups of kind spending (and uncategorized expenses); saving = expenses in groups of kind saving. Amounts are integer cents.";
 
 export const REPORT_TREND_MAX_MONTHS = 36;
+// Month buckets one reports.analysis call may return when grouping by month.
+export const ANALYSIS_MAX_MONTHS = 120;
 
 // Months since year 0, so two YYYY-MM strings can be compared and counted.
 export function monthIndex(month: string): number {
@@ -190,4 +193,73 @@ const accounts = procedure({
   errors: {},
 });
 
-export const reportsContract = { monthOverview, trend, breakdown, tag, accounts };
+const DayRangeSchema = z
+  .object({ from: IsoDate, to: IsoDate })
+  .refine((p) => p.from <= p.to, { message: "from must not be after to", path: ["to"] });
+
+const AnalysisItemSchema = z.object({
+  // The group, category, beneficiary, account or tag id, or the month
+  // (YYYY-MM). Null for the bucket without one: uncategorized, no
+  // beneficiary, untagged.
+  key: z.string().nullable(),
+  // The stored name; null for months and for the null bucket.
+  name: z.string().nullable(),
+  // group and category only: the look the UI shows (a category without its
+  // own wears its group's); null otherwise and for uncategorized.
+  color: CategoryColor.nullable(),
+  icon: CategoryIcon.nullable(),
+  // category only: the group it belongs to, else null.
+  groupId: Id.nullable(),
+  totalMinor: z.int(),
+  count: z.int(),
+});
+
+const analysis = procedure({
+  description: `Totals of the caller's money between from and to (YYYY-MM-DD, inclusive), filtered and grouped. types picks the report figures to count (income, spending, saving; default spending + saving); groupIds, categoryIds, beneficiaryIds, accountIds and tagIds (from categories.list, beneficiaries.list, accounts.list, tags.list) keep only matching transactions; text keeps those whose name or note contains it (case-insensitive). Values inside one list are OR, different filters are AND; an empty list does not filter, an id the caller does not own matches nothing. groupBy (group, category, month, beneficiary, account, tag) gives items: sorted by total, largest first, with a null-key bucket for transactions without one (uncategorized, no beneficiary, untagged); grouped by month, every month the range touches is listed oldest first, zeros included, at most ${ANALYSIS_MAX_MONTHS} months. Grouped by tag, a transaction with several tags counts under each, so items can add up to more than totalMinor; totalMinor, count and byType always count each transaction once. Pass compare (another from/to, e.g. the previous period) to also get that range's total with the same filters. ${COUNTING}`,
+  examples: [
+    { from: "2026-11-01", to: "2026-11-30", groupBy: "group" },
+    {
+      from: "2025-12-01",
+      to: "2026-11-30",
+      types: ["income"],
+      groupBy: "month",
+      compare: { from: "2024-12-01", to: "2025-11-30" },
+    },
+    {
+      from: "2026-01-01",
+      to: "2026-11-30",
+      types: ["spending"],
+      groupIds: [EXAMPLE_IDS.group],
+      beneficiaryIds: [EXAMPLE_IDS.beneficiary],
+      groupBy: "category",
+    },
+  ],
+  readOnly: true,
+  idempotent: true,
+  input: AnalysisFilters.extend({
+    from: IsoDate,
+    to: IsoDate,
+    groupBy: AnalysisGroupBy.default("group"),
+    compare: DayRangeSchema.optional(),
+  })
+    .refine((p) => p.from <= p.to, { message: "from must not be after to", path: ["to"] })
+    .refine(
+      (p) =>
+        p.groupBy !== "month" ||
+        monthIndex(p.to.slice(0, 7)) - monthIndex(p.from.slice(0, 7)) < ANALYSIS_MAX_MONTHS,
+      { message: `At most ${ANALYSIS_MAX_MONTHS} months when grouping by month`, path: ["to"] },
+    ),
+  output: z.object({
+    totalMinor: z.int(),
+    count: z.int(),
+    byType: z.object({ incomeMinor: z.int(), spendingMinor: z.int(), savingMinor: z.int() }),
+    items: z.array(AnalysisItemSchema),
+    // The compare range's total with the same filters; null without compare.
+    comparison: z
+      .object({ from: IsoDate, to: IsoDate, totalMinor: z.int(), count: z.int() })
+      .nullable(),
+  }),
+  errors: {},
+});
+
+export const reportsContract = { monthOverview, trend, breakdown, tag, accounts, analysis };

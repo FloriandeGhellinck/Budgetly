@@ -103,6 +103,21 @@ uncategorized expenses. Saving: expenses whose group kind is `saving`.
 Income: income on personal accounts; inflows to a shared account are ignored
 (ADR 0023). Transfers and deleted transactions never count.
 
+## Analysis
+
+The page and report (`reports.analysis`) that totals the user's money for any
+period, filtered by type (income, spending, saving), group, category,
+beneficiary, account, tag and text, and grouped by one of group, category,
+month, beneficiary, account or tag, with a comparison to an earlier range
+(ADR 0035).
+
+## Analysis view
+
+What the Analysis page shows, as one object: its filters, period (a relative
+preset such as "last 12 months", or fixed days), group-by, display (donut or
+bars) and comparison mode (previous period or same period last year).
+`AnalysisView` in the contract; saved views will store it as-is.
+
 ## Net
 
 Income − spending − saving for a period, in signed cents (`netMinor`).
