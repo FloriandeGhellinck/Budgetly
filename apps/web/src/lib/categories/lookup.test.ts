@@ -7,6 +7,7 @@ const groups: CategoryGroupOption[] = [
     id: "g1",
     label: "Daily life",
     direction: "expense",
+    kind: "spending",
     color: "teal",
     icon: "house",
     categories: [{ id: "c1", label: "Groceries", color: "teal", icon: "shopping-cart" }],

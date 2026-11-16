@@ -14,6 +14,8 @@ export type CategoryOption = Option & Appearance;
 export type CategoryGroupOption = Option &
   Appearance & {
     direction: "expense" | "income";
+    // Expense groups: spending or saving (ADR 0004); null for income.
+    kind: "spending" | "saving" | null;
     categories: CategoryOption[];
   };
 
@@ -56,6 +58,7 @@ export const getEntryOptions = cache(async (): Promise<EntryOptions> => {
       id: group.id,
       label: seedLabel(seed, "categoryGroups", group),
       direction: group.direction,
+      kind: group.kind,
       color: group.color,
       icon: group.icon,
       categories: group.categories.map((c) => ({

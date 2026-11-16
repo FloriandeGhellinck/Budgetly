@@ -45,3 +45,13 @@ export function monthDays(month: string): { from: string; to: string } {
 export function monthStart(month: string): Date {
   return fromIsoDay(`${month}-01`);
 }
+
+// The `YYYY-MM-DD` day an instant falls on in `timeZone` ("today" for reports).
+export function dayOf(instant: Date, timeZone: string = TIME_ZONE): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(instant);
+}

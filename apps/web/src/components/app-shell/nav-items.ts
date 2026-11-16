@@ -1,5 +1,6 @@
 import {
   ArrowLeftRightIcon,
+  ChartPieIcon,
   LayoutDashboardIcon,
   type LucideIcon,
   SettingsIcon,
@@ -11,7 +12,14 @@ import {
 export type NavItem = {
   href: string;
   // Key under `nav` in messages/*.json.
-  label: "dashboard" | "transactions" | "accounts" | "categories" | "tags" | "settings";
+  label:
+    | "dashboard"
+    | "analysis"
+    | "transactions"
+    | "accounts"
+    | "categories"
+    | "tags"
+    | "settings";
   icon: LucideIcon;
   // Shown in the mobile bottom bar; the rest are reached from Settings.
   mobile: boolean;
@@ -19,8 +27,9 @@ export type NavItem = {
 
 export const NAV_ITEMS: readonly NavItem[] = [
   { href: "/", label: "dashboard", icon: LayoutDashboardIcon, mobile: true },
+  { href: "/analysis", label: "analysis", icon: ChartPieIcon, mobile: true },
   { href: "/transactions", label: "transactions", icon: ArrowLeftRightIcon, mobile: true },
-  { href: "/accounts", label: "accounts", icon: WalletIcon, mobile: true },
+  { href: "/accounts", label: "accounts", icon: WalletIcon, mobile: false },
   { href: "/categories", label: "categories", icon: ShapesIcon, mobile: false },
   { href: "/tags", label: "tags", icon: TagIcon, mobile: false },
   { href: "/settings", label: "settings", icon: SettingsIcon, mobile: true },

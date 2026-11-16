@@ -24,6 +24,15 @@ export function formatRate(bps: number, locale: string, maximumFractionDigits = 
   );
 }
 
+// A relative change in basis points as a signed percentage: 1200 → "+12%".
+export function formatChange(bps: number, locale: string): string {
+  return new Intl.NumberFormat(locale, {
+    style: "percent",
+    maximumFractionDigits: 0,
+    signDisplay: "exceptZero",
+  }).format(decimal(bps, 4));
+}
+
 // A change between two rates in percentage points, signed: 250 → "+2.5".
 export function formatPoints(bps: number, locale: string): string {
   return new Intl.NumberFormat(locale, {

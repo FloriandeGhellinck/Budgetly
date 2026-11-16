@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fromIsoDay, monthDays, monthOf, shiftMonth, toIsoDay } from "./dates";
+import { dayOf, fromIsoDay, monthDays, monthOf, shiftMonth, toIsoDay } from "./dates";
 
 describe("toIsoDay", () => {
   it("uses the local day, not the UTC one", () => {
@@ -17,6 +17,13 @@ describe("monthOf", () => {
     // 23:30 UTC on 31 October is already 1 November in Brussels.
     expect(monthOf(new Date("2026-10-31T23:30:00Z"), "Europe/Brussels")).toBe("2026-11");
     expect(monthOf(new Date("2026-10-31T23:30:00Z"), "UTC")).toBe("2026-10");
+  });
+});
+
+describe("dayOf", () => {
+  it("reads the day in the given zone, not UTC", () => {
+    expect(dayOf(new Date("2026-10-31T23:30:00Z"), "Europe/Brussels")).toBe("2026-11-01");
+    expect(dayOf(new Date("2026-10-31T23:30:00Z"), "UTC")).toBe("2026-10-31");
   });
 });
 
