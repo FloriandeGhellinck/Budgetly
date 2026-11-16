@@ -10,7 +10,14 @@ import { analysisHref } from "@/lib/analysis/view";
 type Navigation = {
   // The view the controls show: the one just chosen, before the server answers.
   view: AnalysisView;
+  // The active tab (saved view), if any.
+  savedViewId: string | undefined;
+  // Whether the URL carries a state (false: the default page or a bare tab).
+  hasState: boolean;
+  // A new state on the current tab (a draft until saved).
   go: (next: AnalysisView) => void;
+  // Another tab, or none, with the state to show.
+  open: (view: AnalysisView, savedViewId: string | undefined) => void;
   pending: boolean;
 };
 
@@ -20,22 +27,31 @@ const NavigationContext = createContext<Navigation | null>(null);
 // at once (optimistic view); only the figures wait for the server, dimmed.
 export function AnalysisNavigation({
   view,
+  savedViewId,
+  hasState,
   children,
 }: {
   view: AnalysisView;
+  savedViewId: string | undefined;
+  hasState: boolean;
   children: ReactNode;
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
-  const [optimistic, setOptimistic] = useOptimistic(view);
+  const [optimistic, setOptimistic] = useOptimistic({ view, savedViewId, hasState });
   const value = useMemo<Navigation>(
     () => ({
-      view: optimistic,
+      ...optimistic,
       pending,
       go: (next) =>
         startTransition(() => {
-          setOptimistic(next);
-          router.replace(analysisHref(next), { scroll: false });
+          setOptimistic({ ...optimistic, view: next, hasState: true });
+          router.replace(analysisHref(next, optimistic.savedViewId), { scroll: false });
+        }),
+      open: (next, id) =>
+        startTransition(() => {
+          setOptimistic({ view: next, savedViewId: id, hasState: true });
+          router.push(analysisHref(next, id), { scroll: false });
         }),
     }),
     [optimistic, pending, router, setOptimistic],

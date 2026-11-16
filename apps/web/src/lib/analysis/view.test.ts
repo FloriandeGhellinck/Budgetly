@@ -5,7 +5,10 @@ import {
   analysisInput,
   drillDown,
   drillUp,
+  parseAnalysisLocation,
   parseAnalysisView,
+  pruneView,
+  sameView,
   transactionFilters,
   withGroups,
   withTypes,
@@ -167,5 +170,55 @@ describe("transactionFilters", () => {
     },
   ])("$label", ({ view, item, expected }) => {
     expect(transactionFilters(view, range, item, tagName)).toEqual(expected);
+  });
+});
+
+describe("parseAnalysisLocation", () => {
+  const V = "4b5c6d7e-8f9a-4b0c-9d1e-2f3a4b5c6d7e";
+
+  it.each([
+    { label: "nothing", params: {}, expected: { hasState: false } },
+    { label: "a tab alone", params: { view: V }, expected: { savedViewId: V, hasState: false } },
+    {
+      label: "a tab with its state",
+      params: { view: V, period: "this-month" },
+      expected: { savedViewId: V, hasState: true },
+    },
+    { label: "a shared state", params: { groupBy: "month" }, expected: { hasState: true } },
+  ])("reads $label", ({ params, expected }) => {
+    const { view: _view, ...location } = parseAnalysisLocation(params);
+
+    expect(location).toEqual(expected);
+  });
+
+  it("keeps a state on a tab even when it is all defaults", () => {
+    const query = new URL(analysisHref(base, V), "http://x").searchParams;
+
+    expect(parseAnalysisLocation(Object.fromEntries(query))).toEqual({
+      view: base,
+      savedViewId: V,
+      hasState: true,
+    });
+  });
+});
+
+describe("pruneView / sameView", () => {
+  const known = {
+    groupIds: new Set([G1]),
+    categoryIds: new Set([C1]),
+    beneficiaryIds: new Set<string>(),
+    accountIds: new Set<string>(),
+    tagIds: new Set<string>(),
+  };
+
+  it("drops ids that no longer exist", () => {
+    const view = { ...base, groupIds: [G1, G2], categoryIds: [C2], tagIds: [T1] };
+
+    expect(pruneView(view, known)).toEqual({ ...base, groupIds: [G1] });
+  });
+
+  it("compares views by what they show", () => {
+    expect(sameView(base, AnalysisView.parse({ types: ["spending", "saving"] }))).toBe(true);
+    expect(sameView(base, { ...base, compare: "last-year" })).toBe(false);
   });
 });

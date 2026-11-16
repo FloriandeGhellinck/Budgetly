@@ -33,6 +33,8 @@ export type AnalysisRow = {
 
 export type ItemContext = {
   view: AnalysisView;
+  // The active tab, kept by drill-down links.
+  savedViewId?: string | undefined;
   // The days the view covers.
   range: DayRange;
   // The month in progress (YYYY-MM).
@@ -65,7 +67,10 @@ export function analysisItems(rows: readonly AnalysisRow[], context: ItemContext
     const key = row.key;
     const link =
       groupBy === "group"
-        ? { href: analysisHref(drillDown(view, key)), action: "drill" as const }
+        ? {
+            href: analysisHref(drillDown(view, key), context.savedViewId),
+            action: "drill" as const,
+          }
         : {
             href: transactionsHref(
               transactionFilters(view, range, { groupBy, key }, context.tagName),

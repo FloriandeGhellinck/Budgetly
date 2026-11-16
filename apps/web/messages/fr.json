@@ -158,7 +158,32 @@
     "chartLabel": "Répartition par {groupBy}",
     "barsLabel": "Par mois",
     "tagNote": "Une transaction avec plusieurs étiquettes compte dans chacune : les lignes peuvent dépasser le total.",
-    "loading": "Mise à jour des chiffres…"
+    "loading": "Mise à jour des chiffres…",
+    "views": {
+      "tabs": "Vues enregistrées",
+      "newView": "Nouvelle vue",
+      "newViewName": "Nouvelle vue",
+      "viewOptions": "Options de {name}",
+      "rename": "Renommer",
+      "name": "Nom de la vue",
+      "deleteView": "Supprimer la vue",
+      "confirmDelete": "Confirmer la suppression",
+      "deleteHint": "La vue disparaît pour de bon ; tes transactions restent.",
+      "unsaved": "Modifications non enregistrées",
+      "draft": "<b>Brouillon.</b> Tu explores : « {name} » ne change pas tant que tu n'enregistres pas.",
+      "unsavedView": "<b>Non enregistrée.</b> Cette vue ne fait pas partie de tes onglets.",
+      "discard": "Annuler les changements",
+      "saveAsNew": "Enregistrer comme nouvelle vue",
+      "save": "Enregistrer",
+      "newName": "Nom de la nouvelle vue",
+      "copyName": "{name} (copie)",
+      "create": "Créer la vue",
+      "cancel": "Annuler",
+      "saved": "« {name} » enregistrée",
+      "created": "Vue « {name} » créée",
+      "deleted": "Vue supprimée",
+      "renamed": "Vue renommée"
+    }
   },
   "accounts": {
     "title": "Comptes",
@@ -414,6 +439,11 @@
       "salary": "Salaire",
       "meal_vouchers": "Chèques-repas",
       "other_income": "Autres revenus"
+    },
+    "savedViews": {
+      "this_month": "Ce mois",
+      "spending_per_month": "Dépenses par mois",
+      "income_per_month": "Revenus par mois"
     }
   },
   "forms": {

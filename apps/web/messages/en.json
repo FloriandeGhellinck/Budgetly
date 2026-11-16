@@ -158,7 +158,32 @@
     "chartLabel": "Split by {groupBy}",
     "barsLabel": "Per month",
     "tagNote": "A transaction with several tags counts under each tag, so rows can add up to more than the total.",
-    "loading": "Updating the figures…"
+    "loading": "Updating the figures…",
+    "views": {
+      "tabs": "Saved views",
+      "newView": "New view",
+      "newViewName": "New view",
+      "viewOptions": "Options for {name}",
+      "rename": "Rename",
+      "name": "View name",
+      "deleteView": "Delete view",
+      "confirmDelete": "Confirm deletion",
+      "deleteHint": "The view goes for good; your transactions stay.",
+      "unsaved": "Unsaved changes",
+      "draft": "<b>Draft.</b> You are exploring: “{name}” stays as it is until you save.",
+      "unsavedView": "<b>Not saved.</b> This view is not one of your tabs.",
+      "discard": "Discard changes",
+      "saveAsNew": "Save as new view",
+      "save": "Save",
+      "newName": "Name of the new view",
+      "copyName": "{name} (copy)",
+      "create": "Create view",
+      "cancel": "Cancel",
+      "saved": "“{name}” saved",
+      "created": "View “{name}” created",
+      "deleted": "View deleted",
+      "renamed": "View renamed"
+    }
   },
   "accounts": {
     "title": "Accounts",
@@ -414,6 +439,11 @@
       "salary": "Salary",
       "meal_vouchers": "Meal vouchers",
       "other_income": "Other income"
+    },
+    "savedViews": {
+      "this_month": "This month",
+      "spending_per_month": "Spending per month",
+      "income_per_month": "Income per month"
     }
   },
   "forms": {

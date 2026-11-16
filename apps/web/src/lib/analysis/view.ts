@@ -94,14 +94,35 @@ export function parseAnalysisView(params: SearchParams): AnalysisView {
   });
 }
 
-// The Analysis URL for a view, in a stable order, defaults left out.
-export function analysisHref(view: AnalysisView): string {
+// Where the page is: the view's state, the saved view (tab) it belongs to, if
+// any, and whether the URL carries a state at all. Without one, the page shows
+// the saved view's own state (ADR 0036).
+export type AnalysisLocation = {
+  view: AnalysisView;
+  savedViewId?: string;
+  hasState: boolean;
+};
+
+const SAVED_VIEW_PARAM = "view";
+
+export function parseAnalysisLocation(params: SearchParams): AnalysisLocation {
+  const savedViewId = option(first(params[SAVED_VIEW_PARAM]), Id);
+  const hasState = Object.keys(params).some((key) => key !== SAVED_VIEW_PARAM);
+  return { view: parseAnalysisView(params), ...(savedViewId ? { savedViewId } : {}), hasState };
+}
+
+// The Analysis URL for a view, in a stable order, defaults left out. On a
+// saved view the period is always written, so the URL keeps a state of its
+// own even when it is all defaults (`?view=<id>` alone opens the saved state).
+export function analysisHref(view: AnalysisView, savedViewId?: string): string {
   const next = normalize(view);
   const params = new URLSearchParams();
+  if (savedViewId) params.set(SAVED_VIEW_PARAM, savedViewId);
   if (next.period.kind === "fixed") {
     params.set("from", next.period.from);
     params.set("to", next.period.to);
   } else if (
+    savedViewId ||
     DEFAULT_VIEW.period.kind !== "relative" ||
     next.period.preset !== DEFAULT_VIEW.period.preset
   ) {
@@ -120,6 +141,26 @@ export function analysisHref(view: AnalysisView): string {
   if (next.compare !== DEFAULT_VIEW.compare) params.set("compare", next.compare);
   const query = params.toString();
   return query ? `/analysis?${query}` : "/analysis";
+}
+
+// Whether two views show the same thing (the draft vs its saved view).
+export function sameView(a: AnalysisView, b: AnalysisView): boolean {
+  return analysisHref(a) === analysisHref(b);
+}
+
+// The ids a user still has, per filter.
+export type KnownIds = Record<ListKey, ReadonlySet<string>>;
+
+// A saved view without ids that no longer exist (a deleted category or tag):
+// they would match nothing and show as "…" (ADR 0036).
+export function pruneView(view: AnalysisView, known: KnownIds): AnalysisView {
+  const kept = Object.fromEntries(
+    (Object.keys(LIST_PARAMS) as ListKey[]).map((key) => [
+      key,
+      view[key].filter((id) => known[key].has(id)),
+    ]),
+  ) as Record<ListKey, string[]>;
+  return normalize({ ...view, ...kept });
 }
 
 // What a group counts as: income for income groups, else its kind

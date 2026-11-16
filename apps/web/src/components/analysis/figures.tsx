@@ -33,11 +33,13 @@ const SERIES: Record<AnalysisType, string> = {
 // figures themselves (ADR 0035).
 export function AnalysisFigures({
   view,
+  savedViewId,
   result,
   range,
   today,
 }: {
   view: AnalysisView;
+  savedViewId: string | undefined;
   result: Result;
   range: DayRange;
   today: string;
@@ -76,6 +78,7 @@ export function AnalysisFigures({
 
   const items = analysisItems(result.items, {
     view,
+    savedViewId,
     range,
     thisMonth: today.slice(0, 7),
     label: (row) => {
@@ -197,7 +200,7 @@ export function AnalysisFigures({
             className="flex items-center gap-1.5 text-sm text-muted-foreground"
           >
             <Link
-              href={analysisHref(drillUp(view))}
+              href={analysisHref(drillUp(view), savedViewId)}
               className="inline-flex items-center gap-1 font-medium text-foreground hover:underline"
             >
               <ArrowLeftIcon aria-hidden className="size-3.5" />
