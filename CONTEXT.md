@@ -109,7 +109,7 @@ The page and report (`reports.analysis`) that totals the user's money for any
 period, filtered by type (income, spending, saving), group, category,
 beneficiary, account, tag and text, and grouped by one of group, category,
 month, beneficiary, account or tag, with a comparison to an earlier range
-(ADR 0035).
+(ADR 0036).
 
 ## Analysis view
 
@@ -123,7 +123,7 @@ bars) and comparison mode (previous period or same period last year).
 An Analysis view kept under a name, shown as a tab on the Analysis page.
 Changing a control on it opens a draft: the saved view changes only when the
 user saves. New users start with three (This month, Spending per month,
-Income per month) they can edit or delete (ADR 0036).
+Income per month) they can edit or delete (ADR 0037).
 
 ## Net
 

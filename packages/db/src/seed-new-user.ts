@@ -84,7 +84,7 @@ type DefaultGroup = (typeof DEFAULT_GROUPS)[number];
 
 export type CategoryGroupSeedKey = DefaultGroup["seedKey"];
 export type CategorySeedKey = DefaultGroup["categories"][number]["seedKey"];
-// The starter saved views (ADR 0036), as the contract's AnalysisView. The
+// The starter saved views (ADR 0037), as the contract's AnalysisView. The
 // backfill in migration 20261116151013 repeats them for users who signed up before.
 const EMPTY_FILTERS = {
   groupIds: [],

@@ -1,7 +1,7 @@
 import { integer, jsonb, pgTable, text, unique } from "drizzle-orm/pg-core";
 import { id, timestamps, userId } from "./_shared";
 
-// A named Analysis view the user keeps as a tab (ADR 0036). `view` holds the
+// A named Analysis view the user keeps as a tab (ADR 0037). `view` holds the
 // contract's AnalysisView as JSON; the API validates it on write and reads it
 // leniently, so a schema change never makes a saved view unreadable.
 export const savedViews = pgTable(

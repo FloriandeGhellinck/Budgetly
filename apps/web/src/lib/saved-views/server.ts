@@ -5,7 +5,7 @@ import { cache } from "react";
 import { getApi } from "@/lib/api/server";
 import { seedLabel } from "@/lib/i18n/seed-label";
 
-// A saved view as the tabs show it: starter views translated (ADR 0031, 0036).
+// A saved view as the tabs show it: starter views translated (ADR 0031, 0037).
 export type SavedViewOption = { id: string; label: string; view: AnalysisView };
 
 export const getSavedViews = cache(async (): Promise<SavedViewOption[]> => {

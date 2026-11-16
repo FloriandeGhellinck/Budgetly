@@ -5,7 +5,7 @@ import { and, asc, eq, sql } from "drizzle-orm";
 type SavedViewRow = typeof savedViews.$inferSelect;
 
 // The stored JSON is read leniently: a field that no longer parses takes its
-// default instead of failing the whole list (ADR 0036).
+// default instead of failing the whole list (ADR 0037).
 function toSavedView(row: SavedViewRow): SavedView {
   return {
     id: row.id,

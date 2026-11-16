@@ -4,7 +4,7 @@ import type { AnalysisView, SavedView } from "@budgetly/contract";
 import type { ActionResult } from "@/lib/action-result";
 import { runWrite } from "@/lib/api/action";
 
-// Server actions for saved views, the Analysis tabs (ADR 0036).
+// Server actions for saved views, the Analysis tabs (ADR 0037).
 
 export async function createSavedView(
   name: string,

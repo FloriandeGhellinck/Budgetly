@@ -18,7 +18,7 @@ import { monthDays } from "../dates";
 import type { TransactionFilters } from "../transactions/filters";
 
 // The Analysis view lives in the URL, like the transaction filters (ADR
-// 0035): a bookmarkable page the server renders. Lists are comma-separated
+// 0036): a bookmarkable page the server renders. Lists are comma-separated
 // ids; defaults are left out; a bad value is dropped, never an error.
 
 type SearchParams = Record<string, string | string[] | undefined>;
@@ -96,7 +96,7 @@ export function parseAnalysisView(params: SearchParams): AnalysisView {
 
 // Where the page is: the view's state, the saved view (tab) it belongs to, if
 // any, and whether the URL carries a state at all. Without one, the page shows
-// the saved view's own state (ADR 0036).
+// the saved view's own state (ADR 0037).
 export type AnalysisLocation = {
   view: AnalysisView;
   savedViewId?: string;
@@ -152,7 +152,7 @@ export function sameView(a: AnalysisView, b: AnalysisView): boolean {
 export type KnownIds = Record<ListKey, ReadonlySet<string>>;
 
 // A saved view without ids that no longer exist (a deleted category or tag):
-// they would match nothing and show as "…" (ADR 0036).
+// they would match nothing and show as "…" (ADR 0037).
 export function pruneView(view: AnalysisView, known: KnownIds): AnalysisView {
   const kept = Object.fromEntries(
     (Object.keys(LIST_PARAMS) as ListKey[]).map((key) => [

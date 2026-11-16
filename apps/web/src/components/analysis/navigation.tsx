@@ -23,7 +23,7 @@ type Navigation = {
 
 const NavigationContext = createContext<Navigation | null>(null);
 
-// Every control changes the view in the URL (ADR 0035). The controls switch
+// Every control changes the view in the URL (ADR 0036). The controls switch
 // at once (optimistic view); only the figures wait for the server, dimmed.
 export function AnalysisNavigation({
   view,

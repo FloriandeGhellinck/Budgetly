@@ -45,7 +45,7 @@ function useActionError() {
   };
 }
 
-// Saved views as tabs (ADR 0036): switching drops the draft and opens the tab
+// Saved views as tabs (ADR 0037): switching drops the draft and opens the tab
 // as saved; the active tab shows a dot while it has unsaved changes and a ⋯
 // menu to rename or delete it. Scrolls sideways on phones.
 export function SavedViewTabs() {

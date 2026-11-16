@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: (await getTranslations("analysis"))("title") };
 }
 
-// The Analysis page (ADR 0035, 0036): the URL holds the state and the active
+// The Analysis page (ADR 0036, 0037): the URL holds the state and the active
 // tab; the server asks reports.analysis for its figures, the client controls
 // only change the URL. Labels, options and saved views come from the layouts,
 // so a filter change costs one API call.

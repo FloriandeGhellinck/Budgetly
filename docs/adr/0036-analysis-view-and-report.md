@@ -1,4 +1,4 @@
-# 35. Analysis: one view object, one report procedure
+# 36. Analysis: one view object, one report procedure
 
 Status: accepted (2026-11-16)
 

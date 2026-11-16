@@ -20,9 +20,9 @@ newer than most training data: read `node_modules/next/dist/docs/` first.
   (income, spending, saving); groups and categories wear their look
   (`--cat-<token>*`, `CategoryChip` in `src/components/categories`, ADR 0034).
 - `src/app/(app)/analysis` + `src/components/analysis`: the Analysis page
-  (ADR 0035). Its view lives in the URL (`src/lib/analysis/view.ts`); the
+  (ADR 0036). Its view lives in the URL (`src/lib/analysis/view.ts`); the
   filter chips, group-by and comparison only change the URL; `view=<id>` is
-  the active saved view (tab, ADR 0036), loaded once by `analysis/layout.tsx`.
+  the active saved view (tab, ADR 0037), loaded once by `analysis/layout.tsx`.
 
 ## Patterns
 

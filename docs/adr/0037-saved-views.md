@@ -1,10 +1,10 @@
-# 36. Saved views: named Analysis views as tabs, starters seeded once
+# 37. Saved views: named Analysis views as tabs, starters seeded once
 
 Status: accepted (2026-11-16)
 
 ## Context
 
-The Analysis page (ADR 0035) is explored through filters; users want to keep
+The Analysis page (ADR 0036) is explored through filters; users want to keep
 the views they return to as tabs, start with a few useful ones, and explore
 from a tab without overwriting it. Agents should manage the same views.
 

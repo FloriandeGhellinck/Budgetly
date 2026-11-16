@@ -10,7 +10,7 @@ import { formatMoney } from "@budgetly/ui/lib/money";
 import { Bar, BarChart, CartesianGrid, Cell, LabelList, XAxis, YAxis } from "recharts";
 import type { AnalysisItem } from "@/lib/analysis/items";
 
-// One bar per month, one colour (ADR 0035): the period's months side by side,
+// One bar per month, one colour (ADR 0036): the period's months side by side,
 // the month in progress lighter. Each bar opens that month's transactions.
 export function MonthBars({
   items,

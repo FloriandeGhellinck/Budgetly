@@ -33,7 +33,7 @@ const SERIES: Record<AnalysisType, string> = {
 // The figures of one view: total, split, comparison, drill-down crumb, chart
 // and table. Rendered on the client from the layout's options (accounts,
 // categories, beneficiaries, tags), so a filter change only fetches the
-// figures themselves (ADR 0035).
+// figures themselves (ADR 0036).
 export function AnalysisFigures({
   view,
   savedViewId,
