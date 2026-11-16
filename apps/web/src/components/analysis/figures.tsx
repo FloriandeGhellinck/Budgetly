@@ -12,11 +12,14 @@ import { useEntry } from "@/components/transactions/entry-context";
 import type { Api } from "@/lib/api/server";
 import { comparisonChange } from "@/lib/analysis/compare";
 import { analysisItems } from "@/lib/analysis/items";
+import { periodLabel as formatPeriod } from "@/lib/analysis/period-label";
+import { isPlainClick } from "@/lib/analysis/plain-click";
 import { analysisHref, drilledGroup, drillUp } from "@/lib/analysis/view";
-import { fromIsoDay, monthDays, monthStart } from "@/lib/dates";
+import { monthStart } from "@/lib/dates";
 import { optionLabels } from "@/lib/entry-options-labels";
 import { formatChange } from "@/lib/reports/figures";
 import { CompareToggle } from "./compare-toggle";
+import { useAnalysisNavigation } from "./navigation";
 import { AnalysisResult } from "./result";
 
 type Result = Awaited<ReturnType<Api["reports"]["analysis"]>>;
@@ -50,6 +53,7 @@ export function AnalysisFigures({
   const format = useFormatter();
   const locale = useLocale();
   const { options } = useEntry();
+  const navigation = useAnalysisNavigation();
   const labels = optionLabels(options);
   const groups = new Map(options.categoryGroups.map((g) => [g.id, g]));
   const categories = new Map(
@@ -61,20 +65,8 @@ export function AnalysisFigures({
   );
   const multiYear = range.from.slice(0, 4) !== range.to.slice(0, 4);
 
-  // "November 2026", "Sep – Nov 2026" or "3 Oct – 20 Nov 2026".
-  const periodLabel = ({ from, to }: DayRange) => {
-    const wholeMonths = from.endsWith("-01") && monthDays(to.slice(0, 7)).to === to;
-    if (wholeMonths && from.slice(0, 7) === to.slice(0, 7)) {
-      return format.dateTime(fromIsoDay(from), { month: "long", year: "numeric" });
-    }
-    return format.dateTimeRange(
-      fromIsoDay(from),
-      fromIsoDay(to),
-      wholeMonths
-        ? { month: "short", year: "numeric" }
-        : { day: "numeric", month: "short", year: "numeric" },
-    );
-  };
+  const periodLabel = (range: DayRange) =>
+    formatPeriod(range, (date, options) => format.dateTime(date, options));
 
   const items = analysisItems(result.items, {
     view,
@@ -201,6 +193,11 @@ export function AnalysisFigures({
           >
             <Link
               href={analysisHref(drillUp(view), savedViewId)}
+              onClick={(event) => {
+                if (!isPlainClick(event)) return;
+                event.preventDefault();
+                navigation.open(drillUp(view), savedViewId);
+              }}
               className="inline-flex items-center gap-1 font-medium text-foreground hover:underline"
             >
               <ArrowLeftIcon aria-hidden className="size-3.5" />

@@ -35,7 +35,11 @@ describe("analysisItems", () => {
   it("drills a group down to its categories", () => {
     const [item] = analysisItems([row(G1, { color: "teal" })], context(base));
 
-    expect(item).toMatchObject({ action: "drill", color: "teal" });
+    expect(item).toMatchObject({
+      action: "drill",
+      color: "teal",
+      drillTo: { groupIds: [G1], groupBy: "category" },
+    });
     expect(item?.href).toBe(`/analysis?groups=${G1}&groupBy=category`);
   });
 

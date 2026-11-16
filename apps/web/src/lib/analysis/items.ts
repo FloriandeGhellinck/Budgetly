@@ -19,6 +19,8 @@ export type AnalysisItem = {
   // Groups drill down; the rest open their transactions; none-buckets nothing.
   href?: string;
   action?: "drill" | "transactions";
+  // Groups: the view a click opens, so it can switch at once (no round trip).
+  drillTo?: AnalysisView;
 };
 
 // A row as reports.analysis returns it.
@@ -70,6 +72,7 @@ export function analysisItems(rows: readonly AnalysisRow[], context: ItemContext
         ? {
             href: analysisHref(drillDown(view, key), context.savedViewId),
             action: "drill" as const,
+            drillTo: drillDown(view, key),
           }
         : {
             href: transactionsHref(

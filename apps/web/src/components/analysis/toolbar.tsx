@@ -34,7 +34,7 @@ import { CheckIcon, PlusIcon } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { type ReactNode, useId, useState } from "react";
 import { useEntry } from "@/components/transactions/entry-context";
-import { fromIsoDay } from "@/lib/dates";
+import { periodLabel } from "@/lib/analysis/period-label";
 import { donutAllowed, withGroupBy, withGroups, withTypes } from "@/lib/analysis/view";
 import { useAnalysisNavigation } from "./navigation";
 
@@ -266,11 +266,7 @@ function PeriodChip({ today, ...state }: ChipState & { today: string }) {
   const [to, setTo] = useState(current.to);
   const range = (p: AnalysisPeriod) => {
     const days = resolvePeriod(p, today);
-    return format.dateTimeRange(fromIsoDay(days.from), fromIsoDay(days.to), {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
+    return periodLabel(days, (date, options) => format.dateTime(date, options));
   };
   const value =
     view.period.kind === "relative" ? t(`presets.${view.period.preset}`) : range(view.period);

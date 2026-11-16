@@ -1,7 +1,7 @@
 import { Money } from "@budgetly/ui/components/money";
 import { cn } from "@budgetly/ui/lib/utils";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { MouseEvent, ReactNode } from "react";
 import { barWidths } from "@/lib/reports/figures";
 
 export type RankedBar = {
@@ -15,6 +15,8 @@ export type RankedBar = {
   color: string;
   // Shown before the label, e.g. the category's icon chip.
   leading?: ReactNode;
+  // Handles a click on the link itself (the href stays for new tabs).
+  onClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
 };
 
 // Parts of a total as ranked horizontal bars, largest first, each with its
@@ -44,7 +46,7 @@ export function RankedBars({
     <ul aria-label={label} className={cn("flex flex-col", className)}>
       {items.map((item, index) => (
         <li key={item.key}>
-          <Row href={item.href} leading={item.leading}>
+          <Row href={item.href} leading={item.leading} onClick={item.onClick}>
             <span className="flex items-baseline justify-between gap-3">
               <span className={cn("min-w-0 truncate", inset && "ps-4")}>
                 {item.label}
@@ -70,10 +72,12 @@ export function RankedBars({
 function Row({
   href,
   leading,
+  onClick,
   children,
 }: {
   href: string | undefined;
   leading: ReactNode;
+  onClick?: ((event: MouseEvent<HTMLAnchorElement>) => void) | undefined;
   children: ReactNode;
 }) {
   const className = "flex items-center gap-3 rounded-md px-2 py-1.5";
@@ -84,7 +88,11 @@ function Row({
     </>
   );
   return href ? (
-    <Link href={href} className={cn(className, "hover:bg-muted focus-visible:bg-muted")}>
+    <Link
+      href={href}
+      onClick={onClick}
+      className={cn(className, "hover:bg-muted focus-visible:bg-muted")}
+    >
       {body}
     </Link>
   ) : (

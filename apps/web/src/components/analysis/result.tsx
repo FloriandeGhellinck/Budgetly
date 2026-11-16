@@ -19,10 +19,12 @@ import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { RankedBars } from "@/components/reports/ranked-bars";
 import { NONE_COLOR } from "@/lib/analysis/colors";
+import { isPlainClick } from "@/lib/analysis/plain-click";
 import type { AnalysisItem } from "@/lib/analysis/items";
 import { foldTail, formatRate, shareBps } from "@/lib/reports/figures";
 import { DonutChart } from "./donut-chart";
 import { MonthBars } from "./month-bars";
+import { useAnalysisNavigation } from "./navigation";
 
 // Nine palette colours: beyond eight slices the rest fold into a neutral "Other".
 const DONUT_MAX_SLICES = 9;
@@ -51,8 +53,12 @@ export function AnalysisResult({
   const locale = useLocale();
   const router = useRouter();
   const [hot, setHot] = useState<string | null>(null);
+  const navigation = useAnalysisNavigation();
+  // A group drills down through the instant navigation; anything else opens
+  // its transactions page.
   const open = (item: AnalysisItem) => {
-    if (item.href) router.push(item.href);
+    if (item.drillTo) navigation.open(item.drillTo, navigation.savedViewId);
+    else if (item.href) router.push(item.href);
   };
   const chartLabel = t("chartLabel", { groupBy: t(`groupBys.${groupBy}`).toLowerCase() });
 
@@ -99,6 +105,15 @@ export function AnalysisResult({
           totalMinor: item.totalMinor,
           color: paletteVar(item.color),
           ...(item.href ? { href: item.href } : {}),
+          ...(item.drillTo
+            ? {
+                onClick: (event) => {
+                  if (!isPlainClick(event)) return;
+                  event.preventDefault();
+                  open(item);
+                },
+              }
+            : {}),
         }))}
       />
     );
@@ -146,7 +161,13 @@ export function AnalysisResult({
                           : t("openTransactions", { name: item.label })
                       }
                       className="truncate hover:underline focus-visible:underline focus-visible:outline-none"
-                      onClick={(event) => event.stopPropagation()}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        if (item.drillTo && isPlainClick(event)) {
+                          event.preventDefault();
+                          open(item);
+                        }
+                      }}
                     >
                       {item.label}
                     </Link>
