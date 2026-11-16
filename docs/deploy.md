@@ -58,7 +58,15 @@ No service-role or secret key is used anywhere.
 
 ## Supabase
 
-- Migrations: `supabase db push` from a linked checkout.
+- Migrations: applied automatically by `.github/workflows/migrate.yml` when
+  a push to `main` touches `supabase/migrations/` (ADR 0038). It needs the
+  repository secret `SUPABASE_ACCESS_TOKEN` (a Supabase personal access
+  token) and the variable `SUPABASE_PROJECT_REF`. Run it by hand from the
+  Actions tab (or `gh workflow run migrate.yml`) to retry. By hand from a
+  linked checkout: `supabase db push --remote`.
+- Migrations must work with the code already deployed: Vercel and the
+  workflow start on the same push, so for a minute old code can meet the new
+  schema. Add before you use, stop using before you drop.
 - `app_runtime` gets its password out of band (never in the repo).
 - Auth settings are set per project, not with `supabase config push`
   (`supabase/config.toml` holds local values): site URL = the web production
