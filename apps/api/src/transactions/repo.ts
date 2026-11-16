@@ -96,6 +96,8 @@ export type ListFilters = {
   accountId?: string | undefined;
   categoryId?: string | undefined;
   groupId?: string | undefined;
+  categoryIds?: string[] | undefined;
+  groupIds?: string[] | undefined;
   beneficiaryId?: string | undefined;
   tag?: string | undefined;
   direction?: Direction | undefined;
@@ -123,6 +125,18 @@ export async function listTransactions(
             .select({ id: categories.id })
             .from(categories)
             .where(and(eq(categories.userId, userId), eq(categories.groupId, filters.groupId))),
+        )
+      : undefined,
+    filters.categoryIds ? inArray(transactions.categoryId, filters.categoryIds) : undefined,
+    filters.groupIds
+      ? inArray(
+          transactions.categoryId,
+          tx
+            .select({ id: categories.id })
+            .from(categories)
+            .where(
+              and(eq(categories.userId, userId), inArray(categories.groupId, filters.groupIds)),
+            ),
         )
       : undefined,
     filters.beneficiaryId ? eq(transactions.beneficiaryId, filters.beneficiaryId) : undefined,

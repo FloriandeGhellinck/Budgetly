@@ -111,6 +111,18 @@ describe("transactions.list filters", () => {
       filters: () => ({ groupId: alice.groupId("leisure") }),
       expected: ["school"],
     },
+    {
+      label: "any of several categories",
+      filters: () => ({
+        categoryIds: [alice.categoryId("groceries"), alice.categoryId("salary")],
+      }),
+      expected: ["salary", "groceries"],
+    },
+    {
+      label: "any of several groups",
+      filters: () => ({ groupIds: [alice.groupId("leisure"), alice.groupId("daily_life")] }),
+      expected: ["school", "groceries"],
+    },
     { label: "beneficiary", filters: () => ({ beneficiaryId: children }), expected: ["school"] },
     {
       label: "tag, case-insensitive",

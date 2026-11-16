@@ -41,7 +41,7 @@ export const TRANSACTION_PAGE_MAX = 200;
 
 const list = procedure({
   description:
-    "List the caller's transactions, newest first (by date, then id). Deleted transactions are left out. Filters combine with AND: from/to (inclusive YYYY-MM-DD), accountId, categoryId or groupId (any category of that group), beneficiaryId, tag (name, case-insensitive), direction (expense, income, transfer_out, transfer_in) and text (case-insensitive substring of name or note). Returns at most limit items (default 50, max 200); pass nextCursor back as cursor for the next page, it is null on the last one.",
+    "List the caller's transactions, newest first (by date, then id). Deleted transactions are left out. Filters combine with AND: from/to (inclusive YYYY-MM-DD), accountId, categoryId or groupId (any category of that group), categoryIds or groupIds (any of several; uncategorized never matches), beneficiaryId, tag (name, case-insensitive), direction (expense, income, transfer_out, transfer_in) and text (case-insensitive substring of name or note). Returns at most limit items (default 50, max 200); pass nextCursor back as cursor for the next page, it is null on the last one.",
   examples: [
     { from: "2026-11-01", to: "2026-11-30", direction: "expense" },
     { text: "supermarket", limit: 20 },
@@ -55,6 +55,8 @@ const list = procedure({
     accountId: Id.optional(),
     categoryId: Id.optional(),
     groupId: Id.optional(),
+    categoryIds: z.array(Id).min(1).max(200).optional(),
+    groupIds: z.array(Id).min(1).max(200).optional(),
     beneficiaryId: Id.optional(),
     tag: TagName.optional(),
     direction: DirectionSchema.optional(),
