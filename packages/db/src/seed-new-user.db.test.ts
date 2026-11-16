@@ -1,6 +1,6 @@
 import { asc, eq } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { accounts, beneficiaries, categories, categoryGroups } from "./schema";
+import { accounts, beneficiaries, categories, categoryGroups, savedViews } from "./schema";
 import { seedNewUser } from "./seed-new-user";
 import { ALICE, createMigratedDatabase, type MigratedDatabase } from "./test-support";
 import { withUser } from "./with-user";
@@ -93,5 +93,19 @@ describe("seedNewUser", () => {
     // Null colour: a default category wears its group's colour.
     expect(rows.every((row) => row.color === null && row.icon !== null)).toBe(true);
     expect(rows.find((row) => row.seedKey === "groceries")?.icon).toBe("shopping-cart");
+  });
+
+  it("creates the three starter views, in tab order", async () => {
+    const rows = await db.admin
+      .select({ seedKey: savedViews.seedKey, view: savedViews.view })
+      .from(savedViews)
+      .where(eq(savedViews.userId, ALICE))
+      .orderBy(asc(savedViews.sortOrder));
+    expect(rows.map((row) => row.seedKey)).toEqual([
+      "this_month",
+      "spending_per_month",
+      "income_per_month",
+    ]);
+    expect(rows[1]?.view).toMatchObject({ types: ["spending"], groupBy: "month" });
   });
 });

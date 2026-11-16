@@ -4,6 +4,7 @@ import { categoriesContract } from "./categories";
 import { meContract } from "./me";
 import { defineContract } from "./procedure";
 import { reportsContract } from "./reports";
+import { savedViewsContract } from "./saved-views";
 import { suggestionsContract } from "./suggestions";
 import { tagsContract } from "./tags";
 import { transactionsContract } from "./transactions";
@@ -19,10 +20,12 @@ export const contract = defineContract({
   transfers: transfersContract,
   suggestions: suggestionsContract,
   reports: reportsContract,
+  savedViews: savedViewsContract,
 });
 export type Contract = typeof contract;
 
 export * from "./accounts";
+export * from "./analysis";
 export * from "./appearance";
 export * from "./beneficiaries";
 export * from "./categories";
@@ -30,6 +33,7 @@ export * from "./common";
 export { ERRORS, type ErrorCode } from "./errors";
 export { type AgentMeta } from "./procedure";
 export * from "./reports";
+export * from "./saved-views";
 export * from "./suggestions";
 export * from "./tags";
 export * from "./transactions";

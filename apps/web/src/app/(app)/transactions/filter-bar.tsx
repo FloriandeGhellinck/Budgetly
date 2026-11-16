@@ -66,9 +66,28 @@ export function FilterBar({ filters }: { filters: TransactionFilters }) {
   ];
   // Filters reached from reports with no control of their own, shown as chips.
   const groupLabel = options.categoryGroups.find((g) => g.id === filters.groupId)?.label;
+  const names = (ids: string[], rows: { id: string; label: string }[]) =>
+    ids.map((id) => rows.find((row) => row.id === id)?.label ?? "…").join(", ");
+  const allCategories = options.categoryGroups.flatMap((g) => g.categories);
   const chips = [
     ...(filters.groupId
       ? [{ key: "groupId" as const, label: t("group", { name: groupLabel ?? "…" }) }]
+      : []),
+    ...(filters.groupIds
+      ? [
+          {
+            key: "groupIds" as const,
+            label: t("groups", { names: names(filters.groupIds, options.categoryGroups) }),
+          },
+        ]
+      : []),
+    ...(filters.categoryIds
+      ? [
+          {
+            key: "categoryIds" as const,
+            label: t("categories", { names: names(filters.categoryIds, allCategories) }),
+          },
+        ]
       : []),
     ...(filters.tag ? [{ key: "tag" as const, label: t("tag", { name: filters.tag }) }] : []),
   ];

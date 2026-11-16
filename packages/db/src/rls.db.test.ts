@@ -6,6 +6,7 @@ import {
   beneficiaries,
   categories,
   categoryGroups,
+  savedViews,
   tags,
   transactions,
   transactionTags,
@@ -43,6 +44,7 @@ const TABLES = [
   "tags",
   "transactions",
   "transaction_tags",
+  "saved_views",
 ] as const;
 
 async function countOwnedBy(table: string, userId: string): Promise<number> {
@@ -132,6 +134,7 @@ const INSERTS_FOR_BOB = {
     table: transactionTags,
     values: { userId: BOB, transactionId: bob.transactionId, tagId: bob.tagId },
   }),
+  saved_views: () => ({ table: savedViews, values: { userId: BOB, name: "Spy", view: {} } }),
 };
 
 describe.each(TABLES)("%s: inserting a row for another user", (table) => {

@@ -45,4 +45,5 @@ export const EXAMPLE_IDS = {
   transaction: "6e7f8a9b-0c1d-4e2f-8a3b-4c5d6e7f8a9b",
   transfer: "8f9a0b1c-2d3e-4f5a-9b6c-7d8e9f0a1b2c",
   tag: "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+  savedView: "4b5c6d7e-8f9a-4b0c-9d1e-2f3a4b5c6d7e",
 } as const;

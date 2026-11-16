@@ -6,13 +6,15 @@ export type FormatMoneyOptions = {
   locale: string;
   /** When set, the amount is signed: money out is negative, money in positive. */
   direction?: MoneyDirection;
+  /** Rounded half up to whole euros, for chart labels where cents are noise. */
+  wholeEuros?: boolean;
 };
 
 const OUTGOING: ReadonlySet<MoneyDirection> = new Set(["expense", "transfer_out"]);
 
 export function formatMoney(
   amountMinor: number,
-  { locale, direction }: FormatMoneyOptions,
+  { locale, direction, wholeEuros = false }: FormatMoneyOptions,
 ): string {
   if (!Number.isSafeInteger(amountMinor) || amountMinor < 0) {
     throw new RangeError(`amountMinor must be a non-negative integer, got ${amountMinor}`);
@@ -26,6 +28,7 @@ export function formatMoney(
     style: "currency",
     currency: "EUR",
     signDisplay: direction === undefined ? "auto" : "exceptZero",
+    ...(wholeEuros ? { minimumFractionDigits: 0, maximumFractionDigits: 0 } : {}),
   }).format(decimal);
 }
 

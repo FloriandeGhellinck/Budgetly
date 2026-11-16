@@ -1,6 +1,8 @@
+import type { AnalysisGroupBy, AnalysisType } from "@budgetly/contract";
 import type { Tx } from "@budgetly/db";
 import { sql, type SQL } from "drizzle-orm";
 import { accountBalance } from "../balance.ts";
+import { containsPattern } from "../like.ts";
 import type { MonthTotals } from "./figures.ts";
 
 // Every row the reports count, one per transaction, with the caller's part
@@ -18,6 +20,8 @@ function counted(userId: string, where: SQL = sql``) {
       t.id,
       t.occurred_on,
       t.direction,
+      t.account_id,
+      t.beneficiary_id,
       (t.amount_minor::bigint * a.share_bps + 5000) / 10000 as part,
       case
         when t.direction = 'income' then 'income'
@@ -292,6 +296,237 @@ export async function transferFlows(
     toAccountId: row.to_account_id,
     sentMinor: toInt(row.sent),
     receivedMinor: toInt(row.received),
+    count: toInt(row.count),
+  }));
+}
+
+export type AnalysisQuery = {
+  from: string;
+  to: string;
+  types: readonly AnalysisType[];
+  groupIds: readonly string[];
+  categoryIds: readonly string[];
+  beneficiaryIds: readonly string[];
+  accountIds: readonly string[];
+  tagIds: readonly string[];
+  text?: string | undefined;
+};
+
+const inList = (ids: readonly string[]) =>
+  sql.join(
+    ids.map((id) => sql`${id}`),
+    sql`, `,
+  );
+
+// The bucket of `counted`, spelled on the t/g aliases so it can filter there.
+const TYPE_CONDITION: Record<AnalysisType, SQL> = {
+  income: sql`t.direction = 'income'`,
+  saving: sql`(t.direction = 'expense' and g.kind = 'saving')`,
+  spending: sql`(t.direction = 'expense' and g.kind is distinct from 'saving')`,
+};
+
+// One filter for the items, the per-type split and the comparison, so the
+// three can never disagree. An empty list does not filter.
+function analysisWhere(query: AnalysisQuery, range: { from: string; to: string }): SQL {
+  const parts: SQL[] = [
+    sql`and t.occurred_on between ${range.from}::date and ${range.to}::date`,
+    sql`and (${sql.join(
+      query.types.map((type) => TYPE_CONDITION[type]),
+      sql` or `,
+    )})`,
+  ];
+  if (query.groupIds.length > 0) parts.push(sql`and g.id in (${inList(query.groupIds)})`);
+  if (query.categoryIds.length > 0) parts.push(sql`and c.id in (${inList(query.categoryIds)})`);
+  if (query.beneficiaryIds.length > 0) {
+    parts.push(sql`and t.beneficiary_id in (${inList(query.beneficiaryIds)})`);
+  }
+  if (query.accountIds.length > 0) {
+    parts.push(sql`and t.account_id in (${inList(query.accountIds)})`);
+  }
+  if (query.tagIds.length > 0) {
+    parts.push(sql`and exists (
+      select 1 from transaction_tags tt
+      where tt.user_id = t.user_id and tt.transaction_id = t.id
+        and tt.tag_id in (${inList(query.tagIds)}))`);
+  }
+  if (query.text) {
+    const pattern = containsPattern(query.text);
+    parts.push(sql`and (t.name ilike ${pattern} or t.note ilike ${pattern})`);
+  }
+  return sql.join(parts, sql` `);
+}
+
+export type TypeTotals = { incomeMinor: number; spendingMinor: number; savingMinor: number };
+
+// Total, count and per-type split of the matching transactions, each counted once.
+export async function analysisTotals(
+  tx: Tx,
+  userId: string,
+  query: AnalysisQuery,
+  range: { from: string; to: string },
+): Promise<TypeTotals & { totalMinor: number; count: number }> {
+  const [row] = await tx.execute<{
+    income: string;
+    spending: string;
+    saving: string;
+    total: string;
+    count: string;
+  }>(sql`
+    with rows as (${counted(userId, analysisWhere(query, range))})
+    select
+      coalesce(sum(part) filter (where bucket = 'income'), 0) as income,
+      coalesce(sum(part) filter (where bucket = 'spending'), 0) as spending,
+      coalesce(sum(part) filter (where bucket = 'saving'), 0) as saving,
+      coalesce(sum(part), 0) as total,
+      count(*) as count
+    from rows`);
+  return {
+    incomeMinor: toInt(row?.income ?? 0),
+    spendingMinor: toInt(row?.spending ?? 0),
+    savingMinor: toInt(row?.saving ?? 0),
+    totalMinor: toInt(row?.total ?? 0),
+    count: toInt(row?.count ?? 0),
+  };
+}
+
+// The first day any transaction counts for the caller, whatever the filters.
+export async function firstCountedDay(tx: Tx, userId: string): Promise<string | null> {
+  const [row] = await tx.execute<{ first_on: string | null }>(sql`
+    with rows as (${counted(userId)})
+    select to_char(min(occurred_on), 'YYYY-MM-DD') as first_on from rows`);
+  return row?.first_on ?? null;
+}
+
+export type AnalysisRow = {
+  key: string | null;
+  name: string | null;
+  color: string | null;
+  icon: string | null;
+  groupId: string | null;
+  totalMinor: number;
+  count: number;
+};
+
+// The key, label and look of each grouping, over the `rows` CTE (r) and the
+// join it adds; joins are scoped to the caller like every query.
+function grouping(userId: string, groupBy: Exclude<AnalysisGroupBy, "month">) {
+  const none = { color: sql`null`, icon: sql`null`, groupId: sql`null::uuid` };
+  switch (groupBy) {
+    case "group":
+      return {
+        join: sql``,
+        key: sql`r.group_id`,
+        name: sql`r.group_name`,
+        color: sql`r.group_color`,
+        icon: sql`r.group_icon`,
+        groupId: sql`null::uuid`,
+      };
+    case "category":
+      return {
+        join: sql``,
+        key: sql`r.category_id`,
+        name: sql`r.category_name`,
+        color: sql`r.category_color`,
+        icon: sql`r.category_icon`,
+        groupId: sql`r.group_id`,
+      };
+    case "beneficiary":
+      return {
+        ...none,
+        join: sql`left join beneficiaries b on b.user_id = ${userId} and b.id = r.beneficiary_id`,
+        key: sql`r.beneficiary_id`,
+        name: sql`b.name`,
+      };
+    case "account":
+      return {
+        ...none,
+        join: sql`join accounts acc on acc.user_id = ${userId} and acc.id = r.account_id`,
+        key: sql`r.account_id`,
+        name: sql`acc.name`,
+      };
+    case "tag":
+      // A transaction with several tags lands in each of them.
+      return {
+        ...none,
+        join: sql`left join transaction_tags tt on tt.user_id = ${userId} and tt.transaction_id = r.id
+          left join tags tg on tg.user_id = ${userId} and tg.id = tt.tag_id`,
+        key: sql`tg.id`,
+        name: sql`tg.name`,
+      };
+  }
+}
+
+// Totals per group, category, beneficiary, account or tag; largest first is
+// left to the handler, which also breaks ties.
+export async function analysisItems(
+  tx: Tx,
+  userId: string,
+  query: AnalysisQuery,
+  groupBy: Exclude<AnalysisGroupBy, "month">,
+): Promise<AnalysisRow[]> {
+  const g = grouping(userId, groupBy);
+  const rows = await tx.execute<{
+    key: string | null;
+    name: string | null;
+    color: string | null;
+    icon: string | null;
+    group_id: string | null;
+    total: string;
+    count: string;
+  }>(sql`
+    with rows as (${counted(userId, analysisWhere(query, query))})
+    select
+      ${g.key}::text as key,
+      ${g.name} as name,
+      ${g.color} as color,
+      ${g.icon} as icon,
+      ${g.groupId} as group_id,
+      sum(r.part) as total,
+      count(*) as count
+    from rows r
+    ${g.join}
+    group by 1, 2, 3, 4, 5`);
+  return rows.map((row) => ({
+    key: row.key,
+    name: row.name,
+    color: row.color,
+    icon: row.icon,
+    groupId: row.group_id,
+    totalMinor: toInt(row.total),
+    count: toInt(row.count),
+  }));
+}
+
+// Totals per month for every month the range touches, oldest first, zeros
+// included.
+export async function analysisMonths(
+  tx: Tx,
+  userId: string,
+  query: AnalysisQuery,
+): Promise<AnalysisRow[]> {
+  const rows = await tx.execute<{ month: string; total: string; count: string }>(sql`
+    with rows as (${counted(userId, analysisWhere(query, query))}),
+    months as (
+      select generate_series(
+        date_trunc('month', ${query.from}::date),
+        date_trunc('month', ${query.to}::date),
+        interval '1 month')::date as start
+    )
+    select
+      to_char(m.start, 'YYYY-MM') as month,
+      coalesce(sum(r.part), 0) as total,
+      count(r.id) as count
+    from months m
+    left join rows r on date_trunc('month', r.occurred_on)::date = m.start
+    group by m.start
+    order by m.start`);
+  return rows.map((row) => ({
+    key: row.month,
+    name: null,
+    color: null,
+    icon: null,
+    groupId: null,
+    totalMinor: toInt(row.total),
     count: toInt(row.count),
   }));
 }

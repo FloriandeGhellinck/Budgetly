@@ -14,6 +14,8 @@ export type CategoryOption = Option & Appearance;
 export type CategoryGroupOption = Option &
   Appearance & {
     direction: "expense" | "income";
+    // Expense groups: spending or saving (ADR 0004); null for income.
+    kind: "spending" | "saving" | null;
     categories: CategoryOption[];
   };
 
@@ -25,7 +27,8 @@ export type EntryOptions = {
   accounts: AccountOption[];
   categoryGroups: CategoryGroupOption[];
   beneficiaries: Option[];
-  tags: string[];
+  // Tags have no translation: the label is the stored name.
+  tags: Option[];
 };
 
 export const getEntryOptions = cache(async (): Promise<EntryOptions> => {
@@ -56,6 +59,7 @@ export const getEntryOptions = cache(async (): Promise<EntryOptions> => {
       id: group.id,
       label: seedLabel(seed, "categoryGroups", group),
       direction: group.direction,
+      kind: group.kind,
       color: group.color,
       icon: group.icon,
       categories: group.categories.map((c) => ({
@@ -69,27 +73,8 @@ export const getEntryOptions = cache(async (): Promise<EntryOptions> => {
       id: b.id,
       label: seedLabel(seed, "beneficiaries", b),
     })),
-    tags: tags.items.map((tag) => tag.name),
+    tags: tags.items.map((tag) => ({ id: tag.id, label: tag.name })),
   };
 });
 
-export type OptionLabels = Record<
-  "account" | "group" | "category" | "beneficiary",
-  (id: string | null, storedName: string | null) => string | null
->;
-
-// Reports return stored names; these give the translated label of a row the
-// options know (a default keeps its seed translation), else the stored name.
-export function optionLabels(options: EntryOptions): OptionLabels {
-  const index = (rows: Option[]) => {
-    const labels = new Map(rows.map((row) => [row.id, row.label]));
-    return (id: string | null, storedName: string | null) =>
-      (id !== null && labels.get(id)) || storedName;
-  };
-  return {
-    account: index(options.accounts),
-    group: index(options.categoryGroups),
-    category: index(options.categoryGroups.flatMap((group) => group.categories)),
-    beneficiary: index(options.beneficiaries),
-  };
-}
+export { optionLabels, type OptionLabels } from "./entry-options-labels";

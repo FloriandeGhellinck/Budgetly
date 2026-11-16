@@ -4,6 +4,7 @@ import {
   changeTone,
   donutSegments,
   foldTail,
+  formatChange,
   formatPoints,
   formatRate,
   ringShare,
@@ -41,6 +42,16 @@ describe("formatPoints", () => {
     ["a sub-point change", 5, "+0.1"],
   ])("formats %s", (_label, bps, expected) => {
     expect(formatPoints(bps, "en")).toBe(expected);
+  });
+});
+
+describe("formatChange", () => {
+  it.each([
+    ["a rise", 1200, "+12%"],
+    ["a fall, rounded", -1249, "-12%"],
+    ["no change, unsigned", 0, "0%"],
+  ])("formats %s", (_label, bps, expected) => {
+    expect(formatChange(bps, "en")).toBe(expected);
   });
 });
 

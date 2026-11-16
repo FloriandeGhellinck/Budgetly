@@ -7,5 +7,6 @@ export {
   categoryGroups,
   type CategoryPaletteColor,
 } from "./categories";
+export { savedViews } from "./saved-views";
 export { tags } from "./tags";
 export { transactions, transactionTags } from "./transactions";

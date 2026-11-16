@@ -6,6 +6,7 @@ import {
   beneficiaries,
   categories,
   categoryGroups,
+  savedViews,
   tags,
   transactions,
   transactionTags,
@@ -80,6 +81,7 @@ export async function insertOwnedRows(db: Db, userId: string): Promise<OwnedRows
     .returning();
   if (!transaction) throw new Error("fixture insert returned no row");
   await db.insert(transactionTags).values({ userId, transactionId: transaction.id, tagId: tag.id });
+  await db.insert(savedViews).values({ userId, name: "Groceries this month", view: {} });
   return {
     accountId: account.id,
     groupId: group.id,

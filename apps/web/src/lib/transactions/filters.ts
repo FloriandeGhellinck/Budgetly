@@ -4,6 +4,17 @@ import { z } from "zod";
 // Transactions per page of the list.
 export const PAGE_SIZE = 50;
 
+// Several ids in one param, comma-separated (from the Analysis page); a list
+// with a malformed id is dropped whole.
+const IdList = z
+  .preprocess(
+    (value) => (typeof value === "string" ? value.split(",") : value),
+    z.array(Id).min(1).max(200),
+  )
+  .optional()
+  .catch(undefined);
+const LIST_KEYS = new Set(["categoryIds", "groupIds"]);
+
 // The transaction list's filters live in the URL (ADR 0014), so a filtered
 // view can be bookmarked and the server renders it. A malformed value is
 // dropped rather than failing the page.
@@ -13,6 +24,8 @@ const FiltersSchema = z.object({
   accountId: Id.optional().catch(undefined),
   categoryId: Id.optional().catch(undefined),
   groupId: Id.optional().catch(undefined),
+  categoryIds: IdList,
+  groupIds: IdList,
   beneficiaryId: Id.optional().catch(undefined),
   tag: z.string().trim().min(1).max(100).optional().catch(undefined),
   from: IsoDate.optional().catch(undefined),
@@ -26,7 +39,10 @@ type SearchParams = Record<string, string | string[] | undefined>;
 
 export function parseFilters(params: SearchParams): TransactionFilters {
   const first = Object.fromEntries(
-    Object.entries(params).map(([key, value]) => [key, Array.isArray(value) ? value[0] : value]),
+    Object.entries(params).map(([key, value]) => [
+      key,
+      Array.isArray(value) && !LIST_KEYS.has(key) ? value[0] : value,
+    ]),
   );
   const parsed = FiltersSchema.parse(first);
   // Drop the keys that parsed to undefined, so filters compare by content.
@@ -40,7 +56,7 @@ export function filtersToSearch(filters: TransactionFilters): string {
   const params = new URLSearchParams();
   for (const key of Object.keys(FiltersSchema.shape).toSorted()) {
     const value = filters[key as FilterKey];
-    if (value) params.set(key, value);
+    if (value) params.set(key, Array.isArray(value) ? value.join(",") : value);
   }
   const query = params.toString();
   return query ? `?${query}` : "";

@@ -279,7 +279,12 @@ export function TransactionForm({
 
       <Field>
         <FieldLabel htmlFor={`${id}-tags`}>{t("tags")}</FieldLabel>
-        <TagsInput id={`${id}-tags`} known={options.tags} value={tags} onValueChange={setTags} />
+        <TagsInput
+          id={`${id}-tags`}
+          known={options.tags.map((tag) => tag.label)}
+          value={tags}
+          onValueChange={setTags}
+        />
       </Field>
 
       {error && <FieldError>{tError(error)}</FieldError>}

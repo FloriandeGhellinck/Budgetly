@@ -35,6 +35,22 @@ describe("parseFilters", () => {
   });
 });
 
+describe("id lists", () => {
+  const OTHER = "7a8b9c0d-1e2f-4a3b-8c4d-5e6f7a8b9c0d";
+
+  it("round-trips several categories through the URL", () => {
+    const search = filtersToSearch({ categoryIds: [ACCOUNT, OTHER] });
+
+    expect(parseFilters(Object.fromEntries(new URLSearchParams(search)))).toEqual({
+      categoryIds: [ACCOUNT, OTHER],
+    });
+  });
+
+  it("drops a list with a malformed id", () => {
+    expect(parseFilters({ groupIds: `${ACCOUNT},42` })).toEqual({});
+  });
+});
+
 describe("filtersToSearch", () => {
   it("writes keys in a stable order and round-trips", () => {
     const search = filtersToSearch({ text: "rent", direction: "expense" });

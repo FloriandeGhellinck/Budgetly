@@ -3,6 +3,10 @@ import { authed } from "../orpc.ts";
 import { figuresChange, monthFigures, previousMonth } from "./figures.ts";
 import {
   accountBalances,
+  analysisItems,
+  analysisMonths,
+  analysisTotals,
+  firstCountedDay,
   breakdownTotals,
   findTag,
   monthlyTotals,
@@ -120,4 +124,41 @@ export const accounts = authed.reports.accounts.handler(async ({ input, context 
   return { asOf: input.asOf ?? null, accounts: balances, flows };
 });
 
-export const reportsRouter = { monthOverview, trend, breakdown, tag, accounts };
+export const analysis = authed.reports.analysis.handler(async ({ input, context }) => {
+  const { tx, userId } = context;
+  const { groupBy, compare } = input;
+  const [totals, rows, previous, firstOn] = await Promise.all([
+    analysisTotals(tx, userId, input, input),
+    groupBy === "month"
+      ? analysisMonths(tx, userId, input)
+      : analysisItems(tx, userId, input, groupBy),
+    compare ? analysisTotals(tx, userId, input, compare) : null,
+    firstCountedDay(tx, userId),
+  ]);
+  const items = rows.map((row) => ({
+    key: row.key,
+    name: row.name,
+    color: asCategoryColor(row.color),
+    icon: asCategoryIcon(row.icon),
+    groupId: row.groupId,
+    totalMinor: row.totalMinor,
+    count: row.count,
+  }));
+  return {
+    totalMinor: totals.totalMinor,
+    count: totals.count,
+    byType: {
+      incomeMinor: totals.incomeMinor,
+      spendingMinor: totals.spendingMinor,
+      savingMinor: totals.savingMinor,
+    },
+    items: groupBy === "month" ? items : items.sort(byTotal((item) => item.name)),
+    firstOn,
+    comparison:
+      compare && previous
+        ? { ...compare, totalMinor: previous.totalMinor, count: previous.count }
+        : null,
+  };
+});
+
+export const reportsRouter = { monthOverview, trend, breakdown, tag, accounts, analysis };
