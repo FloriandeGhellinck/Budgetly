@@ -157,7 +157,8 @@
     "other": "Other ({count})",
     "chartLabel": "Split by {groupBy}",
     "barsLabel": "Per month",
-    "tagNote": "A transaction with several tags counts under each tag, so rows can add up to more than the total."
+    "tagNote": "A transaction with several tags counts under each tag, so rows can add up to more than the total.",
+    "loading": "Updating the figures…"
   },
   "accounts": {
     "title": "Accounts",

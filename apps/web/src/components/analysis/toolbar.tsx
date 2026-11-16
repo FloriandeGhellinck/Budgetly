@@ -46,10 +46,8 @@ type Section = { title?: string; items: Choice[] };
 // optional ones behind "+ Filter") and, beside it, group-by and display.
 // Values inside one chip are OR, chips are AND.
 export function AnalysisToolbar({
-  tags,
   today,
 }: {
-  tags: { id: string; name: string }[];
   // The user's day (YYYY-MM-DD), to show what each preset covers.
   today: string;
 }) {
@@ -150,7 +148,7 @@ export function AnalysisToolbar({
           <MultiChip
             {...chipProps("tag")}
             label={t("filters.tag")}
-            sections={[{ items: tags.map((tag) => ({ id: tag.id, label: tag.name })) }]}
+            sections={[{ items: options.tags }]}
             selected={view.tagIds}
             onChange={(tagIds) => go({ ...view, tagIds })}
           />
@@ -380,16 +378,25 @@ function MultiChip({
 }) {
   const t = useTranslations("analysis.filters");
   const summary = useSummary();
+  // Ticks collect in a draft, applied once when the popover closes: one
+  // navigation per edit, not one per checkbox.
+  const [draft, setDraft] = useState<readonly string[]>(selected);
+  const shown = state.open ? draft : selected;
   const all = sections.flatMap((section) => section.items);
-  const labels = selected.map((id) => all.find((item) => item.id === id)?.label ?? "…");
+  const labels = shown.map((id) => all.find((item) => item.id === id)?.label ?? "…");
   const toggle = (id: string, checked: boolean) => {
-    const next = checked ? [...selected, id] : selected.filter((value) => value !== id);
+    const next = checked ? [...draft, id] : draft.filter((value) => value !== id);
     // Keep the options' order, so the URL and the chip read the same way.
-    onChange(all.map((item) => item.id).filter((value) => next.includes(value)));
+    setDraft(all.map((item) => item.id).filter((value) => next.includes(value)));
+  };
+  const onOpenChange = (open: boolean) => {
+    if (open) setDraft(selected);
+    else if (draft.join(",") !== selected.join(",")) onChange([...draft]);
+    state.onOpenChange(open);
   };
 
   return (
-    <Popover {...state}>
+    <Popover open={state.open} onOpenChange={onOpenChange}>
       <PopoverTrigger
         render={<FilterChip label={label} value={(summarize ?? summary)(labels)} />}
       />
@@ -399,7 +406,7 @@ function MultiChip({
           <div key={section.title ?? index} className="flex flex-col">
             {section.title && <SectionTitle>{section.title}</SectionTitle>}
             {section.items.map((item) => {
-              const checked = selected.includes(item.id);
+              const checked = draft.includes(item.id);
               return (
                 <label
                   key={item.id}
@@ -407,7 +414,7 @@ function MultiChip({
                 >
                   <Checkbox
                     checked={checked}
-                    disabled={required && checked && selected.length === 1}
+                    disabled={required && checked && draft.length === 1}
                     onCheckedChange={(value) => toggle(item.id, value)}
                   />
                   <span className="flex-1 truncate">{item.label}</span>
@@ -420,9 +427,9 @@ function MultiChip({
           </div>
         ))}
         {hint && <p className="px-2 pt-1 pb-1.5 text-xs text-muted-foreground">{hint}</p>}
-        {!required && selected.length > 0 && (
+        {!required && draft.length > 0 && (
           <div className="mt-1 flex justify-end border-t px-1 pt-1.5">
-            <Button variant="ghost" size="sm" onClick={() => onChange([])}>
+            <Button variant="ghost" size="sm" onClick={() => setDraft([])}>
               {t("clear")}
             </Button>
           </div>

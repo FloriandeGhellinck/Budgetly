@@ -157,7 +157,8 @@
     "other": "Autres ({count})",
     "chartLabel": "Répartition par {groupBy}",
     "barsLabel": "Par mois",
-    "tagNote": "Une transaction avec plusieurs étiquettes compte dans chacune : les lignes peuvent dépasser le total."
+    "tagNote": "Une transaction avec plusieurs étiquettes compte dans chacune : les lignes peuvent dépasser le total.",
+    "loading": "Mise à jour des chiffres…"
   },
   "accounts": {
     "title": "Comptes",

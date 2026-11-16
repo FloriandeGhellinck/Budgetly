@@ -29,6 +29,11 @@ the same questions.
 - **Presets resolve outside the API** (`resolvePeriod`, `comparisonRange` in
   the contract, given today's date in the user's time zone), so the procedure
   only sees days and an agent can pass any range.
+- **One API call per change.** The page asks only `reports.analysis`;
+  names, colours and filter options come from the entry options the `(app)`
+  layout already loads on the server (ADR 0030) and hands to the client,
+  which a search-param change does not re-run. Controls update optimistically
+  and multi-select chips apply when their popover closes.
 - **Grouped by tag**, a transaction with several tags counts under each; the
   total and split still count it once.
 
