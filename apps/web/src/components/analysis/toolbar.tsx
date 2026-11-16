@@ -280,9 +280,17 @@ function PeriodChip({ today, ...state }: ChipState & { today: string }) {
     state.onOpenChange(false);
     go({ ...view, period });
   };
+  // The toolbar outlives navigation: start from the current period on each open.
+  const onOpenChange = (next: boolean) => {
+    if (next) {
+      setFrom(current.from);
+      setTo(current.to);
+    }
+    state.onOpenChange(next);
+  };
 
   return (
-    <Popover {...state}>
+    <Popover open={state.open} onOpenChange={onOpenChange}>
       <PopoverTrigger render={<FilterChip label={t("filters.period")} value={value} active />} />
       <PopoverContent align="start" className="w-80 gap-1 p-1.5">
         <SectionTitle>{t("relativeTitle")}</SectionTitle>
@@ -433,8 +441,12 @@ function TextChip(state: ChipState) {
     const { text: _old, ...rest } = view;
     go(value ? { ...rest, text: value } : rest);
   };
+  const onOpenChange = (next: boolean) => {
+    if (next) setText(view.text ?? "");
+    state.onOpenChange(next);
+  };
   return (
-    <Popover {...state}>
+    <Popover open={state.open} onOpenChange={onOpenChange}>
       <PopoverTrigger render={<FilterChip label={t("text")} value={view.text ?? ""} />} />
       <PopoverContent align="start" className="w-72">
         <form

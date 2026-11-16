@@ -203,10 +203,11 @@ export function monthInRange(month: string, range: DayRange): DayRange {
   };
 }
 
-// The transactions page's filters for a view, narrowed to one item. The
-// transactions list takes one value per filter and a direction, so a filter
-// with several values, or spending without saving, cannot be carried over
-// (the list then shows more than the figure).
+// The transactions page's filters for a view, narrowed to one item. The list
+// takes several groups or categories but one beneficiary, account and tag,
+// and a direction: those with several values, and spending without saving
+// (or the reverse), are not carried over, so the list shows more than the
+// figure.
 export function transactionFilters(
   view: AnalysisView,
   range: DayRange,
@@ -218,18 +219,24 @@ export function transactionFilters(
   const direction = !types.has("income") ? "expense" : types.size === 1 ? "income" : undefined;
   const days = item.groupBy === "month" ? monthInRange(item.key, range) : range;
   const tagId = item.groupBy === "tag" ? item.key : one(view.tagIds);
+  const many = (ids: readonly string[]) => (ids.length > 1 ? [...ids] : undefined);
   const filters: TransactionFilters = {
     ...days,
     direction,
     groupId: item.groupBy === "group" ? item.key : one(view.groupIds),
+    groupIds: item.groupBy === "group" ? undefined : many(view.groupIds),
     categoryId: item.groupBy === "category" ? item.key : one(view.categoryIds),
+    categoryIds: item.groupBy === "category" ? undefined : many(view.categoryIds),
     beneficiaryId: item.groupBy === "beneficiary" ? item.key : one(view.beneficiaryIds),
     accountId: item.groupBy === "account" ? item.key : one(view.accountIds),
     tag: tagId ? tagName(tagId) : undefined,
     text: view.text,
   };
   // A category implies its group: keep the narrower one.
-  if (filters.categoryId) delete filters.groupId;
+  if (filters.categoryId || filters.categoryIds) {
+    delete filters.groupId;
+    delete filters.groupIds;
+  }
   return Object.fromEntries(
     Object.entries(filters).filter(([, value]) => value !== undefined),
   ) as TransactionFilters;

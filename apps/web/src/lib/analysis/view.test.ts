@@ -149,10 +149,21 @@ describe("transactionFilters", () => {
       },
     },
     {
-      label: "mixed types and several groups: neither carried",
+      label: "mixed types: no direction; several groups carried",
       view: { ...base, types: ["income" as const, "spending" as const], groupIds: [G1, G2] },
       item: { groupBy: "beneficiary" as const, key: T1 },
-      expected: { ...range, beneficiaryId: T1 },
+      expected: { ...range, beneficiaryId: T1, groupIds: [G1, G2] },
+    },
+    {
+      label: "several categories on a month",
+      view: { ...base, groupIds: [G1], categoryIds: [C1, C2] },
+      item: { groupBy: "month" as const, key: "2026-11" },
+      expected: {
+        from: "2026-11-01",
+        to: "2026-11-30",
+        direction: "expense",
+        categoryIds: [C1, C2],
+      },
     },
   ])("$label", ({ view, item, expected }) => {
     expect(transactionFilters(view, range, item, tagName)).toEqual(expected);

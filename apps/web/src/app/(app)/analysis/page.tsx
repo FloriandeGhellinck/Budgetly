@@ -130,6 +130,11 @@ export default async function AnalysisPage({ searchParams }: PageProps<"/analysi
         : SERIES.spending;
 
   const comparison = result.comparison;
+  // Like the mockup, by month: a compare range starting in a month before the
+  // first recorded one has no history to compare with.
+  const lacksHistory =
+    comparison !== null &&
+    (result.firstOn === null || comparison.from.slice(0, 7) < result.firstOn.slice(0, 7));
   const change = comparison
     ? comparisonChange(result.totalMinor, comparison.totalMinor, view.types)
     : null;
@@ -174,7 +179,11 @@ export default async function AnalysisPage({ searchParams }: PageProps<"/analysi
                 <div className="flex flex-col gap-1.5 sm:items-end sm:text-right">
                   {comparison && (
                     <span className="flex items-center gap-1 text-sm sm:justify-end">
-                      {change === null ? (
+                      {lacksHistory ? (
+                        <span className="text-muted-foreground">
+                          {t("noHistory", { period: periodLabel(comparison) })}
+                        </span>
+                      ) : change === null ? (
                         <span className="text-muted-foreground">
                           {t("nothingIn", { period: periodLabel(comparison) })}
                         </span>
