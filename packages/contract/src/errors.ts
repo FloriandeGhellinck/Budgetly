@@ -17,6 +17,7 @@ export const ERRORS = {
         "transaction",
         "transfer",
         "tag",
+        "saved_view",
       ]),
     }),
   },

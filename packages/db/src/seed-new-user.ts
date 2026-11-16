@@ -6,6 +6,7 @@ import {
   categories,
   categoryGroups,
   type CategoryPaletteColor,
+  savedViews,
 } from "./schema";
 
 // The defaults a new user starts with (ADR 0021 as amended by 0023). Names are
@@ -83,6 +84,55 @@ type DefaultGroup = (typeof DEFAULT_GROUPS)[number];
 
 export type CategoryGroupSeedKey = DefaultGroup["seedKey"];
 export type CategorySeedKey = DefaultGroup["categories"][number]["seedKey"];
+// The starter saved views (ADR 0036), as the contract's AnalysisView. The
+// backfill in migration 20261116151013 repeats them for users who signed up before.
+const EMPTY_FILTERS = {
+  groupIds: [],
+  categoryIds: [],
+  beneficiaryIds: [],
+  accountIds: [],
+  tagIds: [],
+};
+export const STARTER_VIEWS = [
+  {
+    seedKey: "this_month",
+    name: "This month",
+    view: {
+      ...EMPTY_FILTERS,
+      types: ["spending", "saving"],
+      period: { kind: "relative", preset: "this-month" },
+      groupBy: "group",
+      display: "donut",
+      compare: "previous-period",
+    },
+  },
+  {
+    seedKey: "spending_per_month",
+    name: "Spending per month",
+    view: {
+      ...EMPTY_FILTERS,
+      types: ["spending"],
+      period: { kind: "relative", preset: "last-12-months" },
+      groupBy: "month",
+      display: "bars",
+      compare: "last-year",
+    },
+  },
+  {
+    seedKey: "income_per_month",
+    name: "Income per month",
+    view: {
+      ...EMPTY_FILTERS,
+      types: ["income"],
+      period: { kind: "relative", preset: "last-12-months" },
+      groupBy: "month",
+      display: "bars",
+      compare: "last-year",
+    },
+  },
+] as const;
+export type SavedViewSeedKey = (typeof STARTER_VIEWS)[number]["seedKey"];
+
 export type BeneficiarySeedKey = "me";
 export type AccountSeedKey = "main";
 
@@ -135,5 +185,15 @@ export async function seedNewUser(tx: Tx, userId: string): Promise<void> {
         };
       }),
     ),
+  );
+
+  await tx.insert(savedViews).values(
+    STARTER_VIEWS.map((starter, index) => ({
+      userId,
+      seedKey: starter.seedKey,
+      name: starter.name,
+      view: starter.view,
+      sortOrder: index,
+    })),
   );
 }

@@ -5,6 +5,7 @@ import type {
   categoryGroups,
   categoryKind,
   direction,
+  savedViews,
   tags,
   transactions,
   transactionTags,
@@ -18,6 +19,8 @@ export {
   type BeneficiarySeedKey,
   type CategoryGroupSeedKey,
   type CategorySeedKey,
+  type SavedViewSeedKey,
+  STARTER_VIEWS,
 } from "./seed-new-user";
 export { withUser } from "./with-user";
 
@@ -32,6 +35,8 @@ export type Category = typeof categories.$inferSelect;
 export type NewCategory = typeof categories.$inferInsert;
 export type Beneficiary = typeof beneficiaries.$inferSelect;
 export type NewBeneficiary = typeof beneficiaries.$inferInsert;
+export type SavedView = typeof savedViews.$inferSelect;
+export type NewSavedView = typeof savedViews.$inferInsert;
 export type Tag = typeof tags.$inferSelect;
 export type NewTag = typeof tags.$inferInsert;
 export type Transaction = typeof transactions.$inferSelect;

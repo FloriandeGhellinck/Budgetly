@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { type AnalysisPreset, comparisonRange, resolvePeriod } from "./analysis";
+import {
+  type AnalysisPreset,
+  AnalysisView,
+  comparisonRange,
+  parseStoredView,
+  resolvePeriod,
+} from "./analysis";
 
 describe("resolvePeriod", () => {
   it.each<{ preset: AnalysisPreset; today: string; from: string; to: string }>([
@@ -67,5 +73,25 @@ describe("comparisonRange", () => {
     },
   ])("last year: $label", ({ range, to }) => {
     expect(comparisonRange(range, "last-year")).toEqual(to);
+  });
+});
+
+describe("parseStoredView", () => {
+  const defaults = AnalysisView.parse({});
+
+  it("reads a valid stored view as it is", () => {
+    const view = { ...defaults, types: ["income" as const], groupBy: "month" as const };
+
+    expect(parseStoredView(view)).toEqual(view);
+  });
+
+  it("keeps the valid fields and defaults the rest", () => {
+    expect(
+      parseStoredView({ types: ["income"], groupBy: "weather", period: { kind: "someday" } }),
+    ).toEqual({ ...defaults, types: ["income"] });
+  });
+
+  it.each([null, "garbage", 42])("falls back to the default view for %s", (value) => {
+    expect(parseStoredView(value)).toEqual(defaults);
   });
 });

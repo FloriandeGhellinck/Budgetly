@@ -79,6 +79,21 @@ export const AnalysisView = AnalysisFilters.extend({
 });
 export type AnalysisView = z.infer<typeof AnalysisView>;
 
+// A view stored earlier (a saved view's JSON), read leniently: each field that
+// no longer parses falls back to its default, so a schema change or a bad
+// row never makes the view unreadable. Ids are kept as they are; one that
+// points at a deleted row simply matches nothing.
+export function parseStoredView(value: unknown): AnalysisView {
+  const stored = typeof value === "object" && value !== null ? value : {};
+  const fields = Object.fromEntries(
+    Object.entries(AnalysisView.shape).flatMap(([key, schema]) => {
+      const parsed = schema.safeParse((stored as Record<string, unknown>)[key]);
+      return parsed.success && parsed.data !== undefined ? [[key, parsed.data]] : [];
+    }),
+  );
+  return AnalysisView.parse(fields);
+}
+
 export type DayRange = { from: string; to: string };
 
 // Day arithmetic on `YYYY-MM-DD` strings in UTC, so no time zone shifts a day.

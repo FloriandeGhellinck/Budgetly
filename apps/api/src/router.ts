@@ -4,6 +4,7 @@ import { categoriesRouter } from "./categories/handler.ts";
 import { meRouter } from "./me/handler.ts";
 import { os } from "./orpc.ts";
 import { reportsRouter } from "./reports/handler.ts";
+import { savedViewsRouter } from "./saved-views/handler.ts";
 import { suggestionsRouter } from "./suggestions/handler.ts";
 import { tagsRouter } from "./tags/handler.ts";
 import { transactionsRouter } from "./transactions/handler.ts";
@@ -20,4 +21,5 @@ export const router = os.router({
   transfers: transfersRouter,
   suggestions: suggestionsRouter,
   reports: reportsRouter,
+  savedViews: savedViewsRouter,
 });
