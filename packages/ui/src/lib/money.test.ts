@@ -25,6 +25,13 @@ describe("formatMoney", () => {
     ["transfer out is negative", 100, { locale: "en", direction: "transfer_out" }, "-€1.00"],
     ["transfer in is positive", 100, { locale: "en", direction: "transfer_in" }, "+€1.00"],
     ["zero has no sign", 0, { locale: "en", direction: "expense" }, "€0.00"],
+    ["whole euros round half up", 248050, { locale: "en", wholeEuros: true }, "€2,481"],
+    [
+      "whole euros keep lower cents down",
+      248049,
+      { locale: "fr-BE", wholeEuros: true },
+      `2${NNBSP}480${NBSP}€`,
+    ],
     [
       "beyond float precision stays exact",
       9007199254740991,

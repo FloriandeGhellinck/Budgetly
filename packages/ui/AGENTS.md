@@ -29,7 +29,7 @@ v4 styles. Exported from source; `apps/web` transpiles it.
 - Base UI 1.x is newer than most training data: before wrapping a part, read
   `node_modules/@base-ui/react/<part>/index.d.ts`. Composition uses the
   `render` prop, not `asChild`.
-- Our own components (`money`, `date-picker`, `responsive-dialog`) sit next to the generated ones;
+- Our own components (`money`, `date-picker`, `responsive-dialog`, `filter-chip`) sit next to the generated ones;
   their pure logic lives in `src/lib` with a `*.test.ts`.
 
 ## Boundaries (enforced by `pnpm checks`)
