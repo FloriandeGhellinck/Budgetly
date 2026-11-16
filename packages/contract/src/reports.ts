@@ -215,7 +215,7 @@ const AnalysisItemSchema = z.object({
 });
 
 const analysis = procedure({
-  description: `Totals of the caller's money between from and to (YYYY-MM-DD, inclusive), filtered and grouped. types picks the report figures to count (income, spending, saving; default spending + saving); groupIds, categoryIds, beneficiaryIds, accountIds and tagIds (from categories.list, beneficiaries.list, accounts.list, tags.list) keep only matching transactions; text keeps those whose name or note contains it (case-insensitive). Values inside one list are OR, different filters are AND; an empty list does not filter, an id the caller does not own matches nothing. groupBy (group, category, month, beneficiary, account, tag) gives items: sorted by total, largest first, with a null-key bucket for transactions without one (uncategorized, no beneficiary, untagged); grouped by month, every month the range touches is listed oldest first, zeros included, at most ${ANALYSIS_MAX_MONTHS} months. Grouped by tag, a transaction with several tags counts under each, so items can add up to more than totalMinor; totalMinor, count and byType always count each transaction once. Pass compare (another from/to, e.g. the previous period) to also get that range's total with the same filters. ${COUNTING}`,
+  description: `Totals of the caller's money between from and to (YYYY-MM-DD, inclusive), filtered and grouped. types picks the report figures to count (income, spending, saving; default spending + saving); groupIds, categoryIds, beneficiaryIds, accountIds and tagIds (from categories.list, beneficiaries.list, accounts.list, tags.list) keep only matching transactions; text keeps those whose name or note contains it (case-insensitive). Values inside one list are OR, different filters are AND; an empty list does not filter, an id the caller does not own matches nothing. groupBy (group, category, month, beneficiary, account, tag) gives items: sorted by total, largest first, with a null-key bucket for transactions without one (uncategorized, no beneficiary, untagged); grouped by month, every month the range touches is listed oldest first, zeros included, at most ${ANALYSIS_MAX_MONTHS} months. Grouped by tag, a transaction with several tags counts under each, so items can add up to more than totalMinor; totalMinor, count and byType always count each transaction once. Pass compare (another from/to, e.g. the previous period) to also get that range's total with the same filters; firstOn, the first day anything was counted, tells whether that range has history at all. ${COUNTING}`,
   examples: [
     { from: "2026-11-01", to: "2026-11-30", groupBy: "group" },
     {
@@ -254,6 +254,9 @@ const analysis = procedure({
     count: z.int(),
     byType: z.object({ incomeMinor: z.int(), spendingMinor: z.int(), savingMinor: z.int() }),
     items: z.array(AnalysisItemSchema),
+    // The caller's earliest counted day, whatever the filters (null without
+    // any): a compare range starting before it lacks history.
+    firstOn: IsoDate.nullable(),
     // The compare range's total with the same filters; null without compare.
     comparison: z
       .object({ from: IsoDate, to: IsoDate, totalMinor: z.int(), count: z.int() })

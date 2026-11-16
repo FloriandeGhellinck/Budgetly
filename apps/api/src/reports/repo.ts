@@ -389,6 +389,14 @@ export async function analysisTotals(
   };
 }
 
+// The first day any transaction counts for the caller, whatever the filters.
+export async function firstCountedDay(tx: Tx, userId: string): Promise<string | null> {
+  const [row] = await tx.execute<{ first_on: string | null }>(sql`
+    with rows as (${counted(userId)})
+    select to_char(min(occurred_on), 'YYYY-MM-DD') as first_on from rows`);
+  return row?.first_on ?? null;
+}
+
 export type AnalysisRow = {
   key: string | null;
   name: string | null;

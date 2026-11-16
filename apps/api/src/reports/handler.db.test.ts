@@ -643,6 +643,16 @@ describe("reports.analysis", () => {
     expect([result.totalMinor, result.count]).toEqual([4000, 2]);
   });
 
+  it("puts untagged transactions in a null bucket", async () => {
+    const { items } = await fay.client.reports.analysis({
+      ...july,
+      types: ["income"],
+      groupBy: "tag",
+    });
+
+    expect(items.map((i) => [i.key, i.totalMinor])).toEqual([[null, 50000]]);
+  });
+
   it("groups by beneficiary and account, with a null bucket for no beneficiary", async () => {
     const [byBeneficiary, byAccount] = await Promise.all([
       fay.client.reports.analysis({ ...july, groupBy: "beneficiary" }),
@@ -688,6 +698,8 @@ describe("reports.analysis", () => {
       totalMinor: 40000,
       count: 1,
     });
+    // The first salary, though the filters leave income out.
+    expect(result.firstOn).toBe("2026-04-01");
   });
 
   it.each([
@@ -712,7 +724,7 @@ describe("reports.analysis", () => {
       bob.client.reports.analysis({ ...may, types: ["income", "spending", "saving"] }),
     ]);
 
-    expect(byTheirIds).toMatchObject({ totalMinor: 0, count: 0, items: [] });
+    expect(byTheirIds).toMatchObject({ totalMinor: 0, count: 0, items: [], firstOn: "2026-05-02" });
     expect(byTheirIds.comparison?.totalMinor).toBe(0);
     expect(own).toMatchObject({ totalMinor: 785400, count: 2 });
   });
