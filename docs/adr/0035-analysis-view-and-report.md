@@ -35,7 +35,9 @@ the same questions.
 ## Consequences
 
 - A new filter or grouping is a contract field plus a clause in one SQL
-  fragment; the transactions page may lag behind (it takes single values), so
-  links from the page carry only what it understands.
+  fragment. The transactions page takes several groups or categories but one
+  beneficiary, account and tag, and a direction, so links from Analysis
+  carry only what it understands: spending without saving, or several
+  beneficiaries, accounts or tags, open a wider list than the figure.
 - Saved views (slice 2) need a table holding an `AnalysisView` as JSON and a
   name; no change to the procedure.
